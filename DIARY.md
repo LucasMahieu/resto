@@ -7,3 +7,5 @@
     * Dépendances fonctionnelles
     * Contraintes
   * Tâche B : Florentin, Pierre et Paul
+    * Ajout du diagramme de cas d'utilisation
+    * Ajout du diagramme de fonctionnement global du système
