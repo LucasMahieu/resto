@@ -13,5 +13,5 @@
 
 ## Séance du 05/04
 * Schéma Entités/Association
-* Architecture de l'application
+* Architecture de l'application (Patron de conception Fabrique à appliquer sur le modèle)
 * Ecriture du rendu intermédiaire
