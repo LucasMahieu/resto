@@ -33,20 +33,35 @@
 \section{Schéma entités-associations}
 {
     \begin{figure}[ht!]
-        \includegraphics[width=\textwidth]{chemin_de_limage}
+        \includegraphics[width=\textwidth]{SchemaEntiteAssociation.png}
         \centering
-        \caption{Légende}
+        \caption{Schéma entités-association}
     \end{figure}
-
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{Contraintes de valeurs}
 {
-	
+    \begin{itemize}
+        \item $nombrePlaceIsolée \geq nombrePlaceAccolée1 \geq nombrePlaceAccolée2 > 0$
+        \item $numeroTable > 0$
+        \item $prixArticle \geq 0$
+        \item $type \in \{"entrée", "plat", "dessert", "boisson", "menu"\}$
+        \item $typeService \in \{"midi", "soir"\}$
+        \item $numeroClient > 0$
+        \item $numeroReservation > 0$
+        \item $nbPersonnes > 0$
+        \item $prixTotal \geq 0$
+    \end{itemize}
 }
-\section{Contraintes d'intégrités}
+\section{Contraintes d'intégrité}
 {
+    \begin{itemize}
+        \item Si le type d'article est un menu, il contient au moins un plat et un autre type d'article.
+        \item Les articles composant un menu doivent être à 60\% de la même spécialité que le menu.
+        \item Les tables d'un groupe ont la même localisation.
+        \item Les articles commandés doivent apparaître sur la carte.
+    \end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
