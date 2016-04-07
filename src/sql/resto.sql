@@ -1,40 +1,13 @@
-CREATE TABLE Tables (
-	numeroTable INTEGER CONSTRAINT KnumeroTable PRIMARY KEY check (numeroTable > 0),
-	nombrePlaceIsolee INTEGER check (nombrePlaceIsolee > 0),
-	nombrePlaceAccolee1 INTEGER check (nombrePlaceAccolee1 > 0),
-	nombrePlaceAccolee2 INTEGER check (nombrePlaceAccolee2 > 0),
-	localisation VARCHAR(20),
-	numeroGroupe INTEGER check (numeroGroupe > 0)
+-- Traduction des entités normales :
+CREATE TABLE GroupeTables (
+    numeroGroupe INTEGER CONSTRAINT KnumeroGroupe PRIMARY KEY check (numeroGroupe > 0),
+    nombreTables INTEGER check (nombreTables > 0)
 );
 
 CREATE TABLE Client (
-	numeroClient INTEGER CONSTRAINT KnumeroCLIENT PRIMARY KEY check (numeroClient > 0),
+	numeroClient INTEGER CONSTRAINT KnumeroClient PRIMARY KEY check (numeroClient > 0),
 	nomClient VARCHAR(20),
 	telephoneClient VARCHAR(20)
-);
-
-CREATE TABLE Reservation (
-	numeroReservation INTEGER check (numeroReservation > 0),
-    numeroClient INTEGER REFERENCES Client,
-	nbPersonnes INTEGER check (nbPersonnes > 0),
-	prixTotal INTEGER check (prixTotal > 0)
-	CONSTRAINT KReservation PRIMARY KEY (numeroReservation, numeroClient)
-);
-
-CREATE TABLE aReserve (
-	numeroReservation INTEGER REFERENCES Reservation.numeroReservation,
-    numeroClient INTEGER REFERENCES Client.numeroClient,
-	nbPersonnes INTEGER REFERENCES Reservation.nbPersonnes,
-	prixTotal INTEGER REFERENCES Reservation.prixTotal,
-	nomClient VARCHAR(20),
-	telephoneClient VARCHAR(20)
-	CONSTRAINT KReservation PRIMARY KEY (numeroReservation, numeroClient)
-);
-
-CREATE TABLE Service (
-	typeService VARCHAR(20),
-	dateService VARCHAR(20),
-	CONSTRAINT KService PRIMARY KEY (typeService, dateService)
 );
 
 CREATE TABLE Carte (
@@ -48,27 +21,87 @@ CREATE TABLE Article (
 	quantiteArticle INTEGER check (quantiteArticle > 0)
 );
 
+CREATE TABLE Service (
+	typeService VARCHAR(20),
+	dateService VARCHAR(20),
+    -- Attributs lié à la cardinalité 1..1
+    nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
+	CONSTRAINT KService PRIMARY KEY (typeService, dateService)
+);
+
+CREATE TABLE Reservation (
+	numeroReservation INTEGER check (numeroReservation > 0),
+	nbPersonnes INTEGER check (nbPersonnes > 0),
+	prixTotal INTEGER check (prixTotal > 0),
+    -- Attributs liés aux cardinalités 1..1
+    numeroClient INTEGER REFERENCES Client(numeroClient),
+	typeService VARCHAR(20) REFERENCES Service(typeService),
+	dateService VARCHAR(20) REFERENCES Service(dateService),
+	CONSTRAINT KReservation PRIMARY KEY (numeroReservation)
+);
+
+-- Traduction des sous-types d'entité
 CREATE TABLE Menu (
-	nomMenu VARCHAR(20) CONSTRAINT KnomMenu PRIMARY KEY REFERENCES Article
+	nomMenu VARCHAR(20) CONSTRAINT KnomMenu PRIMARY KEY REFERENCES Article(nomArticle)
 );
 
 CREATE TABLE Choix (
-	nomChoix VARCHAR(20) CONSTRAINT KnomChoix PRIMARY KEY REFERENCES Article
+	nomChoix VARCHAR(20) CONSTRAINT KnomChoix PRIMARY KEY REFERENCES Article(nomArticle)
 );
 
 CREATE TABLE Plat (
-	nomPlat VARCHAR(20) CONSTRAINT KnomPlat PRIMARY KEY REFERENCES Choix
+	nomPlat VARCHAR(20) CONSTRAINT KnomPlat PRIMARY KEY REFERENCES Choix(nomChoix)
 );
 
 CREATE TABLE Entree (
-	nomEntree VARCHAR(20) CONSTRAINT KnomEntree PRIMARY KEY REFERENCES Choix
+	nomEntree VARCHAR(20) CONSTRAINT KnomEntree PRIMARY KEY REFERENCES Choix(nomChoix)
 );
 
 CREATE TABLE Dessert (
-	nomDessert VARCHAR(20) CONSTRAINT KnomDessert PRIMARY KEY REFERENCES Choix
+	nomDessert VARCHAR(20) CONSTRAINT KnomDessert PRIMARY KEY REFERENCES Choix(nomChoix)
 );
 
 CREATE TABLE Boisson (
-	nomBoisson VARCHAR(20) CONSTRAINT KnomBoisson PRIMARY KEY REFERENCES Choix
+	nomBoisson VARCHAR(20) CONSTRAINT KnomBoisson PRIMARY KEY REFERENCES Choix(nomChoix)
 );
 
+-- Traduction des entités faibles
+CREATE TABLE Tables (
+	numeroTable INTEGER check (numeroTable > 0),
+	nombrePlaceIsolee INTEGER check (nombrePlaceIsolee > 0),
+	nombrePlaceAccolee1 INTEGER check (nombrePlaceAccolee1 > 0),
+	nombrePlaceAccolee2 INTEGER check (nombrePlaceAccolee2 > 0),
+	localisation VARCHAR(20),
+    -- Attribut lié à l'entité dont dépend cette entité faible
+    numeroGroupe INTEGER check (numeroGroupe > 0) REFERENCES GroupeTables(numeroGroupe),
+    -- Attribut lié à la cardinalité 1..1
+	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
+	CONSTRAINT KTables PRIMARY KEY (numeroTable, numeroGroupe)
+);
+
+-- Traduction des multiplicités 1..1 : OK (voir ci dessus)
+-- Traduction des multiplicités 0..1 : aucunes
+-- Traduction des multiplicités ?..* (et 0..2)
+CREATE TABLE sontCommandes (
+	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
+	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
+	CONSTRAINT KsontCommandes PRIMARY KEY (nomArticle, numeroReservation)
+);
+
+CREATE TABLE Disponibles (
+	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
+    nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
+	CONSTRAINT KDisponibles PRIMARY KEY (nomArticle, nomCarte)
+);
+
+CREATE TABLE estBase (
+	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
+	nomPlat VARCHAR(20) REFERENCES Plat(nomPlat),
+	CONSTRAINT KestBase PRIMARY KEY (nomMenu, nomPlat)
+);
+
+CREATE TABLE estCompose (
+	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
+	nomChoix VARCHAR(20) REFERENCES Choix(nomChoix),
+	CONSTRAINT KestCompose PRIMARY KEY (nomMenu, nomChoix)
+);
