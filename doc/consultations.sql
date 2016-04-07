@@ -45,6 +45,7 @@ where numeroreservation = (SELECT numeroclient
 from client
 where nomclient = 'le nom'));
 
+
 --consulter tous les clients associés à une résevation (par telephone)
 SELECT distinct reserve.numeroreservation, reserve.numeroclient, reservation.nbPersonnes, client.nomClient, client.telephoneclient
 FROM reserve, reservation, client
@@ -67,11 +68,25 @@ where 'numerotable' = comprend(tables).numerotable);
 
 
 
---a finir
 --reservation
 --calcul de la facture par numero de table
-SELECT article.numeroreservation, (article.quantitearticle * article.prixArticle) as Total
+SELECT article.numeroreservation, SUM((article.quantitearticle * article.prixArticle) as Facture)
 FROM commande, article
 where commande.numeroresevation = (SELECT numeroreservation
 from comprend(tables)
 where 'numerotable' = comprend(tables).numerotable);
+
+
+--pas fait, le probleme est : que faut il afficher si l'on réserve plusieurs tables?
+--consulter les tables disponibles pour un nombre de personnes donné
+SELECT tables.numerotable, tables.nombreplacesisolee, 
+FROM tables
+where  
+AND tables.numerotable not in (SELECT comprend.numeroreservation
+FROM comprend)
+
+
+--a faire :
+--consulter toutes les réservations pour une date et un service
+--consulter tous les articles un par un
+--consulter les classe individuellement en général avec différents critères 
