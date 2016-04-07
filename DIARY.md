@@ -15,3 +15,6 @@
 * Schéma Entités/Association
 * Architecture de l'application (Patron de conception Fabrique à appliquer sur le modèle)
 * Ecriture du rendu intermédiaire
+
+## Séance du 06/04
+* Diagramme des classes et début implémentation
