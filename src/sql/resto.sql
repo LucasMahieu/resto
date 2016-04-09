@@ -1,7 +1,12 @@
 -- Traduction des entités normales :
-CREATE TABLE GroupeTables (
-    numeroGroupe INTEGER CONSTRAINT KnumeroGroupe PRIMARY KEY check (numeroGroupe > 0),
-    nombreTables INTEGER check (nombreTables > 0)
+CREATE TABLE Tables (
+	numeroTable INTEGER check (numeroTable > 0),
+	nombrePlaceIsolee INTEGER check (nombrePlaceIsolee > 0),
+	nombrePlaceAccolee1 INTEGER check (nombrePlaceAccolee1 > 0),
+	nombrePlaceAccolee2 INTEGER check (nombrePlaceAccolee2 > 0),
+	localisation VARCHAR(20),
+    numeroGroupe INTEGER check (numeroGroupe > 0),
+	CONSTRAINT KTables PRIMARY KEY (numeroTable)
 );
 
 CREATE TABLE Client (
@@ -65,22 +70,15 @@ CREATE TABLE Boisson (
 	nomBoisson VARCHAR(20) CONSTRAINT KnomBoisson PRIMARY KEY REFERENCES Choix(nomChoix)
 );
 
--- Traduction des entités faibles
-CREATE TABLE Tables (
-	numeroTable INTEGER check (numeroTable > 0),
-	nombrePlaceIsolee INTEGER check (nombrePlaceIsolee > 0),
-	nombrePlaceAccolee1 INTEGER check (nombrePlaceAccolee1 > 0),
-	nombrePlaceAccolee2 INTEGER check (nombrePlaceAccolee2 > 0),
-	localisation VARCHAR(20),
-    -- Attribut lié à l'entité dont dépend cette entité faible
-    numeroGroupe INTEGER check (numeroGroupe > 0) REFERENCES GroupeTables(numeroGroupe),
-    -- Attribut lié à la cardinalité 1..1
-	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
-	CONSTRAINT KTables PRIMARY KEY (numeroTable, numeroGroupe)
+-- Traduction des entités faibles : aucunes
+-- Traduction des multiplicités 1..1 : OK (voir ci dessus)
+-- Traduction des multiplicités 0..1
+CREATE TABLE estReservee (
+    numeroTable INTEGER REFERENCES Tables(numeroTable),
+    numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
+	CONSTRAINT KestReservee PRIMARY KEY (numeroTable)
 );
 
--- Traduction des multiplicités 1..1 : OK (voir ci dessus)
--- Traduction des multiplicités 0..1 : aucunes
 -- Traduction des multiplicités ?..* (et 0..2)
 CREATE TABLE sontCommandes (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
@@ -104,4 +102,10 @@ CREATE TABLE estCompose (
 	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
 	nomChoix VARCHAR(20) REFERENCES Choix(nomChoix),
 	CONSTRAINT KestCompose PRIMARY KEY (nomMenu, nomChoix)
+);
+
+CREATE TABLE sontVoisines (
+    numeroTable1 INTEGER REFERENCES Tables(numeroTable),
+    numeroTable2 INTEGER REFERENCES Tables(numeroTable),
+	CONSTRAINT KsontVoisines PRIMARY KEY (numeroTable1, numeroTable2)
 );
