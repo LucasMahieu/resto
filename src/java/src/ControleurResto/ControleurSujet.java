@@ -1,17 +1,18 @@
 package ControleurResto.SujetControleur;
 
 import VueResto.*;
+import java.util.*;
 
 public abstract class ControleurSujet{
 
-	ArrayList<Observateur> observateur;
+	ArrayList<Observateur> observateurs;
 
 	public ControleurSujet(){
-		observateur = new ArrayList<Observateur>();
+		this.observateurs = new ArrayList<Observateur>();
 	}
 	
 	public void informe(){
-		for(Observateur o in this.observateur){
+		for(Observateur o : this.observateurs){
 			o.miseAJour();
 		}
 	}

@@ -6,6 +6,6 @@ public abstract class Observateur{
 	public Observateur(){
 	}
 
-	public void miseAjour(){
+	public void miseAJour(){
 	}
 }

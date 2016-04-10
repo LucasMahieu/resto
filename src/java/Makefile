@@ -16,12 +16,12 @@
 #  Options de javac:
 #   -d : repertoire dans lequel sont places les .class compiles
 #   -classpath : repertoire dans lequel sont cherches les .class deja compiles
-#   -sourcepath : repertoire dans lequel sont cherches les .java (dependances)
+#   -sourcepath : repertoire dans lequel sont cherchés les .java (dependances)
 
-all: jeuxGUI exeJeuxGUI
+all: resto exeResto
 
-jeuxGUI:
-	javac -d bin -classpath bin/gui.jar -sourcepath src/ src/JeuxGUI.java
+resto:
+	javac -d bin -classpath  -sourcepath src:src/VueResto:src/ModeleResto:src/ControleurResto src/Resto.java
 
 # Execution:
 # on peut taper directement la ligne de commande :
@@ -29,8 +29,9 @@ jeuxGUI:
 # ou bien lancer l'execution en passant par ce Makefile:
 #   > make exeIHM
 
-exeJeuxGUI:
-	java -classpath bin:bin/gui.jar JeuxGUI
+exeResto:
+	java -classpath bin:bin/* resto
 
 clean:
 	rm -rf bin/*.class
+	rm -rf src/*.class
