@@ -18,3 +18,8 @@
 
 ## Séance du 06/04
 * Diagramme des classes et début implémentation
+
+## Lundi 11 avril
+* Fin de l'écriture des relations
+* Ecriture des relations utiles pour la gestion du resto
+* Ecriture de tuples pour tester ces relations
