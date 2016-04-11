@@ -5,7 +5,6 @@ CREATE TABLE Tables (
 	nombrePlaceAccolee1 INTEGER check (nombrePlaceAccolee1 > 0),
 	nombrePlaceAccolee2 INTEGER check (nombrePlaceAccolee2 > 0),
 	localisation VARCHAR(20),
-    numeroGroupe INTEGER check (numeroGroupe > 0),
 	CONSTRAINT KTables PRIMARY KEY (numeroTable)
 );
 
@@ -40,8 +39,9 @@ CREATE TABLE Reservation (
 	prixTotal INTEGER check (prixTotal > 0),
     -- Attributs liés aux cardinalités 1..1
     numeroClient INTEGER REFERENCES Client(numeroClient),
-	typeService VARCHAR(20) REFERENCES Service(typeService),
-	dateService VARCHAR(20) REFERENCES Service(dateService),
+	typeService VARCHAR(20),
+	dateService VARCHAR(20),
+    CONSTRAINT FKReservation FOREIGN KEY (typeService, dateService) REFERENCES Service,
 	CONSTRAINT KReservation PRIMARY KEY (numeroReservation)
 );
 

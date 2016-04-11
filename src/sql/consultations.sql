@@ -35,13 +35,12 @@ WHERE localisation='localisation';
 
 --reserve (reservation - client)
 --consulter tous les clients associés à une résevation (par nom)
-SELECT distinct reserve.numeroreservation, reserve.numeroclient, reservation.nbPersonnes, client.nomClient, client.telephoneclient
-FROM reserve, reservation, client
-where reservation.numeroreservation = reserve.numeroreservation
-and reserve.numeroclient = client.numeroclient
-having numeroreservation = (SELECT numeroreservation
-FROM reserve
-where numeroreservation = (SELECT numeroclient
+SELECT reservation.numeroreservation, reservation.numeroclient, reservation.nbPersonnes, client.nomClient, client.telephoneclient
+FROM reservation, client
+where reservation.numeroclient = client.numeroclient
+having reservation.numeroreservation = (SELECT numeroreservation
+FROM client
+where client.numeroreservation = (SELECT numeroclient
 from client
 where nomclient = 'le nom'));
 
@@ -60,28 +59,29 @@ where numerotelephone = 'le num'));
 
 --commande
 --consulter les articles d'une réservation (par numero de table)
-SELECT article.numeroreservation, article.nomarticle, article.quantitearticle
-FROM commande, article
-where commande.numeroresevation = (SELECT numeroreservation
-from comprend(tables)
-where 'numerotable' = comprend(tables).numerotable);
+	SELECT sontcommandes.numeroreservation, article.nomarticle, article.quantitearticle
+FROM sontcommandes, article
+where sontcommandes.numeroresevation = (SELECT numeroreservation
+from estreserve
+where estreserve.numerotable = 'numerotable');
 
 
 
 --reservation
 --calcul de la facture par numero de table
-SELECT article.numeroreservation, SUM((article.quantitearticle * article.prixArticle) as Facture)
+SELECT sont	commandes.numeroreservation, SUM((article.quantitearticle * article.prixArticle) as Facture)
 FROM commande, article
 where commande.numeroresevation = (SELECT numeroreservation
-from comprend(tables)
-where 'numerotable' = comprend(tables).numerotable);
+from estreserve
+where estreserve.numerotable = 'numerotable');
 
 
 --pas fait, le probleme est : que faut il afficher si l'on réserve plusieurs tables?
 --consulter les tables disponibles pour un nombre de personnes donné
-SELECT tables.numerotable, tables.nombreplacesisolee, 
+SELECT tables.numerotable, tables.nombreplacesisolee
 FROM tables
-where  
+where tales.numerotable not in estreserve
+and tables.nombreplacesisolee
 AND tables.numerotable not in (SELECT comprend.numeroreservation
 FROM comprend)
 
