@@ -1,6 +1,6 @@
 package ModeleResto;
 
-public abstract class Mangeur{
+public class Mangeur{
   public Mangeur(){
   }
 }
