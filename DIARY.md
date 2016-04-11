@@ -23,3 +23,5 @@
 * Fin de l'écriture des relations
 * Ecriture des relations utiles pour la gestion du resto
 * Ecriture de tuples pour tester ces relations
+* Ajout de classes dans ModeleResto
+* Correction du Makefile
