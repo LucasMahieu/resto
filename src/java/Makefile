@@ -21,7 +21,7 @@
 all: resto exeResto
 
 resto:
-	javac -d bin -classpath  -sourcepath src:src/VueResto:src/ModeleResto:src/ControleurResto src/Resto.java
+	javac -d bin -sourcepath src src/Resto.java
 
 # Execution:
 # on peut taper directement la ligne de commande :
@@ -30,7 +30,7 @@ resto:
 #   > make exeIHM
 
 exeResto:
-	java -classpath bin:bin/* resto
+	java -classpath bin:bin/* Resto
 
 clean:
 	rm -rf bin/*.class
