@@ -1,5 +1,5 @@
 package ModeleResto;
-public class Reservation {
+public abstract class Reservation {
   public Reservation(){
   }
 }
