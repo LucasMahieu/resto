@@ -1,6 +1,6 @@
 package ModeleResto;
 
-public abstract class SuiviCommande {
+public class SuiviCommande {
   public SuiviCommande(){
   }
 }

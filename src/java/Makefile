@@ -18,10 +18,10 @@
 #   -classpath : repertoire dans lequel sont cherches les .class deja compiles
 #   -sourcepath : repertoire dans lequel sont cherchés les .java (dependances)
 
-all: resto exeResto
+all: Resto exeResto
 
-resto:
-	javac -d bin -sourcepath src src/Resto.java
+Resto:
+	javac -d bin -sourcepath src:src/* src/Resto.java
 
 # Execution:
 # on peut taper directement la ligne de commande :
@@ -33,5 +33,4 @@ exeResto:
 	java -classpath bin:bin/* Resto
 
 clean:
-	rm -rf bin/*.class
-	rm -rf src/*.class
+	rm -rf bin/*
