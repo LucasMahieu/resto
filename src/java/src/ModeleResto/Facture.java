@@ -1,6 +1,6 @@
 package ModeleResto;
 
-public abstract class Facture {
+public class Facture {
   public Facture(){
   }
 }
