@@ -69,7 +69,7 @@ where estreserve.numerotable = 'numerotable');
 
 --reservation
 --calcul de la facture par numero de table
-SELECT sont	commandes.numeroreservation, SUM((article.quantitearticle * article.prixArticle) as Facture)
+SELECT sontcommandes.numeroreservation, SUM((article.quantitearticle * article.prixArticle) as Facture)
 FROM commande, article
 where commande.numeroresevation = (SELECT numeroreservation
 from estreserve
@@ -78,15 +78,46 @@ where estreserve.numerotable = 'numerotable');
 
 --pas fait, le probleme est : que faut il afficher si l'on réserve plusieurs tables?
 --consulter les tables disponibles pour un nombre de personnes donné
-SELECT tables.numerotable, tables.nombreplacesisolee
-FROM tables
-where tales.numerotable not in estreserve
-and tables.nombreplacesisolee
-AND tables.numerotable not in (SELECT comprend.numeroreservation
-FROM comprend)
+--SELECT T.numerotable, T.nombreplacesisolee, 
+--FROM tables T, estreserve E
+--where T.numerotable not in (SELECT numeroreservation From estreserve)
+
+--having (T.nombreplacesisolee >= 'nombre' 
+
+--or T.nombrePlaceAccolee1 >= 'nombre'
+
+--or (T.nombreplacesisolee + (SELECT TT.nombreplacesisolee, SS.numerotable1, SS.numerotable2
+--FROM tables TT, sontvoisines SS
+--where SS.numerotable1 = T.numerotbale
+--having TT.numerotable not in (SELECT numeroreservation From estreserve)
+--and sontvoisines.numerotable1 = 
+-- >= 'nombre'
+
+--or tables.nombrePlaceAccolee1 + >= 'nombre'
+--and min(tables.nombreplacesisolee
+--AND tables.numerotable not in (SELECT comprend.numeroreservation
+--FROM comprend)
+
+
+
+--consulter toutes les réservations pour une date et un service
+SELECT reservation.dateservice, reservation.typeservice, reservation.numeroreservation, reservation.nbPersonnes,reservation.prixtotal, client.nomclient
+FROM reservation, client
+where reservation.numeroreservation = client.numeroreservation
+and reservation.dateservice = "dates"
+and reservation.typeservice = "type";
+
+
+--consulter tous les articles par nom
+SELECT * 
+from article
+where article.nom = 'nom';
+
+--consulter tous les menus/boissons/plats///
+SELECT * 
+from article
+having article.nomarticle in (SELECT * 
+from 'a coisir');
 
 
 --a faire :
---consulter toutes les réservations pour une date et un service
---consulter tous les articles un par un
---consulter les classe individuellement en général avec différents critères 
