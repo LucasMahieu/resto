@@ -1,4 +1,4 @@
-package LogicielPrincipal;
+package VueResto.LogicielPrincipal;
 import VueResto.*;
 import ModeleResto.*;
 
