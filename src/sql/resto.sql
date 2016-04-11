@@ -5,7 +5,6 @@ CREATE TABLE Tables (
 	nombrePlaceAccolee1 INTEGER check (nombrePlaceAccolee1 > 0),
 	nombrePlaceAccolee2 INTEGER check (nombrePlaceAccolee2 > 0),
 	localisation VARCHAR(20),
-    numeroGroupe INTEGER check (numeroGroupe > 0),
 	CONSTRAINT KTables PRIMARY KEY (numeroTable)
 );
 
@@ -20,14 +19,13 @@ CREATE TABLE Carte (
 );
 
 CREATE TABLE Article (
-	nomArticle VARCHAR(20) CONSTRAINT KnomArticle PRIMARY KEY,
+	nomArticle VARCHAR(100) CONSTRAINT KnomArticle PRIMARY KEY,
 	prixArticle REAL check (prixArticle > 0),
-	specialite VARCHAR(20),
-	quantiteArticle INTEGER check (quantiteArticle > 0)
+	specialite VARCHAR(20)
 );
 
 CREATE TABLE Service (
-	typeService VARCHAR(20),
+	typeService VARCHAR(20) check (typeService in ('MIDI', 'SOIR')),
 	dateService VARCHAR(20),
     -- Attributs lié à la cardinalité 1..1
     nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
@@ -40,16 +38,13 @@ CREATE TABLE Reservation (
 	prixTotal INTEGER check (prixTotal > 0),
     -- Attributs liés aux cardinalités 1..1
     numeroClient INTEGER REFERENCES Client(numeroClient),
-	typeService VARCHAR(20) REFERENCES Service(typeService),
-	dateService VARCHAR(20) REFERENCES Service(dateService),
+	typeService VARCHAR(20),
+	dateService VARCHAR(20),
+    CONSTRAINT FKReservation FOREIGN KEY (typeService, dateService) REFERENCES Service,
 	CONSTRAINT KReservation PRIMARY KEY (numeroReservation)
 );
 
 -- Traduction des sous-types d'entité
-CREATE TABLE Menu (
-	nomMenu VARCHAR(20) CONSTRAINT KnomMenu PRIMARY KEY REFERENCES Article(nomArticle)
-);
-
 CREATE TABLE Choix (
 	nomChoix VARCHAR(20) CONSTRAINT KnomChoix PRIMARY KEY REFERENCES Article(nomArticle)
 );
@@ -70,6 +65,11 @@ CREATE TABLE Boisson (
 	nomBoisson VARCHAR(20) CONSTRAINT KnomBoisson PRIMARY KEY REFERENCES Choix(nomChoix)
 );
 
+CREATE TABLE Menu (
+	nomMenu VARCHAR(20) CONSTRAINT KnomMenu PRIMARY KEY REFERENCES Article(nomArticle),
+    -- Attribut lié à la cardinalité 1..1
+	nomPlatBase VARCHAR(20) REFERENCES Plat(nomPlat)
+);
 -- Traduction des entités faibles : aucunes
 -- Traduction des multiplicités 1..1 : OK (voir ci dessus)
 -- Traduction des multiplicités 0..1
@@ -83,6 +83,7 @@ CREATE TABLE estReservee (
 CREATE TABLE sontCommandes (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
 	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
+	quantiteArticle INTEGER check (quantiteArticle > 0),
 	CONSTRAINT KsontCommandes PRIMARY KEY (nomArticle, numeroReservation)
 );
 
@@ -90,12 +91,6 @@ CREATE TABLE Disponibles (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
     nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
 	CONSTRAINT KDisponibles PRIMARY KEY (nomArticle, nomCarte)
-);
-
-CREATE TABLE estBase (
-	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
-	nomPlat VARCHAR(20) REFERENCES Plat(nomPlat),
-	CONSTRAINT KestBase PRIMARY KEY (nomMenu, nomPlat)
 );
 
 CREATE TABLE estCompose (

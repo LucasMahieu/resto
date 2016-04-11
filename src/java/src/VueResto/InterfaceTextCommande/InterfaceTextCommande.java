@@ -1,4 +1,4 @@
-package InterfaceTextCommande;
+package VueResto.InterfaceTextCommande;
 import VueResto.*;
 
 public class InterfaceTextCommande extends ObservateurReservation {

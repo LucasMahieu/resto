@@ -1,4 +1,4 @@
-package InterfaceTextReservation;
+package VueResto.InterfaceTextReservation;
 import VueResto.*;
 
 public class InterfaceTextReservation extends ObservateurReservation {
