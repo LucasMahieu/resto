@@ -7,63 +7,65 @@
 --choix par nom
 SELECT numeroclient, nomclient, telephoneclient
 FROM client
-WHERE nomclient='nom';
+WHERE nomclient='Francine';
 
 
 --choix par telephone
 SELECT numeroclient, nomclient, telephoneclient
 FROM client
-WHERE telephonetelephone='telephone';
+WHERE telephoneclient='0601012222';
 
 
 --reservation
---choix par numero de reservation
+--choix par numero de de reservation
+----------------------------------------------------------ne marche pas (a cause de insert
 SELECT numeroreservation, nbpersonnes, prixtotal
 FROM reservation
-WHERE telephoneclient='telephone';
+WHERE reservation.numeroreservation = '1';
 
 
 --tables
 --choix par localisation
-SELECT numerotable, nombreplaceisolee, nbplaceAccolee1, nbplaceAccolee2, localisation, numerogroupe	
+SELECT *
 FROM tables
-WHERE localisation='localisation';
+WHERE localisation='cheminee';
 
 --consultation des articles?
 
 
 
 --reserve (reservation - client)
+--INUTILEINUTILE
 --consulter tous les clients associés à une résevation (par nom)
-SELECT reservation.numeroreservation, reservation.numeroclient, reservation.nbPersonnes, client.nomClient, client.telephoneclient
-FROM reservation, client
-where reservation.numeroclient = client.numeroclient
-having reservation.numeroreservation = (SELECT numeroreservation
-FROM client
-where client.numeroreservation = (SELECT numeroclient
-from client
-where nomclient = 'le nom'));
+--SELECT reservation.numeroreservation, reservation.numeroclient, reservation.nbPersonnes, client.nomClient, client.telephoneclient
+--FROM reservation, client
+--where reservation.numeroclient = client.numeroclient
+--having reservation.numeroreservation = (SELECT numeroreservation
+--FROM client
+--where client.numeroreservation = (SELECT numeroclient
+--from client
+--where nomclient = 'Richard'));
 
-
---consulter tous les clients associés à une résevation (par telephone)
-SELECT distinct reserve.numeroreservation, reserve.numeroclient, reservation.nbPersonnes, client.nomClient, client.telephoneclient
-FROM reserve, reservation, client
-where reservation.numeroreservation = reserve.numeroreservation
-and reserve.numeroclient = client.numeroclient
-having numeroreservation = (SELECT numeroreservation
-FROM reserve
-where numeroreservation = (SELECT numeroclient
-from client
-where numerotelephone = 'le num'));
+--INUTILE
+--consulter tous les clients associés à une résevation (par telephone) 
+--SELECT distinct reserve.numeroreservation, reserve.numeroclient, reservation.nbPersonnes, client.nomClient, client.telephoneclient
+--FROM reserve, reservation, client
+--where reservation.numeroreservation = reserve.numeroreservation
+--and reserve.numeroclient = client.numeroclient
+--having numeroreservation = (SELECT numeroreservation
+--FROM reserve
+--where numeroreservation = (SELECT numeroclient
+--from client
+--where numerotelephone = 'le num'));
 
 
 --commande
 --consulter les articles d'une réservation (par numero de table)
-	SELECT sontcommandes.numeroreservation, article.nomarticle, article.quantitearticle
+SELECT sontcommandes.numeroreservation, article.nomarticle, sontcommandes.quantitearticle
 FROM sontcommandes, article
-where sontcommandes.numeroresevation = (SELECT numeroreservation
+where sontcommandes.numeroreservation = (SELECT numeroreservation
 from estreserve
-where estreserve.numerotable = 'numerotable');
+where estreserve.numerotable = '1');
 
 
 

@@ -88,7 +88,7 @@ insert into Service
 -- RESERVATION
 
 insert into Reservation
-	Values(1, 5, 120, 1, 'soir', '21/07/2015');
+	Values(1, 5, 120, 1, 'soir', '21/07/2015');	
 
 insert into Reservation
 	Values(3, 5, 190, 1, 'midi', '21/07/2015');
