@@ -5,6 +5,7 @@ CREATE TABLE Tables (
 	nombrePlaceAccolee1 INTEGER check (nombrePlaceAccolee1 > 0),
 	nombrePlaceAccolee2 INTEGER check (nombrePlaceAccolee2 > 0),
 	localisation VARCHAR(20),
+    CONSTRAINT CheckNombre CHECK (nombrePlaceIsolee >= nombrePlaceAccolee1 AND nombrePlaceAccolee1 >= nombrePlaceAccolee2),
 	CONSTRAINT KTables PRIMARY KEY (numeroTable)
 );
 
