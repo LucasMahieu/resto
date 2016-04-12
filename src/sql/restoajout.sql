@@ -6,7 +6,7 @@ Update articles
 SET prix= ' ',
 	spécialité = '',
 	quantitéArticle= '',
-where nomArticles= '',
+where nomArticles= '';
 
 --Ajout client
 Insert into client Values ('numeroclient',' nomclient', 'telephoneclient'); 
