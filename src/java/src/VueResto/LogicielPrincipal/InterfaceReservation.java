@@ -11,6 +11,9 @@ public class InterfaceReservation extends ObservateurReservation{
   private JPanel panelReservation;
   private static final int TAILLE_X_PANEL = 900;
   private static final int TAILLE_Y_PANEL = 900;
+  private static final int TAILLE_Y_BOUTON = 20;
+  private static final int TAILLE_X_BOUTON = 200;
+
 
   public InterfaceReservation(){
     this.panelReservation = new JPanel();
@@ -18,19 +21,23 @@ public class InterfaceReservation extends ObservateurReservation{
     this.panelReservation.setPreferredSize(new Dimension(TAILLE_X_PANEL,TAILLE_Y_PANEL));
 
     JLabel labelNomReservation = new JLabel("Nom");
-    labelNomReservation.setBounds(0,280,210,20);
+    labelNomReservation.setBounds(0,280,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     this.panelReservation.add(labelNomReservation);
 
     JTextField texteNomReservation = new JTextField(20);
-    texteNomReservation.setBounds(0,300,210,20);
+    texteNomReservation.setBounds(0,300,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     this.panelReservation.add(texteNomReservation);
 
+    JLabel labelPrenomReservation = new JLabel("Prenom");
+    labelPrenomReservation.setBounds(0,380,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    this.panelReservation.add(labelPrenomReservation);
+
     JTextField textePrenomReservation= new JTextField(20);
-    textePrenomReservation.setBounds(0,400,210,20);
+    textePrenomReservation.setBounds(0,400,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     this.panelReservation.add(textePrenomReservation);
 
-    JButton boutonReservation = new JButton("Réserver");
-    boutonReservation.setBounds(0,500,210,20);
+    JButton boutonReservation = new JButton("Reserver");
+    boutonReservation.setBounds(0,500,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     this.panelReservation.add(boutonReservation);
 
   }
