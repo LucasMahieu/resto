@@ -20,9 +20,9 @@ insert into Client
 	
 -- CARTES
 insert into Carte
-	Values('Carte pokemon');
+	Values('carte repas');
 insert into Carte
-	Values('Carte postale');
+	Values('carte bar');
 	
 -- ARTICLES
 insert into Article
@@ -34,9 +34,9 @@ insert into Article
 insert into Article
 	Values('steak frites', 10, 'americain');
 insert into Article
-	Values('salade de tomate', 8, 'italien');
+	Values('salade de tomates', 8, 'italien');
 insert into Article
-	Values('caparccio de morue', 12, 'guineen');	
+	Values('carpaccio', 12, 'guineen');	
 insert into Article
 	Values('tiramisu', 12, 'italien');
 insert into Article
@@ -49,14 +49,16 @@ insert into Article
 	Values('menu enfant', 13, NULL);
 insert into Article
 	Values('menu arabe', 18, 'arabe');
+insert into Article
+	Values('the a la menthe', 4, 'arabe');
 	
 -- SERVICE
 insert into Service
-	Values('MIDI', '25/04/2016', 'Carte postale');
+	Values('MIDI', '25/04/2016', 'carte bar');
 insert into Service
-	Values('MIDI', '21/07/2015', 'Carte postale');
+	Values('MIDI', '21/07/2015', 'carte bar');
 insert into Service
-	Values('SOIR', '21/07/2015', 'Carte pokemon');
+	Values('SOIR', '21/07/2015', 'carte repas');
 
 -- RESERVATION
 insert into Reservation
@@ -74,9 +76,9 @@ insert into Choix
 insert into Choix
 	Values('couscous');
 insert into Choix
-	Values('caparccio de morue');
+	Values('carpaccio');
 insert into Choix
-	Values('salade de tomate');
+	Values('salade de tomates');
 insert into Choix
 	Values('salade tunisienne');
 insert into Choix
@@ -89,6 +91,9 @@ insert into Choix
 	Values('champagne');
 insert into Choix
 	Values('perrier');
+insert into Choix
+	Values('the a la menthe');
+	
 
 -- PLAT
 insert into Plat
@@ -98,9 +103,9 @@ insert into Plat
 
 -- ENTREE	
 insert into Entree
-	Values('caparccio de morue');
+	Values('carpaccio');
 insert into Entree
-	Values('salade de tomate');
+	Values('salade de tomates');
 insert into Entree
 	Values('salade tunisienne');
 
@@ -117,6 +122,9 @@ insert into Boisson
     Values('champagne');
 insert into Boisson
     Values('perrier');
+    
+insert into Boisson
+    Values('the a la menthe');
 
 -- MENU
 insert into Menu
@@ -125,7 +133,104 @@ insert into Menu
 	Values('menu arabe', 'couscous');
 
 
--- estReservee
--- sontCommandes
--- Disponibles
--- estCompose
+-- ESTRESERVEE (NumeroTable, NumeroReservation)
+
+insert into EstReservee
+	Values(1,1);
+	
+insert into EstReservee
+	Values(2,1);
+	
+	
+-- SONTCOMMANDES
+insert into SontCommandes
+	Values('menu enfant',1,2);
+	
+insert into SontCommandes
+	Values('couscous',1,2);
+	
+insert into SontCommandes
+	Values('coca',1,2);
+
+insert into SontCommandes
+	Values('perrier',1,2);
+	
+-- DISPONIBLE
+
+insert into Disponibles
+	Values('coca', 'carte bar');
+
+insert into Disponibles
+	Values('perrier', 'carte bar');
+	
+insert into Disponibles
+	Values('the a la menthe', 'carte bar');
+	
+insert into Disponibles
+	Values('coca', 'carte repas');
+
+insert into Disponibles
+	Values('perrier', 'carte repas');
+
+insert into Disponibles
+	Values('champagne', 'carte repas');
+	
+insert into Disponibles
+	Values('couscous', 'carte repas');
+
+insert into Disponibles
+	Values('steak frites', 'carte repas');
+	
+insert into Disponibles
+	Values('salade de tomates', 'carte repas');
+	
+insert into Disponibles
+	Values('salade tunisienne', 'carte repas');
+	
+insert into Disponibles
+	Values('glace', 'carte repas');
+	
+insert into Disponibles
+	Values('tiramisu', 'carte repas');
+	
+insert into Disponibles
+	Values('carpaccio', 'carte repas');
+	
+	
+
+	
+-- ESTCOMPOSE
+
+insert into EstCompose
+	Values('menu enfant', 'perrier');
+insert into EstCompose
+	Values('menu enfant', 'coca');
+insert into EstCompose
+	Values('menu enfant', 'glace');
+	
+insert into EstCompose
+	Values('menu arabe', 'salade tunisienne');
+insert into EstCompose
+	Values('menu arabe', 'the a la menthe');
+insert into EstCompose
+	Values('menu arabe', 'glace');
+	
+-- SONTVOISINES
+
+insert into SontVoisines
+	Values(1,3);
+	
+insert into SontVoisines
+	Values(3,1);
+	
+insert into SontVoisines
+	Values(3,4);
+
+insert into SontVoisines
+	Values(4,3);
+	
+insert into SontVoisines
+	Values(2,5);
+	
+insert into SontVoisines
+	Values(5,2);
