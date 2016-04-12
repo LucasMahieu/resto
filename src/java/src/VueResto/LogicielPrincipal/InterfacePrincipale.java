@@ -28,9 +28,9 @@ public class InterfacePrincipale extends JFrame{
 
     //onglets.addTab("Suivi Commande",this.InterfaceSuiviCommande.getPanel());
     //onglets.addTab("Commande",this.InterfaceCommande.getPanel());
-    //onglets.addTab("Réservation",this.InterfaceReservation.getPanel());
+    //onglets.addTab("Reservation",this.InterfaceReservation.getPanel());
     this.interfaceReservation = new InterfaceReservation();
-    onglets.addTab("Réservation",this.interfaceReservation.getPanel());
+    onglets.addTab("Reservation",this.interfaceReservation.getPanel());
 
     //this.interfaceSuiviCommande = new InterfaceSuiviCommande();
     //onglets.addTab("Suivi Commande",this.interfaceSuiviCommande.getPanel());
@@ -81,7 +81,7 @@ public class InterfacePrincipale extends JFrame{
 //
 //        
 //
-//        JButton bouton = new JButton("Réservation");
+//        JButton bouton = new JButton("Reservation");
 //        JPanel pReservation = new JPanel();
 //        pReservation.add(bouton);
 //        pReservation.setPreferredSize(new Dimension(300,65));

@@ -29,7 +29,7 @@ public class InterfaceReservation extends ObservateurReservation{
     textePrenomReservation.setBounds(0,400,210,20);
     this.panelReservation.add(textePrenomReservation);
 
-    JButton boutonReservation = new JButton("Réserver");
+    JButton boutonReservation = new JButton("Reserver");
     boutonReservation.setBounds(0,500,210,20);
     this.panelReservation.add(boutonReservation);
 
