@@ -19,28 +19,28 @@ public class InterfacePrincipale extends JFrame{
       }
     }
     );
-//    JButton buttonOngletResa = new JButton("Reservation");
-//    JPanel panneau = new JPanel();
-//    panneau.add(buttonOngletResa);
-//    setContentPane(panneau);
-//    setSize(1000,1000);
-//    setVisible(true);
 
-    JPanel panel = new JPanel(); // panneau d'interface principale
+    JPanel panelPrincipal = new JPanel(); // panneau d'interface principale
     JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 
-    //this.interfaceCommande = new InterfaceCommande();
-    //this.interfaceReservation = new InterfaceReservation();
-    //this.interfaceSuiviCommande = new InterfaceSuiviCommande();
+    this.interfaceCommande = new InterfaceCommande();
+    onglets.addTab("Commande",this.interfaceCommande.getPanel());
 
     //onglets.addTab("Suivi Commande",this.InterfaceSuiviCommande.getPanel());
     //onglets.addTab("Commande",this.InterfaceCommande.getPanel());
     //onglets.addTab("Réservation",this.InterfaceReservation.getPanel());
+    this.interfaceReservation = new InterfaceReservation();
+    onglets.addTab("Réservation",this.interfaceReservation.getPanel());
 
-    panel.add(onglets);
+    //this.interfaceSuiviCommande = new InterfaceSuiviCommande();
+    //onglets.addTab("Suivi Commande",this.interfaceSuiviCommande.getPanel());
 
-    this.setContentPane(panel);
+    panelPrincipal.add(onglets);
+    onglets.setOpaque(true);
+
+    this.setContentPane(panelPrincipal);
     this.setSize(1000,1000);
+
 
     JMenuBar menuBar = new JMenuBar();
     this.setJMenuBar(menuBar);
