@@ -17,7 +17,10 @@ public abstract class ControleurSujet{
 		}
 	}
 
-	public void checkerCommande(int numeroCommande){
-
+	public void checkerFacture(int numeroFacture){
+        Facture factureFinale = new Facture();
+        if(factureFinale.existe(numeroFacture)){
+            factureFinale.getFacture(numeroFacture);
+        }
 	}
 }
