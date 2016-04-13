@@ -29,44 +29,43 @@ and client.nomclient = 'Johnny'
 and client.telephoneclient = '0601010101';
 
 
---marche pas
---------------------------------------------------------------------------------------------------------------------------- TESTER LA SUITE
 --consulter les articles d'une réservation (par numero de table), il faut aussi la date te le type
 SELECT sontcommandes.numeroreservation, article.nomarticle, sontcommandes.quantitearticle
 FROM sontcommandes, article, reservation
 where reservation.dateservice = '21/07/2015'
 and reservation.typeservice = 'SOIR'
-having sontcommandes.numeroreservation in (SELECT numeroreservation
-from estreserve
-where estreserve.numerotable = '1');
+and sontcommandes.numeroreservation = (SELECT numeroreservation
+from estreservee
+where estreservee.numerotable = '1');
 
-
+--a faire dans les updates
 --calcul de la facture par numero de table
-SELECT sontcommandes.numeroreservation, SUM(article.quantitearticle * article.prixArticle) as Facture
-FROM sontcommandes, article
-where sontcommandes.numeroresevation = (SELECT numeroreservation
-from estreserve
-where estreserve.numerotable = 'numerotable');
+SELECT sontcommandes.numeroreservation, client.nomclient, SUM(sontcommandes.quantitearticle * article.prixArticle) as Facture
+FROM sontcommandes, article, client, reservation
+where reservation.numeroclient = clent.numeroclient
+and estreservee.numerotable = 'numero'
+and estreservee.numeroreservation = reservation.numeroreservation
 
 
 --facture par numerotable, il faut aussi la date te le type
-SELECT numeroreservation, nbpersonnes, prixtotal
-FROM reservation
-where reservation.dateservice = 'dates'
-and reservation.typeservice = 'type'
-having reservation.numerotable = (SELECT numerotable
-from estreserve
-where estreserve = 'le numero');
+SELECT reservation.numeroreservation, nbpersonnes, prixtotal
+FROM reservation, estreservee
+where reservation.dateservice = '21/07/2015'
+and reservation.typeservice = 'SOIR'
+and reservation.numeroreservation = estreservee.numeroreservation
+and estreservee.numerotable = (SELECT numerotable
+from estreservee
+where estreservee.numerotable = 1);
 
 
 --facture par nomclient, il faut aussi la date te le type
 SELECT numeroreservation, nbpersonnes, prixtotal
 FROM reservation
-where reservation.dateservice = 'dates'
-and reservation.typeservice = 'type'
-having reservation.numeroclient = (SELECT numeroclient
+where reservation.dateservice = '21/07/2015'
+and reservation.typeservice = 'SOIR'
+and reservation.numeroclient = (SELECT numeroclient
 from client
-where nomclient = 'le nom');
+where nomclient = 'Johnny');
 
 
 --articles
@@ -91,9 +90,6 @@ from 'a choisir');
 
 
 
-
-
-
 --consulter les tables disponibles pour un nombre de personnes donné, marche vraissembleblement pas
 --renvoie le nombre max de tables par localisation
 SELECT count(*)
@@ -109,11 +105,11 @@ CASE
 		when somme >= 'nombre' THEN 'OK' ELSE '0'
 END
 
-FROM estreserve E, tables T1, tables T2, tables Tn
+FROM estreservee E, tables T1, tables T2, tables Tn
 
-WHERE T1.numerotable not in (SELECT numeroreservation From estreserve)
-and T2.numerotable not in (SELECT numeroreservation From estreserve)
-and Tn.numerotable not in (SELECT numeroreservation From estreserve)
+WHERE T1.numerotable not in (SELECT numeroreservation From estreservee)
+and T2.numerotable not in (SELECT numeroreservation From estreservee)
+and Tn.numerotable not in (SELECT numeroreservation From estreservee)
 and exists (SELECT SS.numerotable1, SS.numerotable2 From sontvoisine SS where (SS.numerotable1 = T1.numerotable and SS.numerotable2 = T2.numerotable) or (SS.numerotable1 = T2.numerotable and SS.numerotable2 = T2.numerotable)
 and exists (SELECT SS.numerotable1, SS.numerotable2 From sontvoisine SS where (SS.numerotable1 = T2.numerotable and SS.numerotable2 = Tn.numerotable) or (SS.numerotable1 = Tn.numerotable and SS.numerotable2 = T2.numerotable);
 
