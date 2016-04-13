@@ -25,3 +25,8 @@
 * Ecriture de tuples pour tester ces relations
 * Ajout de classes dans ModeleResto
 * Correction du Makefile
+
+## Mardi 12 avril
+* Fin de l'écriture des tuples de tests
+* Fin de l'écriture des requêtes courantes utiles
+* Début du codage des interfaces du logiciel principal
