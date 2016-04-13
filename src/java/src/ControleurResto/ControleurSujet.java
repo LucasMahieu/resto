@@ -16,4 +16,8 @@ public abstract class ControleurSujet{
 			o.miseAJour();
 		}
 	}
+
+	public void checkerCommande(int numeroCommande){
+
+	}
 }
