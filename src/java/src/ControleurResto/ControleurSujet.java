@@ -8,5 +8,7 @@ public abstract class ControleurSujet {
 	public ControleurSujet(){
       
 	}
+	public void checkerCommande(int numeroCommande){
 
+	}
 }
