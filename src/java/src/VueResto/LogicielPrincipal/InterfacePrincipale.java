@@ -26,9 +26,6 @@ public class InterfacePrincipale extends JFrame{
     this.interfaceCommande = new InterfaceCommande();
     onglets.addTab("Commande",this.interfaceCommande.getPanel());
 
-    //onglets.addTab("Suivi Commande",this.InterfaceSuiviCommande.getPanel());
-    //onglets.addTab("Commande",this.InterfaceCommande.getPanel());
-    //onglets.addTab("Reservation",this.InterfaceReservation.getPanel());
     this.interfaceReservation = new InterfaceReservation();
     onglets.addTab("Reservation",this.interfaceReservation.getPanel());
 
