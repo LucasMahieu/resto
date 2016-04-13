@@ -45,6 +45,7 @@ FROM sontcommandes, article, client, reservation
 where reservation.numeroclient = clent.numeroclient
 and estreservee.numerotable = 'numero'
 and estreservee.numeroreservation = reservation.numeroreservation
+and 
 
 
 --facture par numerotable, il faut aussi la date te le type
