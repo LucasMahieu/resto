@@ -30,12 +30,17 @@ public class InterfaceTextCommande extends ObservateurCommande {
 		}
 
 		if(b.intValue()==1){// on prend  une commande
-
+			System.out.println("veuillez indiquer le numéro de table de la commande");
+			int table = sc.nextLine();
+			System.out.println("veuillez indiquer le plat commandé");
+			String plat = sc.nextLine();
+			Sytem.out.println("veuiller indiquer la quantité de ce plat commandé");
+			int quantite = sc.nextLine();
 		}
 		else if (b.intValue()==2){// on produit la facture
 			Sytem.out.println("choississez le nom du client pour récupérer la facture");
 			String str= sc.nextLine();
-			controler.checkerFacture(b.intValue());
+			controler.checkerFacture(str);
 		}
 
 	}
