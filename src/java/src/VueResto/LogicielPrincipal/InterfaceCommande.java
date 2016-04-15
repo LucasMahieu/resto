@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-public class InterfaceCommande extends ObservateurCommande{
+public class InterfaceCommande extends ObservateurCommande implements ActionListener{
+//public class InterfaceCommande extends ObservateurCommande{
 
 	private JPanel panelCommande;
 	private JTabbedPane tabbedPaneArticle;
