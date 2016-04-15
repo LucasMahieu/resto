@@ -13,9 +13,9 @@ public class InterfaceCommande extends ObservateurCommande{
 	private JPanel panelPlat;
 	private JPanel panelDessert;
 	private JPanel panelMenu;
-	private JTextField textFieldNbTable;
+	private JTextField textFieldNTable;
 	private JTextField textFieldNom;
-	private JLabel labelNbTable;
+	private JLabel labelNTable;
 	private JLabel labelNom;
 	private JButton buttonRecherche;
 	private JButton buttonAjout;
@@ -54,12 +54,12 @@ public class InterfaceCommande extends ObservateurCommande{
 		this.panelCommande.setLayout(null);
 
 		//CHAMP TEXT POUR CHOISIR LE NB DE TABLE
-		this.textFieldNbTable = new JTextField(TAILLE_X_FIELD_TABLE);
-		textFieldNbTable.setBounds(POS_X_TABLE,POS_Y_TABLE,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
-		panelCommande.add(textFieldNbTable);
-		labelNbTable = new JLabel("Num. Table");
-		labelNbTable.setBounds(POS_X_TABLE,10,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
-		panelCommande.add(labelNbTable);
+		this.textFieldNTable = new JTextField(TAILLE_X_FIELD_TABLE);
+		textFieldNTable.setBounds(POS_X_TABLE,POS_Y_TABLE,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
+		panelCommande.add(textFieldNTable);
+		labelNTable = new JLabel("Num. Table");
+		labelNTable.setBounds(POS_X_TABLE,10,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
+		panelCommande.add(labelNTable);
 		//CHAMP TEXT POUR CHOISIR LE NOM DE LA RESA
 		this.textFieldNom = new JTextField(TAILLE_X_FIELD_NOM);
 		textFieldNom.setBounds(POS_X_NOM,POS_Y_NOM,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
@@ -114,4 +114,55 @@ public class InterfaceCommande extends ObservateurCommande{
 
 	public void miseAJour(){
 	}
+
+	public void activeListener(ActionListener aL){
+		buttonRecherche.addActionListener(aL);
+		buttonAjout.addActionListener(aL);
+	}
+	public JPanel getPanelCommande(){
+		return this.panelCommande;
+	}
+	public JTabbedPane getTabbedPaneArticle(){
+		return this.tabbedPaneArticle;
+	}
+	public JPanel getPanelBoisson(){
+		return this.panelBoisson;
+	}
+	public JPanel getPanelEntree(){
+		return this.panelEntree;
+	}
+	public JPanel getPanelPlat(){
+		return this.panelPlat;
+	}
+	public JPanel getPanelDessert(){
+		return this.panelDessert;
+	}
+	public JPanel getPanelMenu(){
+		return this.panelMenu;
+	}
+	public JTextField getTextFieldNTable(){
+		return this.textFieldNTable;
+	}
+	public JTextField getTextFieldNom(){
+		return this.textFieldNom;
+	}
+	public JLabel getLabelNTable(){
+		return this.labelNTable;
+	}
+	public JLabel getLabelNom(){
+		return this.labelNom;
+	}
+	public JButton getButtonRecherche(){
+		return this.buttonRecherche;
+	}
+	public JButton getButtonAjout(){
+		return this.buttonAjout;
+	}
+	public SpinnerModel getModelQuantite(){
+		return this.modelQuantite;
+	}
+	public JSpinner getSpinnerQuantite(){
+		return this.spinnerQuantite;
+	}
+
 }

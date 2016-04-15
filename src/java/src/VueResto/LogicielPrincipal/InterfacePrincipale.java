@@ -13,7 +13,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 
 
 	public InterfacePrincipale(){
-		super("La bonne fourchette");
+		super("La bonne fourchetté");
 		addWindowListener( new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
 				System.exit(0);
@@ -48,8 +48,8 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		menu.add(menuItem);
 		menuBar.add(menu);
 		this.setVisible(true);
-		interfaceReservation.getBoutonReservation().addActionListener(this);
-
+		this.interfaceCommande.activeListener(this);
+		this.interfaceReservation.activeListener(this);
 	}
 
 	public InterfaceCommande getInterfaceCommande(){
@@ -71,9 +71,17 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				+ new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
 				+ interfaceReservation.getComboBoxService().getSelectedItem() + " " + interfaceReservation.getTexteLocalisation().getText();
 			System.out.println(message);
-		}
-		if(source == interfaceReservation.getBoutonReservation()){
-
+		}else if(source == interfaceCommande.getButtonAjout()){
+			System.out.println("Bouton de Ajout");
+			String message = "";
+			message = interfaceCommande.getSpinnerQuantite().getValue() + " ";
+			System.out.println(message);
+		}else if(source == interfaceCommande.getButtonRecherche()){
+			System.out.println("Bouton de Recherche");
+			String message = "";
+			message = interfaceCommande.getTextFieldNTable().getText()+" "+interfaceCommande.getTextFieldNom().getText() + " ";
+			System.out.println(message);
+			
 		}
 	}
 
