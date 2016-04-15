@@ -21,7 +21,7 @@
 all: Resto exeResto
 
 Resto:
-	javac -d bin -sourcepath src:src/* src/Resto.java
+	javac -encoding utf8 -d bin -sourcepath src:src/* src/Resto.java
 
 # Execution:
 # on peut taper directement la ligne de commande :
