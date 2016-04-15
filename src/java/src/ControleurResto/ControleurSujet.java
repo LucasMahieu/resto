@@ -33,7 +33,29 @@ public abstract class ControleurSujet {
       //Vérification de l'existence de la réservation 
       //si ok:
       //Appel à la suppression de réservation dans la BD
-
     }
 
+    public LinkedList<String> getListeArticles(String type)
+    {
+        LinkedList<String> resultat = new LinkedList<String>();
+
+        ResultSet rset = getArticles(null, -1, null, type);
+        while(rset.next())
+        {
+            resultat.add(rset.getString(1));
+        }
+        return resultat;
+    }
+
+    public float getPrixArticle(String nomArticle)
+    {
+        LinkedList<String> resultat = new LinkedList<String>();
+
+        ResultSet rset = getArticles(nomArticle, -1, null, null);
+        while(rset.next())
+        {
+            resultat.add(rset.getFloat(2));
+        }
+        return resultat;
+    }
 }

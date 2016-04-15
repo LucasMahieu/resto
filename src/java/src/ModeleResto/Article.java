@@ -3,26 +3,33 @@ public class Article {
   public Article(){
   }
 	
-	public static /*type de retour*/ afficher(String nomArticle, int prixMax, int prixMin, String specialite, String type) {
-		String requete = new String("SELECT * from article");
+	public static ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String typeArticle) {
+		String requete = new String("SELECT * from article where");
 		if (nomArticle != null= {
-			requete += "where article.nom = " + nomArticle;
-		} else {
-			requete += "where article.nom = *";
+			requete += "article.nom = " + nomArticle;
 		}
-		if (prixMax != -1) {
-			requete += "and article.prix <= " + prixMax;
-		}
-		if (prixMin != -1) {
-			requete += "and article.prix <= " + prixMin;
+		if (prixArticle != -1) {
+				if (nomArticle != null) {	
+					requete += " and ";
+				}
+			requete += " article.prix == " + prixArticle;
 		}
 		if (specialite != null) {
+				if (nomArticle != null or prixArticle != -1) {	
+					requete += " and ";
+				}
 			requete += "and article.specialite = " + specialite;
 		}
 		if (type != null) {
-			requete += "having article.nomarticle in (SELECT * from " + type + " );");
-		} else {
-			requete += "having article.nomarticle in (SELECT * from article );"); //pas sur que ca marche
+			requete += "having article.nomarticle in (SELECT * from " + type + " )");
+		}	
+		requete += ";");
 		}
+
+	public static ResultSet /* pas sur*/ ajoutArticle(String nomArticle, int quantite, int numerReservation) {
+			String requete += String("Insert into sontcommandes Values");
+			requete += "(" += nomArticle;
+			requete += ", " + quantite;
+			requete += ", " + numeroReservation;
 	}
 }

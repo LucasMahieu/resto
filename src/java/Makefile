@@ -32,5 +32,8 @@ Resto:
 exeResto:
 	java -classpath bin:bin/* Resto
 
+documentation:
+	javadoc -d doc -sourcepath src/ -subpackages . 
+	
 clean:
 	rm -rf bin/*
