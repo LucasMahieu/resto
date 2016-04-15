@@ -73,7 +73,7 @@ where nomclient = 'Johnny');
 --consulter tous les articles par nom/specialite/prix
 SELECT * 
 from article
-where article.nom = 'nom'
+where article.nomarticle LIKE '%';
 and article.specialite = 'la spec'
 and article.prix >= 'prixmin'
 and article.prix <= 'prixmax';
