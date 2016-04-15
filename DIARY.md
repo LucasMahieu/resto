@@ -25,3 +25,7 @@
 * Ecriture de tuples pour tester ces relations
 * Ajout de classes dans ModeleResto
 * Correction du Makefile
+
+## Vendredi 15 avril
+* documentation InterfaceReservation
+* travail sur InterfaceReservation
