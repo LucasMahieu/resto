@@ -30,3 +30,7 @@
 * Fin de l'écriture des tuples de tests
 * Fin de l'écriture des requêtes courantes utiles
 * Début du codage des interfaces du logiciel principal
+
+## Vendredi 15 avril
+* documentation InterfaceReservation
+* travail sur InterfaceReservation

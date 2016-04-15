@@ -9,10 +9,9 @@ public abstract class ControleurSujet {
       
 	}
 
-	public void checkerFacture(int numeroFacture){
+	public void checkerFacture(String client){
         Facture factureFinale = new Facture();
-        if(factureFinale.existe(numeroFacture)){
-            factureFinale.getFacture(numeroFacture);
+
         }
 
     public void passerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
