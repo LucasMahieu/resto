@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import ControleurResto.*;
 
 public class InterfaceCommande extends ObservateurCommande{
 
+	private Controleur controleur;
 	private JPanel panelCommande;
 	private JTabbedPane tabbedPaneArticle;
 	private JPanel panelBoisson;
@@ -22,7 +24,11 @@ public class InterfaceCommande extends ObservateurCommande{
 	private JButton buttonAjout;
 	private SpinnerModel modelQuantite;    
 	private JSpinner spinnerQuantite ;
-	private ArrayList<JToggleButton> buttonArticles; 
+	private ArrayList<JToggleButton> buttonArticleBoisson;
+	private ArrayList<JToggleButton> buttonArticleEntree;
+	private ArrayList<JToggleButton> buttonArticlePlat;
+	private ArrayList<JToggleButton> buttonArticleDessert;
+	private ArrayList<JToggleButton> buttonArticleMenu;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -47,9 +53,25 @@ public class InterfaceCommande extends ObservateurCommande{
 	private static final int POS_Y_RECHERCHE = 30;
 	private static final int TAILLE_X_RECHERCHE = 80;
 	private static final int TAILLE_Y_RECHERCHE = 20;
+	private static final int POS_B = 20;
+	private static final int TAILLE_X_B = 80;
+	private static final int TAILLE_Y_B = 80;
+	private static final int POS_E = 20;
+	private static final int TAILLE_X_E = 100;
+	private static final int TAILLE_Y_E = 80;
+	private static final int POS_P = 20;
+	private static final int TAILLE_X_P = 100;
+	private static final int TAILLE_Y_P = 80;
+	private static final int POS_D = 20;
+	private static final int TAILLE_X_D = 80;
+	private static final int TAILLE_Y_D = 80;
+	private static final int POS_M = 20;
+	private static final int TAILLE_X_M = 80;
+	private static final int TAILLE_Y_M = 80;
 
 	
 	public InterfaceCommande(){
+		this.controleur = new Controleur();
 		// PANEL PRINCIPALE
 		this.panelCommande = new JPanel();
 		this.panelCommande.setPreferredSize(new Dimension(TAILLE_X_PANEL,TAILLE_Y_PANEL));
@@ -75,19 +97,102 @@ public class InterfaceCommande extends ObservateurCommande{
 		// Different onglets par article
 		this.panelBoisson = new JPanel();
         panelBoisson.setPreferredSize(new Dimension(TAILLE_X_PANEL_ARTICLE,TAILLE_Y_PANEL_ARTICLE));
+		this.panelBoisson.setLayout(null);
 		this.tabbedPaneArticle.addTab("BOISSON",panelBoisson);
 		this.panelEntree = new JPanel();
         panelEntree.setPreferredSize(new Dimension(TAILLE_X_PANEL_ARTICLE,TAILLE_Y_PANEL_ARTICLE));
+		this.panelEntree.setLayout(null);
 		this.tabbedPaneArticle.addTab("ENTREE",panelEntree);
 		this.panelPlat = new JPanel();
         panelPlat.setPreferredSize(new Dimension(TAILLE_X_PANEL_ARTICLE,TAILLE_Y_PANEL_ARTICLE));
+		this.panelPlat.setLayout(null);
 		this.tabbedPaneArticle.addTab("PLAT",panelPlat);
 		this.panelDessert = new JPanel();
         panelDessert.setPreferredSize(new Dimension(TAILLE_X_PANEL_ARTICLE,TAILLE_Y_PANEL_ARTICLE));
+		this.panelDessert.setLayout(null);
 		this.tabbedPaneArticle.addTab("DESSERT",panelDessert);
 		this.panelMenu = new JPanel();
         panelMenu.setPreferredSize(new Dimension(TAILLE_X_PANEL_ARTICLE,TAILLE_Y_PANEL_ARTICLE));
+		this.panelMenu.setLayout(null);
 		this.tabbedPaneArticle.addTab("MENU",panelMenu);
+
+		//Ajout des bouttons pour article BOISSON
+		LinkedList<String> listArticleBoisson = controleur.getListeArticles("boisson");
+		this.buttonArticleBoisson = new ArrayList<JToggleButton>();
+		int lig=0,col=-1, j=0;
+		for(j=0; j<listArticleBoisson.size(); j++){
+			col++;
+			buttonArticleBoisson.add(new JToggleButton(listArticleBoisson.get(j)));
+			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_B)/TAILLE_X_B)==0 && j!=0){
+				lig++;
+				col=0;
+			}
+			buttonArticleBoisson.get(j).setBounds(POS_B+col*TAILLE_X_B,POS_B+lig*TAILLE_Y_B,TAILLE_X_B,TAILLE_Y_B);
+			panelBoisson.add(buttonArticleBoisson.get(j));
+		}
+		//Ajout des bouttons pour article ENTREE
+		LinkedList<String> listArticleEntree = controleur.getListeArticles("entree");
+		this.buttonArticleEntree = new ArrayList<JToggleButton>();
+		lig=0;
+		col=-1;
+		for(j=0; j<listArticleEntree.size(); j++){
+			col++;
+			buttonArticleEntree.add(new JToggleButton(listArticleEntree.get(j)));
+			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_E)/TAILLE_X_E)==0 && j!=0){
+				lig++;
+				col=0;
+			}
+			buttonArticleEntree.get(j).setBounds(POS_E+col*TAILLE_X_E,POS_E+lig*TAILLE_Y_E,TAILLE_X_E,TAILLE_Y_E);
+			panelEntree.add(buttonArticleEntree.get(j));
+		}
+		//Ajout des bouttons pour article PLAT
+		LinkedList<String> listArticlePlat = controleur.getListeArticles("plat");
+		this.buttonArticlePlat = new ArrayList<JToggleButton>();
+		lig=0;
+		col=-1;
+		for(j=0; j<listArticlePlat.size(); j++){
+			col++;
+			buttonArticlePlat.add(new JToggleButton(listArticlePlat.get(j)));
+			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_P)/TAILLE_X_P)==0 && j!=0){
+				lig++;
+				col=0;
+			}
+			buttonArticlePlat.get(j).setBounds(POS_P+col*TAILLE_X_P,POS_P+lig*TAILLE_Y_P,TAILLE_X_P,TAILLE_Y_P);
+			panelPlat.add(buttonArticlePlat.get(j));
+		}
+		//Ajout des bouttons pour article PLAT
+		LinkedList<String> listArticleDessert = controleur.getListeArticles("dessert");
+		this.buttonArticleDessert = new ArrayList<JToggleButton>();
+		lig=0;
+		col=-1;
+		for(j=0; j<listArticleDessert.size(); j++){
+			col++;
+			buttonArticleDessert.add(new JToggleButton(listArticleDessert.get(j)));
+			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_D)/TAILLE_X_D)==0 && j!=0){
+				lig++;
+				col=0;
+			}
+			buttonArticleDessert.get(j).setBounds(POS_D+col*TAILLE_X_D,POS_D+lig*TAILLE_Y_D,TAILLE_X_D,TAILLE_Y_D);
+			panelDessert.add(buttonArticleDessert.get(j));
+		}
+		//Ajout des bouttons pour article PLAT
+		LinkedList<String> listArticleMenu = controleur.getListeArticles("menu");
+		this.buttonArticleMenu = new ArrayList<JToggleButton>();
+		lig=0;
+		col=-1;
+		for(j=0; j<listArticleMenu.size(); j++){
+			col++;
+			buttonArticleMenu.add(new JToggleButton(listArticleMenu.get(j)));
+			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_M)/TAILLE_X_M)==0 && j!=0){
+				lig++;
+				col=0;
+			}
+			buttonArticleMenu.get(j).setBounds(POS_P+col*TAILLE_X_M,POS_M+lig*TAILLE_Y_M,TAILLE_X_M,TAILLE_Y_M);
+			panelMenu.add(buttonArticleMenu.get(j));
+		}
+		
+		
+
 
 		// Bouton de recherche de la resa
 		this.buttonRecherche = new JButton("Rechercher");
@@ -107,10 +212,6 @@ public class InterfaceCommande extends ObservateurCommande{
 
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
-		LinkedList<String> listArticle = getArticle("boisson");
-		for(int j=0; j<listArticle.length ; j++){
-		
-		}
 	}
 	
 	public JPanel getPanel(){
