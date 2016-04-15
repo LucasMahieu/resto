@@ -8,6 +8,10 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 
+/** classe d'interface de reservation contenant le panel de reservation a afficher dans l'interface principale du logiciel.
+ *
+ *
+ */
 public class InterfaceReservation extends ObservateurReservation{
   private JPanel panelReservation;
   private static final int TAILLE_X_PANEL = 980;
