@@ -15,7 +15,6 @@ public class InterfaceReservation extends ObservateurReservation{
   private static final int TAILLE_Y_BOUTON = 20;
   private static final int TAILLE_X_BOUTON = 200;
   private JButton boutonReservation = new JButton("Reserver");
-  private JLabel labelTest = new JLabel("Localisation");
   private JLabel labelNomReservation = new JLabel("Nom (Obligatoire)");
   private JTextField texteNomReservation = new JTextField(20);
   private JLabel labelPrenomReservation = new JLabel("Prenom (Obligatoire)");
@@ -33,6 +32,10 @@ public class InterfaceReservation extends ObservateurReservation{
   private JLabel labelLocalisation = new JLabel("Localisation");
   private JTextField texteLocalisation = new JTextField(20);
 
+  /** constructeur du panel de l'interface de reservation
+   * 
+   * @returns interface de reservation
+   */
   public InterfaceReservation(){
     int nbBoutons = 0;
     this.panelReservation = new JPanel();
@@ -94,69 +97,162 @@ public class InterfaceReservation extends ObservateurReservation{
   }
 
 
+  /** permet d'acceder au bouton de reservation de l'interface de reservation
+   * 
+   * @returns bouton de reservation
+   */
   public JButton getBoutonReservation(){
     return this.boutonReservation;
   } 
-  public JLabel getLabelTest(){
-    return this.labelTest;
-  } 
+
+  /** permet d'acceder à l'étiquette du nom de l'interface de reservation
+   * 
+   * @returns etiquette du nom de reservation
+   */
   public JLabel getLabelNomReservation(){
     return this.labelNomReservation;
   } 
+
+  /** permet d'acceder au contenu du champ textuel du nom de l'interface de reservation
+   * 
+   * @returns champ de texte du nom de reservation
+   */
   public JTextField getTexteNomReservation(){
     return this.texteNomReservation;
   } 
+
+  /** permet d'acceder a l'etiquette du prenom de l'interface de reservation
+   * 
+   * @returns etiquette du prenom de reservation
+   */
   public JLabel getLabelPrenomReservation(){
     return this.labelPrenomReservation;
   } 
+
+  /** permet d'acceder au contenu du champ textuel du prenom de l'interface de reservation
+   * 
+   * @returns champ du texte du prenom de reservation
+   */
   public JTextField getTextePrenomReservation(){
     return this.textePrenomReservation;
   } 
+
+  /** permet d'acceder a l'etiquette du nombre de personnes de l'interface de reservation
+   * 
+   * @returns etiquette du nombre de personnes
+   */
   public JLabel getLabelNombrePersonnes(){
     return this.labelNombrePersonnes;
   }
+
+  /** permet d'acceder au modele du spinner du nombre de personnes de l'interface de reservation
+   * 
+   * @returns modele du spinner du nombre de personnes
+   */
   public SpinnerModel getModelNombrePersonnes(){
     return this.modelNombrePersonnes;
   } 
+
+  /** permet d'acceder au spinner du nombre de personnes de l'interface de reservation
+   * 
+   * @returns spinner du nombre de personnes
+   */
   public JSpinner getSpinnerNombrePersonnes(){
     return this.spinnerNombrePersonnes;
   } 
+
+  /** permet d'acceder a l'etiquette de la date de l'interface de reservation
+   * 
+   * @returns etiquette de la date
+   */
   public JLabel getLabelDate(){
     return this.labelDate;
   }
+
+  /** permet d'acceder au modele de la date de l'interface de reservation
+   * 
+   * @returns modele du spinner de la date
+   */
   public SpinnerModel getModelDate(){
     return this.modelDate;
   }
+
+
+  /** permet d'acceder au spinner de la date
+   * 
+   * @returns spinner de la date
+   */
   public JSpinner getSpinnerDate(){
     return this.spinnerDate;
   } 
+
+  /** permet d'acceder a l'editeur du spinner de la date
+   * 
+   * @returns editeur du spinner de la date
+   */
   public JSpinner.DateEditor editorDate(){
     return this.editorDate;
   }
+
+  /** permet d'acceder a l'etiquette du service de l'interface de reservation
+   * 
+   * @returns etiquette du service
+   */
   public JLabel getLabelService(){
     return this.labelService;
   } 
+
+
+  /** permet d'acceder au differents services
+   * 
+   * @returns tableau de chaines des services
+   */
   public String[] getService(){
     return this.service;
   }
+
+  /** permet d'acceder a la combobox du service de l'interface de reservation
+   * 
+   * @returns combobox du service
+   */
   public JComboBox<String> getComboBoxService(){
     return this.comboBoxService;
   }
+
+  /** permet d'acceder a l'etiquette de la localisation de l'interface de reservation
+   * 
+   * @returns etiquette de localisation
+   */
   public JLabel getLabelLocalisation(){
     return this.labelLocalisation;
   } 
+
+  /** permet d'acceder au champ de texte de la localisation de l'interface de reservation
+   * 
+   * @returns champ textuel de la localisation 
+   */
   public JTextField getTexteLocalisation(){
     return this.texteLocalisation;
   }
 
+  /** permet d'acceder au panel de l'interface de reservation
+   * 
+   * @returns panel de l'interface de reservation
+   */
   public JPanel getPanel(){
     return this.panelReservation;
   }
 
+  /** permet de modifier les dimensions du panel de l'interface de reservation
+   * 
+   */
   public void setDimension(int x, int y){
     this.panelReservation.setPreferredSize(new Dimension(x,y));
   }
 
+  /** !!!NON IMPLEMENTEE!! permet de mettre a jour les donnees de l'interface de reservation
+   * 
+   */
   public void miseAJour(){
   }
 }
