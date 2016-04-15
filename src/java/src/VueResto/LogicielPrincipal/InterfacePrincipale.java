@@ -3,8 +3,9 @@ import VueResto.*;
 import VueResto.LogicielPrincipal.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 
-public class InterfacePrincipale extends JFrame{
+public class InterfacePrincipale extends JFrame implements ActionListener {
 
   private InterfaceCommande interfaceCommande; // observateur disposant d'un panel 
   private InterfaceReservation interfaceReservation; // observateur disposant d'un panel 
@@ -47,6 +48,7 @@ public class InterfacePrincipale extends JFrame{
     menu.add(menuItem);
     menuBar.add(menu);
     this.setVisible(true);
+    interfaceReservation.getBoutonReservation().addActionListener(this);
 
   }
 
@@ -55,6 +57,22 @@ public class InterfacePrincipale extends JFrame{
   }
   public InterfaceReservation getInterfaceReservation(){
     return this.interfaceReservation;
+  }
+  
+  @Override
+  public void actionPerformed(ActionEvent e){
+    Object source = e.getSource();
+    if(source == interfaceReservation.getBoutonReservation()){
+      System.out.println("Bouton de Reservation");
+      String message = "";
+      message = interfaceReservation.getTexteNomReservation().getText() + " "
+        + interfaceReservation.getTextePrenomReservation().getText() + " "
+        + interfaceReservation.getSpinnerNombrePersonnes().getValue() + " "
+        + new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
+        + interfaceReservation.getComboBoxService().getSelectedItem() + " " + interfaceReservation.getTexteLocalisation().getText();
+      System.out.println(message);
+      //controler.creerReservation(...);
+    }
   }
 
 }
