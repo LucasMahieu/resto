@@ -51,7 +51,6 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		this.interfaceCommande.activeListener(this);
 		this.interfaceReservation.activeListener(this);
 	}
-
 	public InterfaceCommande getInterfaceCommande(){
 		return this.interfaceCommande;
 	}
@@ -65,24 +64,34 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		if(source == interfaceReservation.getBoutonReservation()){
 			System.out.println("Bouton de Reservation");
 			String message = "";
-			message = interfaceReservation.getTexteNomReservation().getText() + " "
-				+ interfaceReservation.getTextePrenomReservation().getText() + " "
-				+ interfaceReservation.getSpinnerNombrePersonnes().getValue() + " "
-				+ new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
-				+ interfaceReservation.getComboBoxService().getSelectedItem() + " " + interfaceReservation.getTexteLocalisation().getText();
-			System.out.println(message);
+			if ( interfaceReservation.getTexteNomReservation().getText().equals("") || interfaceReservation.getTextePrenomReservation().getText().equals("")){
+
+				System.out.println("Erreur Reservation");
+				JOptionPane.showMessageDialog(this,"Des champs obligatoires n'ont pas été remplis","Erreur Reservation",JOptionPane.ERROR_MESSAGE);
+			}else{
+				message = interfaceReservation.getTexteNomReservation().getText() + " "
+					+ interfaceReservation.getTextePrenomReservation().getText() + " "
+					+ interfaceReservation.getSpinnerNombrePersonnes().getValue() + " "
+					+ new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
+					+ interfaceReservation.getComboBoxService().getSelectedItem() + " " + interfaceReservation.getTexteLocalisation().getText();
+				System.out.println(message);
+			}
 		}else if(source == interfaceCommande.getButtonAjout()){
 			System.out.println("Bouton de Ajout");
 			String message = "";
 			message = interfaceCommande.getSpinnerQuantite().getValue() + " ";
 			System.out.println(message);
 		}else if(source == interfaceCommande.getButtonRecherche()){
-			System.out.println("Bouton de Recherche");
-			String message = "";
-			message = interfaceCommande.getTextFieldNTable().getText()+" "+interfaceCommande.getTextFieldNom().getText() + " ";
-			System.out.println(message);
-			
+			if ( interfaceCommande.getTextFieldNTable().getText().equals("") || interfaceCommande.getTextFieldNom().getText().equals("")){
+				System.out.println("Erreur Recherche Commande");
+				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
+			}else{
+				System.out.println("Bouton de Recherche");
+				String message = "";
+				message = interfaceCommande.getTextFieldNTable().getText()+" "+interfaceCommande.getTextFieldNom().getText() + " ";
+				System.out.println(message);
+			}
+
 		}
 	}
-
 }

@@ -3,6 +3,7 @@ import VueResto.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.*;
 
 public class InterfaceCommande extends ObservateurCommande{
 
@@ -21,6 +22,7 @@ public class InterfaceCommande extends ObservateurCommande{
 	private JButton buttonAjout;
 	private SpinnerModel modelQuantite;    
 	private JSpinner spinnerQuantite ;
+	private ArrayList<JToggleButton> buttonArticles; 
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -105,7 +107,10 @@ public class InterfaceCommande extends ObservateurCommande{
 
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
-
+		LinkedList<String> listArticle = getArticle("boisson");
+		for(int j=0; j<listArticle.length ; j++){
+		
+		}
 	}
 	
 	public JPanel getPanel(){
