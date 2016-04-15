@@ -31,7 +31,7 @@ public class InterfaceTextCommande extends ObservateurCommande {
 		else if (b.intValue()==2){// on produit la facture
 			Sytem.out.println("choississez le numéro de réservations pour récupérer la facture");
 			System.in.read(b);
-			controler.checkerCommande(b.intValue());
+			controler.checkerFacture(b.intValue());
 		}
 
 	}
