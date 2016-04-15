@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 
-public class InterfaceReservation extends ObservateurReservation implements ActionListener{
+public class InterfaceReservation extends ObservateurReservation{
   private JPanel panelReservation;
   private static final int TAILLE_X_PANEL = 980;
   private static final int TAILLE_Y_PANEL = 980;
@@ -89,20 +89,64 @@ public class InterfaceReservation extends ObservateurReservation implements Acti
     this.panelReservation.add(texteLocalisation);
 
     boutonReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
-    boutonReservation.addActionListener(this);
     nbBoutons++;
     this.panelReservation.add(boutonReservation);
   }
 
-  @Override
-  public void actionPerformed(ActionEvent e){
-    Object source = e.getSource();
-    if(source == boutonReservation){
-      System.out.println("Bouton de Reservation");
-      String message = "";
-      message = texteNomReservation.getText() + " " + textePrenomReservation.getText() + " " + spinnerNombrePersonnes.getValue() + " " + new SimpleDateFormat("dd-MM-yyyy").format(spinnerDate.getValue()) + " " + comboBoxService.getSelectedItem() + " " + texteLocalisation.getText();
-      System.out.println(message);
-    }
+
+  public JButton getBoutonReservation(){
+    return this.boutonReservation;
+  } 
+  public JLabel getLabelTest(){
+    return this.labelTest;
+  } 
+  public JLabel getLabelNomReservation(){
+    return this.labelNomReservation;
+  } 
+  public JTextField getTexteNomReservation(){
+    return this.texteNomReservation;
+  } 
+  public JLabel getLabelPrenomReservation(){
+    return this.labelPrenomReservation;
+  } 
+  public JTextField getTextePrenomReservation(){
+    return this.textePrenomReservation;
+  } 
+  public JLabel getLabelNombrePersonnes(){
+    return this.labelNombrePersonnes;
+  }
+  public SpinnerModel getModelNombrePersonnes(){
+    return this.modelNombrePersonnes;
+  } 
+  public JSpinner getSpinnerNombrePersonnes(){
+    return this.spinnerNombrePersonnes;
+  } 
+  public JLabel getLabelDate(){
+    return this.labelDate;
+  }
+  public SpinnerModel getModelDate(){
+    return this.modelDate;
+  }
+  public JSpinner getSpinnerDate(){
+    return this.spinnerDate;
+  } 
+  public JSpinner.DateEditor editorDate(){
+    return this.editorDate;
+  }
+  public JLabel getLabelService(){
+    return this.labelService;
+  } 
+  public String[] getService(){
+    return this.service;
+  }
+  public JComboBox<String> getComboBoxService(){
+    return this.comboBoxService;
+  }
+  public JLabel getLabelLocalisation(){
+    return this.labelLocalisation;
+  } 
+  public JTextField getTexteLocalisation(){
+    return this.texteLocalisation;
   }
 
   public JPanel getPanel(){
