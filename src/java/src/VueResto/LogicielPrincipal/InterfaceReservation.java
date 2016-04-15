@@ -16,9 +16,9 @@ public class InterfaceReservation extends ObservateurReservation{
   private static final int TAILLE_X_BOUTON = 200;
   private JButton boutonReservation = new JButton("Reserver");
   private JLabel labelTest = new JLabel("Localisation");
-  private JLabel labelNomReservation = new JLabel("Nom");
+  private JLabel labelNomReservation = new JLabel("Nom (Obligatoire)");
   private JTextField texteNomReservation = new JTextField(20);
-  private JLabel labelPrenomReservation = new JLabel("Prenom");
+  private JLabel labelPrenomReservation = new JLabel("Prenom (Obligatoire)");
   private JTextField textePrenomReservation = new JTextField(20);
   private JLabel labelNombrePersonnes= new JLabel("Nombre de personnes");
   private SpinnerModel modelNombrePersonnes = new SpinnerNumberModel(1,1,100,1);     

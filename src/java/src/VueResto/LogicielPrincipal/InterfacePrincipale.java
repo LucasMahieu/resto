@@ -49,8 +49,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		menuBar.add(menu);
 		this.setVisible(true);
 		interfaceReservation.getBoutonReservation().addActionListener(this);
-
-	}
+    }
 
 	public InterfaceCommande getInterfaceCommande(){
 		return this.interfaceCommande;
@@ -65,12 +64,19 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		if(source == interfaceReservation.getBoutonReservation()){
 			System.out.println("Bouton de Reservation");
 			String message = "";
-			message = interfaceReservation.getTexteNomReservation().getText() + " "
-				+ interfaceReservation.getTextePrenomReservation().getText() + " "
+            if ( interfaceReservation.getTexteNomReservation().getText().equals("") || interfaceReservation.getTextePrenomReservation().getText().equals("")){
+
+              System.out.println("Erreur Reservation");
+              JOptionPane.showMessageDialog(this,"Des champs obligatoires n'ont pas été remplis","Erreur Reservation",JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+              message = interfaceReservation.getTexteNomReservation().getText() + " "
+                + interfaceReservation.getTextePrenomReservation().getText() + " "
 				+ interfaceReservation.getSpinnerNombrePersonnes().getValue() + " "
 				+ new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
 				+ interfaceReservation.getComboBoxService().getSelectedItem() + " " + interfaceReservation.getTexteLocalisation().getText();
-			System.out.println(message);
+              System.out.println(message);
+            }
 		}
 		if(source == interfaceReservation.getBoutonReservation()){
 
