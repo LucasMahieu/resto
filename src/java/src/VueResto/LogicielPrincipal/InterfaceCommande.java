@@ -22,6 +22,7 @@ public class InterfaceCommande extends ObservateurCommande{
 	private JLabel labelNom;
 	private JButton buttonRecherche;
 	private JButton buttonAjout;
+	private JButton buttonSuppression;
 	private SpinnerModel modelQuantite;    
 	private JSpinner spinnerQuantite ;
 	private ArrayList<JToggleButton> buttonArticleBoisson;
@@ -44,10 +45,13 @@ public class InterfaceCommande extends ObservateurCommande{
 	private static final int POS_X_ARTICLE = 10;
 	private static final int POS_Y_ARTICLE = 60;
 	private static final int PLACEMENT_TAB_ARTICLE = SwingConstants.LEFT;
+	private static final int TAILLE_SUPPRESSION = 25;
+	private static final int POS_X_SUPPRESSION = TAILLE_X_PANEL_ARTICLE - TAILLE_SUPPRESSION;
+	private static final int POS_Y_SUPPRESSION = 30;
 	private static final int TAILLE_AJOUT_Q = 45;
 	private static final int TAILLE_AJOUT = 25;
-	private static final int POS_X_AJOUT = TAILLE_X_PANEL_ARTICLE - TAILLE_AJOUT;
-	private static final int POS_X_AJOUT_Q = TAILLE_X_PANEL_ARTICLE - TAILLE_AJOUT - TAILLE_AJOUT_Q - 5;
+	private static final int POS_X_AJOUT = TAILLE_X_PANEL_ARTICLE - TAILLE_AJOUT - TAILLE_SUPPRESSION - 5;
+	private static final int POS_X_AJOUT_Q = TAILLE_X_PANEL_ARTICLE - TAILLE_SUPPRESSION - TAILLE_AJOUT - TAILLE_AJOUT_Q - 10;
 	private static final int POS_Y_AJOUT = 30;
 	private static final int POS_X_RECHERCHE = 240;
 	private static final int POS_Y_RECHERCHE = 30;
@@ -209,6 +213,11 @@ public class InterfaceCommande extends ObservateurCommande{
 		this.buttonAjout = new JButton(new ImageIcon("./ressources/ajout_panier.png"));
 		buttonAjout.setBounds(POS_X_AJOUT,POS_Y_AJOUT,TAILLE_AJOUT,TAILLE_AJOUT);
 		panelCommande.add(buttonAjout);
+
+		// Bouton de suppression de l'article
+		this.buttonSuppression = new JButton(new ImageIcon("./ressources/supprimer_panier.png"));
+		buttonSuppression.setBounds(POS_X_SUPPRESSION,POS_Y_SUPPRESSION,TAILLE_SUPPRESSION,TAILLE_SUPPRESSION);
+		panelCommande.add(buttonSuppression);
 
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
