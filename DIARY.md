@@ -34,3 +34,9 @@
 ## Vendredi 15 avril
 * documentation InterfaceReservation
 * travail sur InterfaceReservation
+
+## DIMANCHE 17 avril
+* Amélioration de l'Interface graphique du panneau commande
+  * Affichage du récapitulatif de la commande
+  * recherche par n° de table ou par n° de resa
+* Ajout que quelques methodes dans le controleur
