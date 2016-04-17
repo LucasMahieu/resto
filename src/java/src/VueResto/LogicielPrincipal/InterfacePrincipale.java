@@ -79,13 +79,20 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		}else if(source == interfaceCommande.getButtonAjout()){
 			System.out.println("Bouton de Ajout");
 			String message = "";
-			message = interfaceCommande.getSpinnerQuantite().getValue() + " ";
+			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
+			System.out.println(message);
+		}else if(source == interfaceCommande.getButtonSuppression()){
+			System.out.println("Bouton de Suppression");
+			String message = "";
+			message = "suppression de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
 			System.out.println(message);
 		}else if(source == interfaceCommande.getButtonRecherche()){
-			if ( interfaceCommande.getTextFieldNTable().getText().equals("") || interfaceCommande.getTextFieldNom().getText().equals("")){
+			if ( interfaceCommande.getTextFieldNTable().getText().equals("") && interfaceCommande.getTextFieldNom().getText().equals("")){
 				System.out.println("Erreur Recherche Commande");
 				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
 			}else{
+				interfaceCommande.printRecap(interfaceCommande.getTextFieldNTable().getText(),interfaceCommande.getTextFieldNom().getText());
+				interfaceCommande.getPanelCommande().updateUI();
 				System.out.println("Bouton de Recherche");
 				String message = "";
 				message = interfaceCommande.getTextFieldNTable().getText()+" "+interfaceCommande.getTextFieldNom().getText() + " ";

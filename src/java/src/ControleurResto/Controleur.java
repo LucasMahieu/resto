@@ -123,4 +123,24 @@ public class Controleur{
         //return resultat;
 		return (float)10.0;
     }
+
+	public int getNumeroReservation(String date, String nTable, String service){
+		return 123456;
+	}
+	public String getNumeroTables(int numResa){
+		return "10-11-12";
+	}
+	public String getNom(int numResa) {
+		return "M. Dieudo";
+	}
+
+	public HashMap<String,Integer> getArticlesCommandes(int numResa){
+		HashMap<String,Integer> h = new HashMap<String,Integer>();
+		h.put("Menu du roi",1);
+		h.put("Quenelles Farcies", 2);
+		h.put("Hugarden", 100);
+		h.put("Menu Tourista",1);
+		h.put("Frite",7);
+		return h;
+	}
 }

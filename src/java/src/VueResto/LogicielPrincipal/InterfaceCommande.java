@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import ControleurResto.*;
+import java.text.SimpleDateFormat;
 
 public class InterfaceCommande extends ObservateurCommande{
 
@@ -30,6 +31,8 @@ public class InterfaceCommande extends ObservateurCommande{
 	private ArrayList<JToggleButton> buttonArticlePlat;
 	private ArrayList<JToggleButton> buttonArticleDessert;
 	private ArrayList<JToggleButton> buttonArticleMenu;
+	private LinkedList<JLabel> labelRecapCommande;
+	private static final int DEBUT_SERVICE_SOIR = 17;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -42,7 +45,7 @@ public class InterfaceCommande extends ObservateurCommande{
 	private static final int POS_Y_NOM = 30;
 	private static final int TAILLE_X_PANEL_ARTICLE = 500;
 	private static final int TAILLE_Y_PANEL_ARTICLE = 600;
-	private static final int POS_X_ARTICLE = 10;
+	private static final int POS_X_ARTICLE = 0;
 	private static final int POS_Y_ARTICLE = 60;
 	private static final int PLACEMENT_TAB_ARTICLE = SwingConstants.LEFT;
 	private static final int TAILLE_SUPPRESSION = 25;
@@ -72,6 +75,10 @@ public class InterfaceCommande extends ObservateurCommande{
 	private static final int POS_M = 20;
 	private static final int TAILLE_X_M = 80;
 	private static final int TAILLE_Y_M = 80;
+	private static final int POS_X_RECAP = TAILLE_X_PANEL_ARTICLE + 50;
+	private static final int POS_Y_RECAP = 10;
+	private static final int TAILLE_X_RECAP = TAILLE_X_PANEL - TAILLE_X_PANEL_ARTICLE;
+	private static final int TAILLE_Y_RECAP = 20;
 
 	
 	public InterfaceCommande(){
@@ -164,7 +171,7 @@ public class InterfaceCommande extends ObservateurCommande{
 			buttonArticlePlat.get(j).setBounds(POS_P+col*TAILLE_X_P,POS_P+lig*TAILLE_Y_P,TAILLE_X_P,TAILLE_Y_P);
 			panelPlat.add(buttonArticlePlat.get(j));
 		}
-		//Ajout des bouttons pour article PLAT
+		//Ajout des bouttons pour article Dessert
 		LinkedList<String> listArticleDessert = controleur.getListeArticles("dessert");
 		this.buttonArticleDessert = new ArrayList<JToggleButton>();
 		lig=0;
@@ -179,7 +186,7 @@ public class InterfaceCommande extends ObservateurCommande{
 			buttonArticleDessert.get(j).setBounds(POS_D+col*TAILLE_X_D,POS_D+lig*TAILLE_Y_D,TAILLE_X_D,TAILLE_Y_D);
 			panelDessert.add(buttonArticleDessert.get(j));
 		}
-		//Ajout des bouttons pour article PLAT
+		//Ajout des bouttons pour article Menu
 		LinkedList<String> listArticleMenu = controleur.getListeArticles("menu");
 		this.buttonArticleMenu = new ArrayList<JToggleButton>();
 		lig=0;
@@ -191,13 +198,10 @@ public class InterfaceCommande extends ObservateurCommande{
 				lig++;
 				col=0;
 			}
-			buttonArticleMenu.get(j).setBounds(POS_P+col*TAILLE_X_M,POS_M+lig*TAILLE_Y_M,TAILLE_X_M,TAILLE_Y_M);
+			buttonArticleMenu.get(j).setBounds(POS_M+col*TAILLE_X_M,POS_M+lig*TAILLE_Y_M,TAILLE_X_M,TAILLE_Y_M);
 			panelMenu.add(buttonArticleMenu.get(j));
 		}
 		
-		
-
-
 		// Bouton de recherche de la resa
 		this.buttonRecherche = new JButton("Rechercher");
 		buttonRecherche.setBounds(POS_X_RECHERCHE,POS_Y_RECHERCHE,TAILLE_X_RECHERCHE,TAILLE_Y_RECHERCHE);
@@ -219,10 +223,80 @@ public class InterfaceCommande extends ObservateurCommande{
 		buttonSuppression.setBounds(POS_X_SUPPRESSION,POS_Y_SUPPRESSION,TAILLE_SUPPRESSION,TAILLE_SUPPRESSION);
 		panelCommande.add(buttonSuppression);
 
+		this.labelRecapCommande = new LinkedList<JLabel>();
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
 	}
 	
+	public void printRecap(String nTable, String nResa){
+		int numResa = 0;
+		Date now = new Date();
+		SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
+		String date = sdfDate.format(now);
+		String heure = sdfHeure.format(now);
+		String service = "midi";
+		if(Integer.parseInt(heure) >= DEBUT_SERVICE_SOIR){
+			service = "soir";
+		}
+		if(nResa.equals("")){
+			numResa = controleur.getNumeroReservation(date,nTable,service);
+		}else{
+			numResa = Integer.parseInt(nResa);
+		}
+		int j=0;
+		// Suppression des anciennes lignes de récap
+		for(j=0;j<labelRecapCommande.size();j++){
+			panelCommande.remove(labelRecapCommande.get(j));
+		}
+		j=0;
+		this.labelRecapCommande = new LinkedList<JLabel>();
+		HashMap<String,Integer> articlesCommandes = controleur.getArticlesCommandes(numResa);
+		Set<String> articles = articlesCommandes.keySet();
+		Iterator<String> itArticles = articles.iterator();
+		labelRecapCommande.add(new JLabel("Réservation n°"+numResa+" au nom de "+controleur.getNom(numResa)));
+		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
+		panelCommande.add(labelRecapCommande.get(j));
+		j++;
+		labelRecapCommande.add(new JLabel("Table n°"+controleur.getNumeroTables(numResa)));
+		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
+		panelCommande.add(labelRecapCommande.get(j));
+		j++;
+		labelRecapCommande.add(new JLabel("Service du "+date+" au "+service));
+		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
+		panelCommande.add(labelRecapCommande.get(j));
+		j++;
+		labelRecapCommande.add(new JLabel("---------------------------------------------"));
+		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
+		panelCommande.add(labelRecapCommande.get(j));
+		j++;
+		String a="";
+		int q=0;
+		float somme=0;
+		float prix = 0;
+		while(itArticles.hasNext()){
+			a=itArticles.next();
+			q=articlesCommandes.get(a);
+			prix = controleur.getPrixArticle(a);
+			somme += prix*q;
+			labelRecapCommande.add(new JLabel(""
+						//+ String.format("%0$-"+(50-a.length()-Integer.toString(q).length())+"s",a).replace(" ","0") 
+						+ String.format("%0$-"+(65)+"s","- (x"+q+") "+a+" ")
+						+ prix*q
+						+ "€"));
+			labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
+			panelCommande.add(labelRecapCommande.get(j));
+			j++;
+		}
+		labelRecapCommande.add(new JLabel("---------------------------------------------"));
+		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
+		panelCommande.add(labelRecapCommande.get(j));
+		j++;
+		labelRecapCommande.add(new JLabel(String.format("%0$-70s","TOTAL = ") + somme + "€"));
+		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
+		panelCommande.add(labelRecapCommande.get(j));
+		j++;
+	}
 	public JPanel getPanel(){
 		return this.panelCommande;
 	}
@@ -233,6 +307,7 @@ public class InterfaceCommande extends ObservateurCommande{
 	public void activeListener(ActionListener aL){
 		buttonRecherche.addActionListener(aL);
 		buttonAjout.addActionListener(aL);
+		buttonSuppression.addActionListener(aL);
 	}
 	public JPanel getPanelCommande(){
 		return this.panelCommande;
@@ -272,6 +347,9 @@ public class InterfaceCommande extends ObservateurCommande{
 	}
 	public JButton getButtonAjout(){
 		return this.buttonAjout;
+	}
+	public JButton getButtonSuppression(){
+		return this.buttonSuppression;
 	}
 	public SpinnerModel getModelQuantite(){
 		return this.modelQuantite;
