@@ -37,6 +37,10 @@ public class Controleur{
       //Appel à la modification de réservation dans la BD
     }
 
+	public void prendreCommande(int Table, String plat, int quantite){
+
+	}
+
     public void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
       //Vérification de l'existence de la réservation 
       //si ok:
