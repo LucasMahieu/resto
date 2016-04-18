@@ -1,6 +1,8 @@
 package ModeleResto;
 
 public class SuiviCommande {
-  public SuiviCommande(){
-  }
+
+    private Mangeur grosMangeur;
+    public SuiviCommande(){
+    }
 }

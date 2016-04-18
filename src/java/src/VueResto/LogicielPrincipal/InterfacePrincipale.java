@@ -11,11 +11,9 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 	private InterfaceCommande interfaceCommande; // observateur disposant d'un panel 
 	private InterfaceReservation interfaceReservation; // observateur disposant d'un panel 
 	private InterfaceSuiviCommande interfaceSuiviCommande; // observateur disposant d'un panel 
-	private Controleur controleur;
 
-	public InterfacePrincipale(Controleur ctr){
+	public InterfacePrincipale(){
 		super("La bonne fourchetté");
-		this.controleur = ctr;
 		addWindowListener( new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
 				System.exit(0);
@@ -26,10 +24,10 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		JPanel panelPrincipal = new JPanel(); // panneau d'interface principale
 		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 
-		this.interfaceCommande = new InterfaceCommande(ctr);
+		this.interfaceCommande = new InterfaceCommande();
 		onglets.addTab("Commande",this.interfaceCommande.getPanel());
 
-		this.interfaceReservation = new InterfaceReservation(ctr);
+		this.interfaceReservation = new InterfaceReservation();
 		onglets.addTab("Reservation",this.interfaceReservation.getPanel());
 
 		//this.interfaceSuiviCommande = new InterfaceSuiviCommande();

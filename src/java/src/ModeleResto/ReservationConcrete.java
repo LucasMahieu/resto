@@ -1,5 +1,8 @@
 package ModeleResto;
 public class ReservationConcrete extends Reservation{
-  public ReservationConcrete(){
-  }
+
+    private Facture fractureDuTibia;
+    private SuiviCommande suivi;
+    public ReservationConcrete(){
+    }
 }

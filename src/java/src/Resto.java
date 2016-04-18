@@ -9,8 +9,6 @@ import java.awt.event.*;
 
 public class Resto{
 	public static void main(String[] args) {
-		
-		Controleur controleurResto = new Controleur();
-		JFrame fenetrePrincipale = new InterfacePrincipale(controleurResto);
+		JFrame fenetrePrincipale = new InterfacePrincipale();
 	}
 }

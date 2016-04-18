@@ -5,10 +5,8 @@ import java.util.Scanner;
 
 
 public class InterfaceTextCommande extends Observateur{
-	private Controleur controleur;
 
-	public InterfaceTextCommande(Controleur c){
-		this.controleur = c;
+	public InterfaceTextCommande(){
 	}
 
 	public void miseAJour(){
@@ -34,12 +32,12 @@ public class InterfaceTextCommande extends Observateur{
 			String plat = sc.nextLine();
 			System.out.println("veuiller indiquer la quantité de ce plat commandé");
 			int quantite = sc.nextInt();
-			controler.prendreCommande(table,plat,quantite);
+			Controleur.prendreCommande(table,plat,quantite);
 		}
 		else if (b==2){// on produit la facture
 			System.out.println("choississez le nom du client pour récupérer la facture");
 			String str= sc.nextLine();
-			controler.creerFacture(str);
+			Controleur.creerFacture(str);
 		}
 
 	}

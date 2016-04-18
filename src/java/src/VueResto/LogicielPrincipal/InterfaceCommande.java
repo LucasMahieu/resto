@@ -87,8 +87,7 @@ public class InterfaceCommande extends Observateur{
 	private static final int TAILLE_Y_RECAP = 20;
 
 	
-	public InterfaceCommande(Controleur ctr){
-		this.controleur = ctr;
+	public InterfaceCommande(){
 		// PANEL PRINCIPALE
 		this.panelCommande = new JPanel();
 		this.panelCommande.setPreferredSize(new Dimension(TAILLE_X_PANEL,TAILLE_Y_PANEL));
@@ -243,8 +242,8 @@ public class InterfaceCommande extends Observateur{
 	 * @exception si nResa ET nTable sont vide => PROBLEME gerer ce cas en amont lors de l'appui sur "Rechercher"
 	 */
 	public void createNewRecap(int numResa){
-		String date = controleur.getDateNow();
-		String service = controleur.getServiceNow();
+		String date = Controleur.getDateNow();
+		String service = Controleur.getServiceNow();
 
 		if(numResa == 0){
 			return;
@@ -297,7 +296,7 @@ public class InterfaceCommande extends Observateur{
 		while(itArticles.hasNext()){
 			a=itArticles.next();
 			q=articlesCommandes.get(a);
-			prix = controleur.getPrixArticle(a);
+			prix = Controleur.getPrixArticle(a);
 			somme += prix*q;
 			labelRecapCommande.add(new JLabel(""
 						+ String.format("%0$-"+(65)+"s","- (x"+q+") "+a+" ")
