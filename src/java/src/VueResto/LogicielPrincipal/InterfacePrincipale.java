@@ -32,8 +32,8 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		this.interfaceReservation = new InterfaceReservation(ctr);
 		onglets.addTab("Reservation",this.interfaceReservation.getPanel());
 
-		//this.interfaceSuiviCommande = new InterfaceSuiviCommande();
-		//onglets.addTab("Suivi Commande",this.interfaceSuiviCommande.getPanel());
+		this.interfaceSuiviCommande = new InterfaceSuiviCommande(ctr);
+		onglets.addTab("Suivi Commande",this.interfaceSuiviCommande.getPanel());
 
 		panelPrincipal.add(onglets);
 		onglets.setOpaque(true);
@@ -52,12 +52,16 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		this.setVisible(true);
 		this.interfaceCommande.activeListener(this);
 		this.interfaceReservation.activeListener(this);
+		this.interfaceSuiviCommande.activeListener(this);
 	}
 	public InterfaceCommande getInterfaceCommande(){
 		return this.interfaceCommande;
 	}
 	public InterfaceReservation getInterfaceReservation(){
 		return this.interfaceReservation;
+	}
+	public InterfaceSuiviCommande getInterfaceSuiviCommande(){
+		return this.interfaceSuiviCommande;
 	}
 
 	@Override
