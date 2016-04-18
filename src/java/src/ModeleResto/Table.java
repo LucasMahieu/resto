@@ -1,6 +1,6 @@
 package ModeleResto;
 //TO DO
-import ControleurResto;
+import ControleurResto.*;
 import java.util.*;
 import java.sql.*;
 public class Table extends Observable {
