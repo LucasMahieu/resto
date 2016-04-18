@@ -1,14 +1,21 @@
 package VueResto.LogicielPrincipal;
 import VueResto.*;
+import ControleurResto.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import ControleurResto.*;
 import java.text.SimpleDateFormat;
 
-public class InterfaceCommande extends ObservateurCommande{
 
+/**
+ * Cette classe est un observateur. Elle traite de la gestion des commandes
+ * Fonctionnalités: 
+ *		- Recherche d'une réservation par num de resa ou num de table
+ *		- Ajout ou suppression d'articles d'une commande
+ *		- Appercue d'un récapitulatif de la commande, avec son total
+ */
+public class InterfaceCommande extends Observateur{
 	private Controleur controleur;
 	private JPanel panelCommande;
 	private JTabbedPane tabbedPaneArticle;
@@ -32,7 +39,6 @@ public class InterfaceCommande extends ObservateurCommande{
 	private ArrayList<JToggleButton> buttonArticleDessert;
 	private ArrayList<JToggleButton> buttonArticleMenu;
 	private LinkedList<JLabel> labelRecapCommande;
-	private static final int DEBUT_SERVICE_SOIR = 17;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -81,8 +87,8 @@ public class InterfaceCommande extends ObservateurCommande{
 	private static final int TAILLE_Y_RECAP = 20;
 
 	
-	public InterfaceCommande(){
-		this.controleur = new Controleur();
+	public InterfaceCommande(Controleur ctr){
+		this.controleur = ctr;
 		// PANEL PRINCIPALE
 		this.panelCommande = new JPanel();
 		this.panelCommande.setPreferredSize(new Dimension(TAILLE_X_PANEL,TAILLE_Y_PANEL));
@@ -228,21 +234,20 @@ public class InterfaceCommande extends ObservateurCommande{
 		this.panelCommande.add(tabbedPaneArticle);
 	}
 	
-	public void printRecap(String nTable, String nResa){
-		int numResa = 0;
-		Date now = new Date();
-		SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
-		String date = sdfDate.format(now);
-		String heure = sdfHeure.format(now);
-		String service = "midi";
-		if(Integer.parseInt(heure) >= DEBUT_SERVICE_SOIR){
-			service = "soir";
-		}
-		if(nResa.equals("")){
-			numResa = controleur.getNumeroReservation(date,nTable,service);
-		}else{
-			numResa = Integer.parseInt(nResa);
+	/**
+	 * Créer une nouvelle LinkedList contenant l'en-tête du récap
+	 * Cette méthode est à appeler à chaque fois que l'utilisateur clique sur le bouton "Rechercher"
+	 * avec un numéro de table OU de réservation correct
+	 * @param nTable numéro de la table pour laquelle on souhaite créer le récap
+	 * @param nResa numéro de la réservation
+	 * @exception si nResa ET nTable sont vide => PROBLEME gerer ce cas en amont lors de l'appui sur "Rechercher"
+	 */
+	public void createNewRecap(int numResa){
+		String date = controleur.getDateNow();
+		String service = controleur.getServiceNow();
+
+		if(numResa == 0){
+			return;
 		}
 		int j=0;
 		// Suppression des anciennes lignes de récap
@@ -251,9 +256,7 @@ public class InterfaceCommande extends ObservateurCommande{
 		}
 		j=0;
 		this.labelRecapCommande = new LinkedList<JLabel>();
-		HashMap<String,Integer> articlesCommandes = controleur.getArticlesCommandes(numResa);
-		Set<String> articles = articlesCommandes.keySet();
-		Iterator<String> itArticles = articles.iterator();
+
 		labelRecapCommande.add(new JLabel("Réservation n°"+numResa+" au nom de "+controleur.getNom(numResa)));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
@@ -270,17 +273,33 @@ public class InterfaceCommande extends ObservateurCommande{
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		String a="";
-		int q=0;
-		float somme=0;
+
+		updateRecap(numResa);
+	}
+	/**
+	 * Cette méthode ne fait qu'afficher la liste des articles commandés pour un numéro de réservation donnée
+	 * Il faut appeler createNewResa() avant un updateRecap()
+	 * @param numResa numéro de réservation
+	 */
+	public void updateRecap(int numResa){
+		if(numResa == 0){
+			return;
+		}
+		int j = 4;
+		int q = 0;
+		float somme = 0;
 		float prix = 0;
+		String a = "";
+		HashMap<String,Integer> articlesCommandes = this.controleur.getArticlesCommandes(numResa);
+		Set<String> articles = articlesCommandes.keySet();
+		Iterator<String> itArticles = articles.iterator();
+
 		while(itArticles.hasNext()){
 			a=itArticles.next();
 			q=articlesCommandes.get(a);
 			prix = controleur.getPrixArticle(a);
 			somme += prix*q;
 			labelRecapCommande.add(new JLabel(""
-						//+ String.format("%0$-"+(50-a.length()-Integer.toString(q).length())+"s",a).replace(" ","0") 
 						+ String.format("%0$-"+(65)+"s","- (x"+q+") "+a+" ")
 						+ prix*q
 						+ "€"));
@@ -296,18 +315,24 @@ public class InterfaceCommande extends ObservateurCommande{
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
+
 	}
 	public JPanel getPanel(){
 		return this.panelCommande;
 	}
 
-	public void miseAJour(){
+	public void update(Observable o, Object arg){
 	}
 
+	/**
+	 * Active les Actions sur les boutons et autres composant de l'inteface
+	 *
+	 */
 	public void activeListener(ActionListener aL){
 		buttonRecherche.addActionListener(aL);
 		buttonAjout.addActionListener(aL);
 		buttonSuppression.addActionListener(aL);
+
 	}
 	public JPanel getPanelCommande(){
 		return this.panelCommande;
@@ -358,4 +383,19 @@ public class InterfaceCommande extends ObservateurCommande{
 		return this.spinnerQuantite;
 	}
 
+	public ArrayList<JToggleButton> getButtonArticleBoisson(){
+		return this.buttonArticleBoisson;
+	}
+	public ArrayList<JToggleButton> getButtonArticleEntree(){
+		return this.buttonArticleEntree;
+	}
+	public ArrayList<JToggleButton> getButtonArticlePlat(){
+		return this.buttonArticlePlat;
+	}
+	public ArrayList<JToggleButton> getButtonArticleDessert(){
+		return this.buttonArticleDessert;
+	}
+	public ArrayList<JToggleButton> getButtonArticleMenu(){
+		return this.buttonArticleMenu;
+	}
 }

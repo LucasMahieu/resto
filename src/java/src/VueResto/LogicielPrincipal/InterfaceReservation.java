@@ -2,6 +2,8 @@ package VueResto.LogicielPrincipal;
 import VueResto.*;
 import VueResto.LogicielPrincipal.*;
 import ModeleResto.*;
+import ControleurResto.*;
+import java.util.*;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import javax.swing.*;
@@ -12,7 +14,7 @@ import java.text.SimpleDateFormat;
  *
  *
  */
-public class InterfaceReservation extends ObservateurReservation{
+public class InterfaceReservation extends Observateur{
   private JPanel panelReservation;
   private static final int TAILLE_X_PANEL = 980;
   private static final int TAILLE_Y_PANEL = 980;
@@ -35,12 +37,14 @@ public class InterfaceReservation extends ObservateurReservation{
   private JComboBox<String> comboBoxService= new JComboBox<String>(service);
   private JLabel labelLocalisation = new JLabel("Localisation");
   private JTextField texteLocalisation = new JTextField(20);
+  private Controleur controleur;
 
   /** constructeur du panel de l'interface de reservation
    * 
    * @returns interface de reservation
    */
-  public InterfaceReservation(){
+  public InterfaceReservation(Controleur ctr){
+	  this.controleur = ctr;
     int nbBoutons = 0;
     this.panelReservation = new JPanel();
     this.panelReservation.setLayout(null);
@@ -260,6 +264,6 @@ public class InterfaceReservation extends ObservateurReservation{
   /** !!!NON IMPLEMENTEE!! permet de mettre a jour les donnees de l'interface de reservation
    * 
    */
-  public void miseAJour(){
+  public void update(Observable o, Object arg){
   }
 }
