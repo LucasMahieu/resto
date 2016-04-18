@@ -3,6 +3,7 @@ package ControleurResto;
 import VueResto.*;
 import ModeleResto.*;
 import java.util.*;
+import java.text.SimpleDateFormat;
 
 /**
  * Tous les attribue de cette classe doivent etre static !!!!!!!!
@@ -14,9 +15,45 @@ import java.util.*;
 public class Controleur{
 
 	private static ReservationFactory reservationFactory;
+	private static int numResaCmdSelectionee;
+	private static int numResaSuiviSelectionee;
+	private static Date date;
+	private static final SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+	private static final SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
+	private static String dateNow;
+	private static String heureNow;
+	private static String serviceNow;
+	private static final int DEBUT_SERVICE_SOIR = 17;
 
 	public Controleur(){
 		this.reservationFactory = new ReservationFactoryConcrete();
+		this.numResaCmdSelectionee = 0;
+		this.numResaSuiviSelectionee = 0;
+		date = new Date();
+		dateNow = sdfDate.format(date);
+		heureNow = sdfHeure.format(date);
+		serviceNow = "midi";
+		if(Integer.parseInt(heureNow) >= DEBUT_SERVICE_SOIR){
+			serviceNow = "soir";
+		}
+		
+	}
+	public String getDateNow(){
+		date = new Date();
+		dateNow = sdfDate.format(date);
+		return this.dateNow;
+	}
+	public String getHeureNow(){
+		date = new Date();
+		heureNow = sdfHeure.format(date);
+		return this.heureNow;
+	}
+	public String getServiceNow(){
+		serviceNow = "midi";
+		if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
+			serviceNow = "soir";
+		}
+		return this.serviceNow;
 	}
 
 	public void creerFacture(String client){
@@ -128,9 +165,22 @@ public class Controleur{
 		return (float)10.0;
     }
 
-	public int getNumeroReservation(String date, String nTable, String service){
+	public int getNumeroReservation(String date, int nTable, String service){
 		return 123456;
 	}
+	public int getNumeroReservation(String date, String nom, String service){
+		return 123456;
+	}
+	public int getNumeroReservation(String nom){
+		return 123456;
+	}
+	public int getNumeroReservation(int numTable){
+		return 123456;
+	}
+	/**
+	 * Donne une string comportant toutes les tables associée à une réservation
+	 * Convention : séparer les numeros par des '-'.
+	 */
 	public String getNumeroTables(int numResa){
 		return "10-11-12";
 	}
@@ -146,5 +196,18 @@ public class Controleur{
 		h.put("Menu Tourista",1);
 		h.put("Frite",7);
 		return h;
+	}
+
+	public int getNumResaCmdSelectionee(){
+		return this.numResaCmdSelectionee;
+	}
+	public int getNumResaSuiviSelectionee(){
+		return this.numResaSuiviSelectionee;
+	}
+	public void setNumResaCmdSelectionee(int n){
+		this.numResaCmdSelectionee = n;
+	}
+	public void setNumResaSuiviSelectionee(int n){
+		this.numResaSuiviSelectionee = n;
 	}
 }
