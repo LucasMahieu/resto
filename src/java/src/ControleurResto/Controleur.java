@@ -15,8 +15,8 @@ import java.text.SimpleDateFormat;
 public class Controleur{
 
 	private static ReservationFactory reservationFactory;
-	private static int numResaCmdSelectionee;
-	private static int numResaSuiviSelectionee;
+	private static int numResaCmdSelectionne;
+	private static int numResaSuiviSelectionne;
 	private static Date date;
 	private static final SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
 	private static final SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
@@ -27,8 +27,8 @@ public class Controleur{
 
 	public Controleur(){
 		this.reservationFactory = new ReservationFactoryConcrete();
-		this.numResaCmdSelectionee = 0;
-		this.numResaSuiviSelectionee = 0;
+		this.numResaCmdSelectionne = 0;
+		this.numResaSuiviSelectionne = 0;
 		date = new Date();
 		dateNow = sdfDate.format(date);
 		heureNow = sdfHeure.format(date);
@@ -56,6 +56,12 @@ public class Controleur{
 		return this.serviceNow;
 	}
 
+	/**
+	 * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
+	 */
+	public void ajouterArticle(String nom, int quantite, int numResa){
+		// ajouter à la resa l'article donner avec les bonnes quantités dans la BD
+	}
 	public void creerFacture(String client){
        // Facture factureFinale = new Facture();
 
@@ -198,16 +204,16 @@ public class Controleur{
 		return h;
 	}
 
-	public int getNumResaCmdSelectionee(){
-		return this.numResaCmdSelectionee;
+	public int getNumResaCmdSelectionne(){
+		return this.numResaCmdSelectionne;
 	}
-	public int getNumResaSuiviSelectionee(){
-		return this.numResaSuiviSelectionee;
+	public int getNumResaSuiviSelectionne(){
+		return this.numResaSuiviSelectionne;
 	}
-	public void setNumResaCmdSelectionee(int n){
-		this.numResaCmdSelectionee = n;
+	public void setNumResaCmdSelectionne(int n){
+		this.numResaCmdSelectionne = n;
 	}
-	public void setNumResaSuiviSelectionee(int n){
-		this.numResaSuiviSelectionee = n;
+	public void setNumResaSuiviSelectionne(int n){
+		this.numResaSuiviSelectionne = n;
 	}
 }
