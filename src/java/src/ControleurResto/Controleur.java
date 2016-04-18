@@ -43,6 +43,16 @@ public class Controleur{
         return instanceUnique;
     }
 
+	/**
+	 * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
+	 */
+	public void ajouterArticle(String nom, int quantite, int numResa){
+		// ajouter à la resa l'article donner avec les bonnes quantités dans la BD
+	}
+	public void creerFacture(String client){
+       // Facture factureFinale = new Facture();
+    }
+
     public String getDateNow(){
         date = new Date();
         dateNow = sdfDate.format(date);
@@ -77,10 +87,6 @@ public class Controleur{
         //Vérification des disponibilités des tables
         //si ok:
         //Appel à la modification de réservation dans la BD
-    }
-
-    public void prendreCommande(int Table, String plat, int quantite){
-
     }
 
     public void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
@@ -169,52 +175,52 @@ public class Controleur{
 
         //rset.close();
         //return resultat;
-        return (float)10.0;
+		return (float)10.0;
     }
 
-    public int getNumeroReservation(String date, int nTable, String service){
-        return 123456;
-    }
-    public int getNumeroReservation(String date, String nom, String service){
-        return 123456;
-    }
-    public int getNumeroReservation(String nom){
-        return 123456;
-    }
-    public int getNumeroReservation(int numTable){
-        return 123456;
-    }
-    /**
-     * Donne une string comportant toutes les tables associée à une réservation
-     * Convention : séparer les numeros par des '-'.
-     */
-    public String getNumeroTables(int numResa){
-        return "10-11-12";
-    }
-    public String getNom(int numResa) {
-        return "M. Dieudo";
-    }
+	public int getNumeroReservation(String date, int nTable, String service){
+		return 123456;
+	}
+	public int getNumeroReservation(String date, String nom, String service){
+		return 123456;
+	}
+	public int getNumeroReservation(String nom){
+		return 123456;
+	}
+	public int getNumeroReservation(int numTable){
+		return 123456;
+	}
+	/**
+	 * Donne une string comportant toutes les tables associée à une réservation
+	 * Convention : séparer les numeros par des '-'.
+	 */
+	public String getNumeroTables(int numResa){
+		return "10-11-12";
+	}
+	public String getNom(int numResa) {
+		return "M. Dieudo";
+	}
 
-    public HashMap<String,Integer> getArticlesCommandes(int numResa){
-        HashMap<String,Integer> h = new HashMap<String,Integer>();
-        h.put("Menu du roi",1);
-        h.put("Quenelles Farcies", 2);
-        h.put("Hugarden", 100);
-        h.put("Menu Tourista",1);
-        h.put("Frite",7);
-        return h;
-    }
+	public HashMap<String,Integer> getArticlesCommandes(int numResa){
+		HashMap<String,Integer> h = new HashMap<String,Integer>();
+		h.put("Menu du roi",1);
+		h.put("Quenelles Farcies", 2);
+		h.put("Hugarden", 100);
+		h.put("Menu Tourista",1);
+		h.put("Frite",7);
+		return h;
+	}
 
-    public int getNumResaCmdSelectionee(){
-        return this.numResaCmdSelectionee;
-    }
-    public int getNumResaSuiviSelectionee(){
-        return this.numResaSuiviSelectionee;
-    }
-    public void setNumResaCmdSelectionee(int n){
-        this.numResaCmdSelectionee = n;
-    }
-    public void setNumResaSuiviSelectionee(int n){
-        this.numResaSuiviSelectionee = n;
-    }
+	public int getNumResaCmdSelectionne(){
+		return this.numResaCmdSelectionne;
+	}
+	public int getNumResaSuiviSelectionne(){
+		return this.numResaSuiviSelectionne;
+	}
+	public void setNumResaCmdSelectionne(int n){
+		this.numResaCmdSelectionne = n;
+	}
+	public void setNumResaSuiviSelectionne(int n){
+		this.numResaSuiviSelectionne = n;
+	}
 }

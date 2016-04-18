@@ -1,6 +1,8 @@
 package VueResto.InterfaceTextCommande;
 import VueResto.*;
+import ControleurResto.*;
 import java.lang.*;
+import java.util.Observable;
 import java.util.Scanner;
 
 
@@ -39,6 +41,10 @@ public class InterfaceTextCommande extends Observateur{
 			String str= sc.nextLine();
 			Controleur.creerFacture(str);
 		}
+
+	}
+
+	public void update(Observable o, Object arg) {
 
 	}
 }

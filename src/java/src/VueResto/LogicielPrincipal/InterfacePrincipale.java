@@ -30,8 +30,8 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		this.interfaceReservation = new InterfaceReservation();
 		onglets.addTab("Reservation",this.interfaceReservation.getPanel());
 
-		//this.interfaceSuiviCommande = new InterfaceSuiviCommande();
-		//onglets.addTab("Suivi Commande",this.interfaceSuiviCommande.getPanel());
+		this.interfaceSuiviCommande = new InterfaceSuiviCommande(ctr);
+		onglets.addTab("Suivi Commande",this.interfaceSuiviCommande.getPanel());
 
 		panelPrincipal.add(onglets);
 		onglets.setOpaque(true);
@@ -50,12 +50,16 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		this.setVisible(true);
 		this.interfaceCommande.activeListener(this);
 		this.interfaceReservation.activeListener(this);
+		this.interfaceSuiviCommande.activeListener(this);
 	}
 	public InterfaceCommande getInterfaceCommande(){
 		return this.interfaceCommande;
 	}
 	public InterfaceReservation getInterfaceReservation(){
 		return this.interfaceReservation;
+	}
+	public InterfaceSuiviCommande getInterfaceSuiviCommande(){
+		return this.interfaceSuiviCommande;
 	}
 
 	@Override
@@ -64,16 +68,19 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		if(source == interfaceReservation.getBoutonReservation()){
 			System.out.println("Bouton de Reservation");
 			String message = "";
-			if ( interfaceReservation.getTexteNomReservation().getText().equals("") || interfaceReservation.getTextePrenomReservation().getText().equals("")){
+			if ( interfaceReservation.getTexteNomReservation().getText().equals("") 
+					|| interfaceReservation.getTextePrenomReservation().getText().equals("")){
 
 				System.out.println("Erreur Reservation");
-				JOptionPane.showMessageDialog(this,"Des champs obligatoires n'ont pas été remplis","Erreur Reservation",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this,"Des champs obligatoires n'ont pas été remplis",
+						"Erreur Reservation",JOptionPane.ERROR_MESSAGE);
 			}else{
 				message = interfaceReservation.getTexteNomReservation().getText() + " "
 					+ interfaceReservation.getTextePrenomReservation().getText() + " "
 					+ interfaceReservation.getSpinnerNombrePersonnes().getValue() + " "
 					+ new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
-					+ interfaceReservation.getComboBoxService().getSelectedItem() + " " + interfaceReservation.getTexteLocalisation().getText();
+					+ interfaceReservation.getComboBoxService().getSelectedItem() 
+					+ " " + interfaceReservation.getTexteLocalisation().getText();
 				System.out.println(message);
 			}
 		}else if(source == interfaceCommande.getButtonAjout()){
@@ -81,9 +88,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelBoisson()){
 				System.out.println("Bouton d'Ajout d'une boisson");
-				if(interfaceCommande.getButtonArticleBoisson().get(0).isSelected()){
-					System.out.println("AJOUT DU 0");
-				}
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleBoisson());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelEntree()){
 				System.out.println("Bouton d'Ajout d'une Entrée");
@@ -98,7 +103,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				System.out.println("Bouton d'Ajout d'un Menu");
 			}
 			System.out.println(message);
-
+			interfaceCommande.setSelectedButtonArticle(false);
 		}else if(source == interfaceCommande.getButtonSuppression()){
 			String message = "";
 			message = "suppression de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
@@ -118,19 +123,31 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				System.out.println("Bouton de Suppression d'un Menu");
 			}
 			System.out.println(message);
+			interfaceCommande.setSelectedButtonArticle(false);
 		}else if(source == interfaceCommande.getButtonRecherche()){
 			if ( interfaceCommande.getTextFieldNTable().getText().equals("") && interfaceCommande.getTextFieldNom().getText().equals("")){
 				System.out.println("Erreur Recherche Commande");
-				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!",
+						"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
 			}else{
 				// Dans ce else on peut aboutir à une resa
 				int numResa = 0;
+				int numTable=0;
 				if(interfaceCommande.getTextFieldNTable().getText().equals("")){
 					numResa = controleur.getNumeroReservation(interfaceCommande.getTextFieldNom().getText());
 				}else{
-					numResa = controleur.getNumeroReservation(Integer.parseInt(interfaceCommande.getTextFieldNTable().getText()));
+					try{
+						numTable = Integer.parseInt(interfaceCommande.getTextFieldNTable().getText());
+					}catch ( NumberFormatException n){
+						System.out.println("Erreur Recherche Commande");
+						JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir\n"
+							+"Le numéro de table entré ("+interfaceCommande.getTextFieldNTable().getText()
+							+") n'est pas un nombre"
+							+"\nBOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
+					}
+					numResa = controleur.getNumeroReservation(numTable);
 				}
-				controleur.setNumResaCmdSelectionee(numResa);
+				controleur.setNumResaCmdSelectionne(numResa);
 				interfaceCommande.createNewRecap(numResa);
 				interfaceCommande.getPanelCommande().updateUI();
 				System.out.println("Bouton de Recherche de réservation");

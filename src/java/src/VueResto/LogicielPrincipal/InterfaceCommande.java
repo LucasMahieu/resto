@@ -313,13 +313,39 @@ public class InterfaceCommande extends Observateur{
 		labelRecapCommande.add(new JLabel(String.format("%0$-70s","TOTAL = ") + somme + "€"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
-		j++;
-
 	}
-	public JPanel getPanel(){
-		return this.panelCommande;
+	
+	/**
+	 * Applique à tous les boutons de la liste l, le boolean b
+	 * @param l liste des bouton à affecter
+	 * @param b etat désiré de tous les boutons 
+	 */
+	public void setSelectedButtonArticle(ArrayList<JToggleButton> l, boolean b){
+		Iterator<JToggleButton> it = l.iterator();
+		while(it.hasNext()){
+			it.next().setSelected(b);
+		}
 	}
-
+	/**
+	 * Applique b à tous les boutons de tous les onglets
+	 */
+	public void setSelectedButtonArticle(boolean b){
+		setSelectedButtonArticle(buttonArticleBoisson,b);
+		setSelectedButtonArticle(buttonArticleEntree,b);
+		setSelectedButtonArticle(buttonArticlePlat,b);
+		setSelectedButtonArticle(buttonArticleDessert,b);
+		setSelectedButtonArticle(buttonArticleMenu,b);
+	}
+	/**
+	 * Demande au controleur d'ajouter les articles selectionnés
+	 */
+	public void ajouterArticlesSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				controleur.ajouterArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),controleur.getNumResaCmdSelectionne());
+			}
+		}
+	}
 	public void update(Observable o, Object arg){
 	}
 
@@ -331,7 +357,10 @@ public class InterfaceCommande extends Observateur{
 		buttonRecherche.addActionListener(aL);
 		buttonAjout.addActionListener(aL);
 		buttonSuppression.addActionListener(aL);
+	}
 
+	public JPanel getPanel(){
+		return this.panelCommande;
 	}
 	public JPanel getPanelCommande(){
 		return this.panelCommande;
