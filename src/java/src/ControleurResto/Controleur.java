@@ -71,11 +71,6 @@ public class Controleur{
         return this.serviceNow;
     }
 
-    public void creerFacture(String client){
-        // Facture factureFinale = new Facture();
-
-    }
-
     public void passerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification des disponibilités des tables
         //si ok:
@@ -212,15 +207,15 @@ public class Controleur{
 	}
 
 	public int getNumResaCmdSelectionne(){
-		return this.numResaCmdSelectionne;
+		return this.numResaCmdSelectionee;
 	}
 	public int getNumResaSuiviSelectionne(){
-		return this.numResaSuiviSelectionne;
+		return this.numResaSuiviSelectionee;
 	}
 	public void setNumResaCmdSelectionne(int n){
-		this.numResaCmdSelectionne = n;
+		this.numResaCmdSelectionee = n;
 	}
 	public void setNumResaSuiviSelectionne(int n){
-		this.numResaSuiviSelectionne = n;
+		this.numResaSuiviSelectionee = n;
 	}
 }

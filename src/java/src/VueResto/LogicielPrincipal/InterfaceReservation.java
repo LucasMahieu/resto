@@ -37,15 +37,13 @@ public class InterfaceReservation extends Observateur{
   private JComboBox<String> comboBoxService= new JComboBox<String>(service);
   private JLabel labelLocalisation = new JLabel("Localisation");
   private JTextField texteLocalisation = new JTextField(20);
-  private Controleur controleur;
 
   /** constructeur du panel de l'interface de reservation
    * 
    * @returns interface de reservation
    */
-  public InterfaceReservation(Controleur ctr){
-	  this.controleur = ctr;
-    int nbBoutons = 0;
+  public InterfaceReservation(){
+      int nbBoutons = 0;
     this.panelReservation = new JPanel();
     this.panelReservation.setLayout(null);
     this.panelReservation.setPreferredSize(new Dimension(TAILLE_X_PANEL,TAILLE_Y_PANEL));

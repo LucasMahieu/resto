@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
  *		- Appercue d'un récapitulatif de la commande, avec son total
  */
 public class InterfaceCommande extends Observateur{
-	private Controleur controleur;
 	private JPanel panelCommande;
 	private JTabbedPane tabbedPaneArticle;
 	private JPanel panelBoisson;
@@ -133,7 +132,7 @@ public class InterfaceCommande extends Observateur{
 		this.tabbedPaneArticle.addTab("MENU",panelMenu);
 
 		//Ajout des bouttons pour article BOISSON
-		LinkedList<String> listArticleBoisson = controleur.getListeArticles("boisson");
+		LinkedList<String> listArticleBoisson = Controleur.get().getListeArticles("boisson");
 		this.buttonArticleBoisson = new ArrayList<JToggleButton>();
 		int lig=0,col=-1, j=0;
 		for(j=0; j<listArticleBoisson.size(); j++){
@@ -147,7 +146,7 @@ public class InterfaceCommande extends Observateur{
 			panelBoisson.add(buttonArticleBoisson.get(j));
 		}
 		//Ajout des bouttons pour article ENTREE
-		LinkedList<String> listArticleEntree = controleur.getListeArticles("entree");
+		LinkedList<String> listArticleEntree = Controleur.get().getListeArticles("entree");
 		this.buttonArticleEntree = new ArrayList<JToggleButton>();
 		lig=0;
 		col=-1;
@@ -162,7 +161,7 @@ public class InterfaceCommande extends Observateur{
 			panelEntree.add(buttonArticleEntree.get(j));
 		}
 		//Ajout des bouttons pour article PLAT
-		LinkedList<String> listArticlePlat = controleur.getListeArticles("plat");
+		LinkedList<String> listArticlePlat = Controleur.get().getListeArticles("plat");
 		this.buttonArticlePlat = new ArrayList<JToggleButton>();
 		lig=0;
 		col=-1;
@@ -177,7 +176,7 @@ public class InterfaceCommande extends Observateur{
 			panelPlat.add(buttonArticlePlat.get(j));
 		}
 		//Ajout des bouttons pour article Dessert
-		LinkedList<String> listArticleDessert = controleur.getListeArticles("dessert");
+		LinkedList<String> listArticleDessert = Controleur.get().getListeArticles("dessert");
 		this.buttonArticleDessert = new ArrayList<JToggleButton>();
 		lig=0;
 		col=-1;
@@ -192,7 +191,7 @@ public class InterfaceCommande extends Observateur{
 			panelDessert.add(buttonArticleDessert.get(j));
 		}
 		//Ajout des bouttons pour article Menu
-		LinkedList<String> listArticleMenu = controleur.getListeArticles("menu");
+		LinkedList<String> listArticleMenu = Controleur.get().getListeArticles("menu");
 		this.buttonArticleMenu = new ArrayList<JToggleButton>();
 		lig=0;
 		col=-1;
@@ -242,8 +241,8 @@ public class InterfaceCommande extends Observateur{
 	 * @exception si nResa ET nTable sont vide => PROBLEME gerer ce cas en amont lors de l'appui sur "Rechercher"
 	 */
 	public void createNewRecap(int numResa){
-		String date = Controleur.getDateNow();
-		String service = Controleur.getServiceNow();
+		String date = Controleur.get().getDateNow();
+		String service = Controleur.get().getServiceNow();
 
 		if(numResa == 0){
 			return;
@@ -256,11 +255,11 @@ public class InterfaceCommande extends Observateur{
 		j=0;
 		this.labelRecapCommande = new LinkedList<JLabel>();
 
-		labelRecapCommande.add(new JLabel("Réservation n°"+numResa+" au nom de "+controleur.getNom(numResa)));
+		labelRecapCommande.add(new JLabel("Réservation n°"+numResa+" au nom de "+Controleur.get().getNom(numResa)));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		labelRecapCommande.add(new JLabel("Table n°"+controleur.getNumeroTables(numResa)));
+		labelRecapCommande.add(new JLabel("Table n°"+Controleur.get().getNumeroTables(numResa)));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
@@ -289,14 +288,14 @@ public class InterfaceCommande extends Observateur{
 		float somme = 0;
 		float prix = 0;
 		String a = "";
-		HashMap<String,Integer> articlesCommandes = this.controleur.getArticlesCommandes(numResa);
+		HashMap<String,Integer> articlesCommandes = Controleur.get().getArticlesCommandes(numResa);
 		Set<String> articles = articlesCommandes.keySet();
 		Iterator<String> itArticles = articles.iterator();
 
 		while(itArticles.hasNext()){
 			a=itArticles.next();
 			q=articlesCommandes.get(a);
-			prix = Controleur.getPrixArticle(a);
+			prix = Controleur.get().getPrixArticle(a);
 			somme += prix*q;
 			labelRecapCommande.add(new JLabel(""
 						+ String.format("%0$-"+(65)+"s","- (x"+q+") "+a+" ")
@@ -342,7 +341,7 @@ public class InterfaceCommande extends Observateur{
 	public void ajouterArticlesSelectionnes(ArrayList<JToggleButton> l){
 		for(int j=0; j<l.size(); j++){
 			if(l.get(j).isSelected()){
-				controleur.ajouterArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),controleur.getNumResaCmdSelectionne());
+				Controleur.get().ajouterArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
 			}
 		}
 	}

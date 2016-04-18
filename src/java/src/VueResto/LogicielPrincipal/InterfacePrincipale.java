@@ -30,7 +30,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		this.interfaceReservation = new InterfaceReservation();
 		onglets.addTab("Reservation",this.interfaceReservation.getPanel());
 
-		this.interfaceSuiviCommande = new InterfaceSuiviCommande(ctr);
+		this.interfaceSuiviCommande = new InterfaceSuiviCommande();
 		onglets.addTab("Suivi Commande",this.interfaceSuiviCommande.getPanel());
 
 		panelPrincipal.add(onglets);
@@ -134,7 +134,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				int numResa = 0;
 				int numTable=0;
 				if(interfaceCommande.getTextFieldNTable().getText().equals("")){
-					numResa = controleur.getNumeroReservation(interfaceCommande.getTextFieldNom().getText());
+					numResa = Controleur.get().getNumeroReservation(interfaceCommande.getTextFieldNom().getText());
 				}else{
 					try{
 						numTable = Integer.parseInt(interfaceCommande.getTextFieldNTable().getText());
@@ -145,9 +145,9 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 							+") n'est pas un nombre"
 							+"\nBOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
 					}
-					numResa = controleur.getNumeroReservation(numTable);
+					numResa = Controleur.get().getNumeroReservation(numTable);
 				}
-				controleur.setNumResaCmdSelectionne(numResa);
+				Controleur.get().setNumResaCmdSelectionne(numResa);
 				interfaceCommande.createNewRecap(numResa);
 				interfaceCommande.getPanelCommande().updateUI();
 				System.out.println("Bouton de Recherche de réservation");

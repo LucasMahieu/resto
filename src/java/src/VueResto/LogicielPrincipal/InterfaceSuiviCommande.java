@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 
 
 public class InterfaceSuiviCommande extends Observateur{
-	private Controleur controleur;
 	private JPanel panelSuiviCommande;
 	private JTextField textFieldNTable;
 	private JTextField textFieldNom;
@@ -67,8 +66,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	private static final int TAILLE_Y_RECAP = 20;
 
 
-	public InterfaceSuiviCommande(Controleur ctr){
-		this.controleur = ctr;
+	public InterfaceSuiviCommande(){
 	// PANEL PRINCIPALE
 		this.panelSuiviCommande = new JPanel();
 		this.panelSuiviCommande.setPreferredSize(new Dimension(TAILLE_X_PANEL,TAILLE_Y_PANEL));
