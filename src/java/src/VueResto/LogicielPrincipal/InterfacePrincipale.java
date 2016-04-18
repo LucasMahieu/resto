@@ -127,10 +127,19 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			}else{
 				// Dans ce else on peut aboutir à une resa
 				int numResa = 0;
+				int numTable=0;
 				if(interfaceCommande.getTextFieldNTable().getText().equals("")){
 					numResa = controleur.getNumeroReservation(interfaceCommande.getTextFieldNom().getText());
 				}else{
-					numResa = controleur.getNumeroReservation(Integer.parseInt(interfaceCommande.getTextFieldNTable().getText()));
+					try{
+						numTable = Integer.parseInt(interfaceCommande.getTextFieldNTable().getText());
+					}catch ( NumberFormatException n){
+						System.out.println("Erreur Recherche Commande");
+						JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir\n"
+							+"Le numéro de table entré ("+interfaceCommande.getTextFieldNTable().getText()+") n'est pas un nombre"
+							+"\nBOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
+					}
+					numResa = controleur.getNumeroReservation(numTable);
 				}
 				controleur.setNumResaCmdSelectionee(numResa);
 				interfaceCommande.createNewRecap(numResa);
