@@ -37,7 +37,6 @@ public class Controleur{
             serviceNow = "soir";
         }
     }
-
     public static Controleur get()
     {
         return instanceUnique;
