@@ -4,10 +4,11 @@ import java.lang.*;
 import java.util.Scanner;
 
 
-public class InterfaceTextCommande extends ObservateurCommande {
-	ControleurSujet controler;
-	public InterfaceTextCommande(ControleurSujet controler){
-	this.controler= controler;
+public class InterfaceTextCommande extends Observateur{
+	private Controleur controleur;
+
+	public InterfaceTextCommande(Controleur c){
+		this.controleur = c;
 	}
 
 	public void miseAJour(){

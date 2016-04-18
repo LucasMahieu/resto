@@ -1,11 +1,10 @@
 package VueResto.InterfaceTextReservation;
 import VueResto.*;
 
-public class InterfaceTextReservation extends ObservateurReservation {
+public class InterfaceTextReservation extends Observateur{
 	public InterfaceTextReservation(){
-	
 	}
 
-	public void miseAJour(){
+	public void update(){
 	}
 }
