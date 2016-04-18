@@ -1,14 +1,16 @@
 package VueResto.InterfaceTextCommande;
 import VueResto.*;
+import ControleurResto.*;
 import java.lang.*;
+import java.util.Observable;
 import java.util.Scanner;
 
 
 public class InterfaceTextCommande extends Observateur{
-	private Controleur controleur;
+	private Controleur controler;
 
 	public InterfaceTextCommande(Controleur c){
-		this.controleur = c;
+		this.controler = c;
 	}
 
 	public void miseAJour(){
@@ -34,13 +36,17 @@ public class InterfaceTextCommande extends Observateur{
 			String plat = sc.nextLine();
 			System.out.println("veuiller indiquer la quantité de ce plat commandé");
 			int quantite = sc.nextInt();
-			controler.prendreCommande(table,plat,quantite);
+			controler.ajouterArticle(plat,quantite,controler.getNumeroReservation(table));
 		}
 		else if (b==2){// on produit la facture
 			System.out.println("choississez le nom du client pour récupérer la facture");
 			String str= sc.nextLine();
 			controler.creerFacture(str);
 		}
+
+	}
+
+	public void update(Observable o, Object arg) {
 
 	}
 }
