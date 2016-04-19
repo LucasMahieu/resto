@@ -3,6 +3,7 @@ import VueResto.*;
 import ModeleResto.*;
 import ControleurResto.*;
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
@@ -15,7 +16,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	private JTextField textFieldNom;
 	private JLabel labelNTable;
 	private JLabel labelNom;
-	private JButton buttonRecherche;
+	private JButton buttonRechercheSuivi;
 	private JButton buttonOuvrir;
 	private JButton buttonFermer;
 	private static final int TAILLE_X_PANEL = 900;
@@ -88,9 +89,9 @@ public class InterfaceSuiviCommande extends Observateur{
 		panelSuiviCommande.add(labelNom);
 		
 		// Bouton de recherche de la resa
-		this.buttonRecherche = new JButton("Rechercher");
-		buttonRecherche.setBounds(POS_X_RECHERCHE,POS_Y_RECHERCHE,TAILLE_X_RECHERCHE,TAILLE_Y_RECHERCHE);
-		panelSuiviCommande.add(buttonRecherche);
+		this.buttonRechercheSuivi = new JButton("Rechercher");
+		buttonRechercheSuivi.setBounds(POS_X_RECHERCHE,POS_Y_RECHERCHE,TAILLE_X_RECHERCHE,TAILLE_Y_RECHERCHE);
+		panelSuiviCommande.add(buttonRechercheSuivi);
 		
 		// Bouton d'ajout de l'article
 		this.buttonOuvrir = new JButton(new ImageIcon("./ressources/more_detail.png"));
@@ -108,7 +109,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	 *
 	 */
 	public void activeListener(ActionListener aL){
-		buttonRecherche.addActionListener(aL);
+		buttonRechercheSuivi.addActionListener(aL);
 		buttonOuvrir.addActionListener(aL);
 		buttonFermer.addActionListener(aL);
 	}
@@ -134,12 +135,60 @@ public class InterfaceSuiviCommande extends Observateur{
 		return this.labelNom;
 	}
 	public JButton getButtonRecherche(){
-		return this.buttonRecherche;
+		return this.buttonRechercheSuivi;
 	}
 	public JButton getButtonOuvrir(){
 		return this.buttonOuvrir;
 	}
 	public JButton getButtonFermer(){
 		return this.buttonFermer;
+	}
+
+	/**
+	 * Cette classe est un TableModel Pour le tableau de suivi des commande
+	 */
+	public class SModel extends AbstractTableModel {
+		private Object[][] data;
+		private String[] title;
+
+		//Constructeur
+		public SModel(Object[][] data, String[] title){
+			this.data = data;
+			this.title = title;
+		}
+
+		//Retourne le nombre de colonnes
+		public int getColumnCount() {
+			return this.title.length;
+		}
+
+		//Retourne le nombre de lignes
+		public int getRowCount() {
+			return this.data.length;
+		}
+
+		//Retourne la valeur à l'emplacement spécifié
+		public Object getValueAt(int row, int col) {
+			return this.data[row][col];
+		}
+		/**
+		 * * Retourne le titre de la colonne à l'indice spécifié
+		 * */
+		public String getColumnName(int col) {
+			  return this.title[col];
+		}
+		//Retourne la classe de la donnée de la colonne
+		public Class getColumnClass(int col){
+			//On retourne le type de la cellule à la colonne demandée
+			//On se moque de la ligne puisque les types de données sont les mêmes quelle que soit la ligne
+			//On choisit donc la première ligne
+			return this.data[0][col].getClass();
+		}
+		//Retourne vrai si la cellule est éditable : celle-ci sera donc éditable
+		public boolean isCellEditable(int row, int col){
+			if(getValueAt(0, col) instanceof JButton)
+				return false;
+			return true; 
+		}
 	}
 }
