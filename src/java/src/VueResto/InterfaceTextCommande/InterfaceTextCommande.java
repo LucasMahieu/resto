@@ -11,7 +11,7 @@ public class InterfaceTextCommande extends Observateur{
 	public InterfaceTextCommande(){
 	}
 
-	public void miseAJour(){
+	public void cadrePrincipale(){
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Voici les différentes fonctions possibles:");
 		System.out.println("1)Prendre une commande individuel");
