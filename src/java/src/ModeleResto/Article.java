@@ -5,6 +5,8 @@ import java.sql.*;
 public class Article extends Observable {
     
     private Connection conn;
+    // Transaction actuelle
+    private Statement stmt;
 
     public Article(){
     }
@@ -13,33 +15,36 @@ public class Article extends Observable {
         this.conn = conn;
     }
 
+    public Statement getStmt() {
+        return this.stmt;
+    }
+
     public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
-        String requete = new String("SELECT * from article where");
+        String requete = new String("SELECT * FROM Article WHERE ");
         if (nomArticle != null) {
-            requete += ("article.nom = " + nomArticle);
+            requete += ("Article.nomArticle = '" + nomArticle + "'");
         }
         if (prixArticle != -1) {
             if (nomArticle != null) {	
-                requete += " and ";
+                requete += " AND ";
             }
-            requete += (" article.prix == " + prixArticle);
+            requete += ("Article.prixArticle = " + prixArticle);
         }
         if (specialite != null) {
             if (nomArticle != null || prixArticle != -1) {	
-                requete += " and ";
+                requete += " AND ";
             }
-            requete += ("and article.specialite = " + specialite);
+            requete += ("AND Article.specialite = '" + specialite + "'");
         }
         if (type != null) {
-            requete += (" having article.nomarticle in (SELECT * from " + type + " )");
+            requete += ("HAVING Article.nomArticle in (SELECT * FROM " + type + ")");
         }	
-        requete += ";";
         
         System.out.println(requete);
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rset = stmt.executeQuery(requete);
-            stmt.close();
+            this.stmt = conn.createStatement();
+            //ResultSet rset = stmt.executeQuery(requete);
+            ResultSet rset = stmt.executeQuery("SELECT * FROM Article");
             return rset;
         }
         catch (SQLException e) {
@@ -56,9 +61,8 @@ public class Article extends Observable {
         requete += (", " + numeroReservation);
 
         try {
-            Statement stmt = conn.createStatement();
+            this.stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(requete);
-            stmt.close();
             return rset;
         }
         catch (SQLException e) {

@@ -166,6 +166,7 @@ public class Controleur{
                 resultat.add(rset.getString(1));
             }
             rset.close();
+            ReservationFactoryConcrete.get().getArticleBD().getStmt().close();
         }
         catch (SQLException e) {
             System.err.println("Erreur pour faire la requête.");
