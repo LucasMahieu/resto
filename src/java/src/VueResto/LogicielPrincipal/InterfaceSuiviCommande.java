@@ -20,7 +20,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	private JButton buttonOuvrir;
 	private JButton buttonFermer;
 	private SModel sModel;
-	private String title[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé","Heure d'arrivé"};
+	private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé","Heure d'arrivé"};
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -41,6 +41,10 @@ public class InterfaceSuiviCommande extends Observateur{
 	private static final int TAILLE_FERMER = 25;
 	private static final int POS_X_FERMER = POS_X_OUVRIR + TAILLE_OUVRIR + 10;
 	private static final int POS_Y_FERMER = 30;
+	private static final int TAILLE_X_TAB = 500;
+	private static final int TAILLE_Y_TAB = 500;
+	private static final int POS_X_TAB = 10;
+	private static final int POS_Y_TAB = 30 + 10;
 	public InterfaceSuiviCommande(){
 	// PANEL PRINCIPALE
 		this.panelSuiviCommande = new JPanel();
@@ -77,6 +81,10 @@ public class InterfaceSuiviCommande extends Observateur{
 		buttonFermer.setBounds(POS_X_FERMER,POS_Y_FERMER,TAILLE_FERMER,TAILLE_FERMER);
 		panelSuiviCommande.add(buttonFermer);
 
+		this.sModel = new SModel(data,titre);
+		this.tableau = new JTable(sModel);
+		this.tableau.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_TAB,TAILLE_TAB);
+		panelSuiviCommande.add(tableau);
 	}
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
@@ -123,17 +131,17 @@ public class InterfaceSuiviCommande extends Observateur{
 	 */
 	public class SModel extends AbstractTableModel {
 		private Object[][] data;
-		private String[] title;
+		private String[] titre;
 
 		//Constructeur
 		public SModel(Object[][] data, String[] title){
 			this.data = data;
-			this.title = title;
+			this.titre = titre;
 		}
 
 		//Retourne le nombre de colonnes
 		public int getColumnCount() {
-			return this.title.length;
+			return this.titre.length;
 		}
 
 		//Retourne le nombre de lignes
@@ -142,14 +150,20 @@ public class InterfaceSuiviCommande extends Observateur{
 		}
 
 		//Retourne la valeur à l'emplacement spécifié
-		public Object getValueAt(int row, int col) {
+		public Object getValueAt(int row, int col){
 			return this.data[row][col];
 		}
+		public void setValueAt(Object value, int lig, int col){
+			if(!(lig==0)){
+				this.data[lig][col] = value;
+			}
+		}
+
 		/**
 		 * * Retourne le titre de la colonne à l'indice spécifié
 		 * */
 		public String getColumnName(int col) {
-			  return this.title[col];
+			  return this.titre[col];
 		}
 		//Retourne la classe de la donnée de la colonne
 		public Class getColumnClass(int col){
@@ -159,7 +173,7 @@ public class InterfaceSuiviCommande extends Observateur{
 			return this.data[0][col].getClass();
 		}
 		//Retourne vrai si la cellule est éditable : celle-ci sera donc éditable
-		public boolean isCellEditable(int row, int col){
+		public boolean isCellEditable(int lig, int col){
 			if(getValueAt(0, col) instanceof JButton)
 				return false;
 			return true; 
