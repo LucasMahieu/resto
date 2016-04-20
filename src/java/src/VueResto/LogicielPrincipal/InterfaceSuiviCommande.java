@@ -19,6 +19,8 @@ public class InterfaceSuiviCommande extends Observateur{
 	private JButton buttonRechercheSuivi;
 	private JButton buttonOuvrir;
 	private JButton buttonFermer;
+	private SModel sModel;
+	private String title[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé","Heure d'arrivé"};
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -27,46 +29,18 @@ public class InterfaceSuiviCommande extends Observateur{
 	private static final int POS_Y_TABLE = 30;
 	private static final int TAILLE_X_FIELD_NOM = 100;
 	private static final int TAILLE_Y_FIELD_NOM = 20;
-	private static final int POS_X_NOM = 120;
+	private static final int POS_X_NOM = POS_X_TABLE + TAILLE_X_FIELD_TABLE + 10;
 	private static final int POS_Y_NOM = 30;
-	private static final int TAILLE_X_PANEL_ARTICLE = 500;
-	private static final int TAILLE_Y_PANEL_ARTICLE = 600;
-	private static final int POS_X_ARTICLE = 0;
-	private static final int POS_Y_ARTICLE = 60;
-	private static final int PLACEMENT_TAB_ARTICLE = SwingConstants.LEFT;
-	private static final int TAILLE_SUPPRESSION = 25;
-	private static final int POS_X_SUPPRESSION = TAILLE_X_PANEL_ARTICLE - TAILLE_SUPPRESSION;
-	private static final int POS_Y_SUPPRESSION = 30;
-	private static final int TAILLE_AJOUT_Q = 45;
-	private static final int TAILLE_AJOUT = 25;
-	private static final int POS_X_AJOUT = TAILLE_X_PANEL_ARTICLE - TAILLE_AJOUT - TAILLE_SUPPRESSION - 5;
-	private static final int POS_X_AJOUT_Q = TAILLE_X_PANEL_ARTICLE - TAILLE_SUPPRESSION - TAILLE_AJOUT - TAILLE_AJOUT_Q - 10;
-	private static final int POS_Y_AJOUT = 30;
-	private static final int POS_X_RECHERCHE = 240;
+	private static final int POS_X_RECHERCHE = POS_X_NOM + TAILLE_X_FIELD_NOM + 10;
 	private static final int POS_Y_RECHERCHE = 30;
 	private static final int TAILLE_X_RECHERCHE = 80;
 	private static final int TAILLE_Y_RECHERCHE = 20;
-	private static final int POS_B = 20;
-	private static final int TAILLE_X_B = 80;
-	private static final int TAILLE_Y_B = 80;
-	private static final int POS_E = 20;
-	private static final int TAILLE_X_E = 100;
-	private static final int TAILLE_Y_E = 80;
-	private static final int POS_P = 20;
-	private static final int TAILLE_X_P = 100;
-	private static final int TAILLE_Y_P = 80;
-	private static final int POS_D = 20;
-	private static final int TAILLE_X_D = 80;
-	private static final int TAILLE_Y_D = 80;
-	private static final int POS_M = 20;
-	private static final int TAILLE_X_M = 80;
-	private static final int TAILLE_Y_M = 80;
-	private static final int POS_X_RECAP = TAILLE_X_PANEL_ARTICLE + 50;
-	private static final int POS_Y_RECAP = 10;
-	private static final int TAILLE_X_RECAP = TAILLE_X_PANEL - TAILLE_X_PANEL_ARTICLE;
-	private static final int TAILLE_Y_RECAP = 20;
-
-
+	private static final int TAILLE_OUVRIR = 25;
+	private static final int POS_X_OUVRIR = POS_X_RECHERCHE + TAILLE_X_RECHERCHE  + 10;
+	private static final int POS_Y_OUVRIR = 30;
+	private static final int TAILLE_FERMER = 25;
+	private static final int POS_X_FERMER = POS_X_OUVRIR + TAILLE_OUVRIR + 10;
+	private static final int POS_Y_FERMER = 30;
 	public InterfaceSuiviCommande(){
 	// PANEL PRINCIPALE
 		this.panelSuiviCommande = new JPanel();
@@ -95,12 +69,12 @@ public class InterfaceSuiviCommande extends Observateur{
 		
 		// Bouton d'ajout de l'article
 		this.buttonOuvrir = new JButton(new ImageIcon("./ressources/more_detail.png"));
-		buttonOuvrir.setBounds(POS_X_AJOUT,POS_Y_AJOUT,TAILLE_AJOUT,TAILLE_AJOUT);
+		buttonOuvrir.setBounds(POS_X_OUVRIR,POS_Y_OUVRIR,TAILLE_OUVRIR,TAILLE_OUVRIR);
 		panelSuiviCommande.add(buttonOuvrir);
 
 		// Bouton de suppression de l'article
 		this.buttonFermer = new JButton(new ImageIcon("./ressources/supprimer_panier.png"));
-		buttonFermer.setBounds(POS_X_SUPPRESSION,POS_Y_SUPPRESSION,TAILLE_SUPPRESSION,TAILLE_SUPPRESSION);
+		buttonFermer.setBounds(POS_X_FERMER,POS_Y_FERMER,TAILLE_FERMER,TAILLE_FERMER);
 		panelSuiviCommande.add(buttonFermer);
 
 	}
