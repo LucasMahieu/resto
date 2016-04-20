@@ -34,12 +34,12 @@ public class InterfaceTextCommande extends Observateur{
 			String plat = sc.nextLine();
 			System.out.println("veuiller indiquer la quantité de ce plat commandé");
 			int quantite = sc.nextInt();
-			Controleur.prendreCommande(table,plat,quantite);
+			Controleur.get().ajouterArticle(plat,quantite,Controleur.get().getNumeroReservation(table));
 		}
 		else if (b==2){// on produit la facture
 			System.out.println("choississez le nom du client pour récupérer la facture");
 			String str= sc.nextLine();
-			Controleur.creerFacture(str);
+			Controleur.get().creerFacture(str);
 		}
 
 	}

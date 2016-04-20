@@ -93,7 +93,7 @@ public class InterfaceSuiviCommande extends Observateur{
 		panelSuiviCommande.add(buttonRecherche);
 		
 		// Bouton d'ajout de l'article
-		this.buttonOuvrir = new JButton(new ImageIcon("./ressources/ajout_panier.png"));
+		this.buttonOuvrir = new JButton(new ImageIcon("./ressources/more_detail.png"));
 		buttonOuvrir.setBounds(POS_X_AJOUT,POS_Y_AJOUT,TAILLE_AJOUT,TAILLE_AJOUT);
 		panelSuiviCommande.add(buttonOuvrir);
 
