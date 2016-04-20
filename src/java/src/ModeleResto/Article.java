@@ -20,7 +20,10 @@ public class Article extends Observable {
     }
 
     public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
-        String requete = new String("SELECT * FROM Article WHERE ");
+        String requete = new String("SELECT * FROM Article ");
+        if (nomArticle != null || prixArticle != -1 || specialite != null) {
+            requete += "WHERE ";
+        }
         if (nomArticle != null) {
             requete += ("Article.nomArticle = '" + nomArticle + "'");
         }
@@ -37,14 +40,20 @@ public class Article extends Observable {
             requete += ("AND Article.specialite = '" + specialite + "'");
         }
         if (type != null) {
-            requete += ("HAVING Article.nomArticle in (SELECT * FROM " + type + ")");
+            requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
+            if (type == "menu") {
+                requete += "(SELECT Menu.nomMenu FROM " + type + ")";
+            }
+            else {
+                requete += "(SELECT * FROM " + type + ")";
+            }
         }	
         
         System.out.println(requete);
         try {
             this.stmt = conn.createStatement();
-            //ResultSet rset = stmt.executeQuery(requete);
-            ResultSet rset = stmt.executeQuery("SELECT * FROM Article");
+            ResultSet rset = stmt.executeQuery(requete);
+            //ResultSet rset = stmt.executeQuery("SELECT * FROM Article");
             return rset;
         }
         catch (SQLException e) {
