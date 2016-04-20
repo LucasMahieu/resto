@@ -13,7 +13,7 @@ public class Article extends Observable {
         this.conn = conn;
     }
 
-    public static ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String typeArticle) {
+    public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
         String requete = new String("SELECT * from article where");
         if (nomArticle != null) {
             requete += ("article.nom = " + nomArticle);
@@ -39,16 +39,16 @@ public class Article extends Observable {
             Statement stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(requete);
             stmt.close();
+            return rset;
         }
         catch (SQLException e) {
             System.err.println("Erreur pour faire la requête.");
             e.printStackTrace(System.err);
+            return null;
         }
-
-        return rset;
     }
 
-    public static ResultSet ajoutArticle(String nomArticle, int quantite, int numerReservation) {
+    public ResultSet ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
         String requete = new String("Insert into sontcommandes Values");
         requete += ("(" + nomArticle);
         requete += (", " + quantite);
@@ -58,13 +58,13 @@ public class Article extends Observable {
             Statement stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(requete);
             stmt.close();
+            return rset;
         }
         catch (SQLException e) {
             System.err.println("Erreur pour faire la requête.");
             e.printStackTrace(System.err);
+            return null;
         }
-
-        return rset;
     }
 }
 

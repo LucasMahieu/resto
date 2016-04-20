@@ -1,10 +1,12 @@
 package ModeleResto;
 //TO DO
-import ControleurResto;
+import ControleurResto.*;
 import java.util.*;
 import java.sql.*;
 public class Table extends Observable {
+
     private Connection conn;
+
     public Table(){
     }
 
@@ -12,38 +14,35 @@ public class Table extends Observable {
         this.conn = conn;
     }
 
-
-
-    consultationTableLibre(String localisation, int nombrePlace) {
+    public ResultSet consultationTableLibre (String localisation, int nombrePlace) {
 
         String requeteNombreMaxTable = new String("SELECT count(*) from tables group by tables.localisation");
         //On fait la requete et on met le resultat dans un int nbTable
-        int nombreMaxTable;
+        int nombreMaxTable = 56;
         int nbTableActuel = 0;
         int nombrePlaceDisponible = 0;
 
-        while ( !(nbTableActuel <= nombreMaxTable) or  ) {
+        while (!(nbTableActuel <= nombreMaxTable)) {
             nbTableActuel += 1;
             String requete = new String("SELECT ");
 
             //on ajoute nbTableActuel tables à la requete 
             for(int i = 0; i < nbTableActuel; i++) { 
-                requete += "T" + i + ".numerotable",;
+                requete += ("T" + i + ".numerotable,");
             }
 
-
             //on calcule la somme des tables considérées
-            requete += "SUM("
-                for(int i = 0; i < nbTableActuel; i++) { 
-                    requete += "T" + i + ".nombreplaceisolee + ";
-                }
+            requete += "SUM(";
+            for(int i = 0; i < nbTableActuel; i++) { 
+                requete += ("T" + i + ".nombreplaceisolee + ");
+            }
             //on enlève le "+ " de fin
             requete = requete.substring(0, requete.length() - 2);
             requete += ")as somme";
             requete += "CASE ";
             requete += "when somme >= 'nombre' THEN 'OK' ELSE '0' ";
             requete += "END";
-            requere += "FROM estreservee E, ";
+            requete += "FROM estreservee E, ";
             for(int i = 0; i < nbTableActuel; i++) { 
                 requete += "tables T" + i + ", ";
             }
@@ -65,10 +64,12 @@ public class Table extends Observable {
 
 
         }  
+        return null;
+    }
 
-        selectionTableLibre(LinkedList<Integer> liste) {
-
-        }
+    public ResultSet selectionTableLibre(LinkedList<Integer> liste) {
+        return null;
 
     }
+
 }
