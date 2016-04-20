@@ -6,6 +6,7 @@ import java.sql.*;
 public class Table extends Observable {
 
     private Connection conn;
+    private Statement stmt;
 
     public Table(){
     }
@@ -14,6 +15,12 @@ public class Table extends Observable {
         this.conn = conn;
     }
 
+    /*
+     * Si localisation est NULL, on renvoit le plus petit groupe de table possible.
+     * Sinon, on renvoit le plus petit groupe de table possible dans cette localisation.
+     * Si nombrePlace = 0, on renvoit les tables libres de cette localisation.
+     * Si les deux sont nuls, on renvoit toutes les tables libres.
+     */
     public ResultSet consultationTableLibre (String localisation, int nombrePlace) {
 
         String requeteNombreMaxTable = new String("SELECT count(*) from tables group by tables.localisation");
@@ -67,9 +74,26 @@ public class Table extends Observable {
         return null;
     }
 
-    public ResultSet selectionTableLibre(LinkedList<Integer> liste) {
-        return null;
-
+    /*
+     * Ajoute une table à une réservation.
+     */
+    public int ajouterTable(int numeroTable, int numeroReservation) {
+        if (numeroTable <= 0 || numeroReservation <= 0) {
+            return -1;
+        }
+        String requete = new String("INSERT INTO estReservee VALUES (");
+        requete += numeroTable + ", " + numeroReservation + ")";
+        try {
+            this.stmt = conn.createStatement();
+            stmt.executeUpdate(requete);
+            stmt.close();
+            return 0;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête.");
+            e.printStackTrace(System.err);
+            return -1;
+        }
     }
 
 }
