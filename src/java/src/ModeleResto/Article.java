@@ -5,6 +5,8 @@ import java.sql.*;
 public class Article extends Observable {
     
     private Connection conn;
+    // Transaction actuelle
+    private Statement stmt;
 
     public Article(){
     }
@@ -13,58 +15,70 @@ public class Article extends Observable {
         this.conn = conn;
     }
 
-    public static ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String typeArticle) {
-        String requete = new String("SELECT * from article where");
+    public Statement getStmt() {
+        return this.stmt;
+    }
+
+    public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
+        String requete = new String("SELECT * FROM Article ");
+        if (nomArticle != null || prixArticle != -1 || specialite != null) {
+            requete += "WHERE ";
+        }
         if (nomArticle != null) {
-            requete += ("article.nom = " + nomArticle);
+            requete += ("Article.nomArticle = '" + nomArticle + "'");
         }
         if (prixArticle != -1) {
             if (nomArticle != null) {	
-                requete += " and ";
+                requete += " AND ";
             }
-            requete += (" article.prix == " + prixArticle);
+            requete += ("Article.prixArticle = " + prixArticle);
         }
         if (specialite != null) {
             if (nomArticle != null || prixArticle != -1) {	
-                requete += " and ";
+                requete += " AND ";
             }
-            requete += ("and article.specialite = " + specialite);
+            requete += ("AND Article.specialite = '" + specialite + "'");
         }
         if (type != null) {
-            requete += ("having article.nomarticle in (SELECT * from " + type + " )");
+            requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
+            if (type == "menu") {
+                requete += "(SELECT Menu.nomMenu FROM " + type + ")";
+            }
+            else {
+                requete += "(SELECT * FROM " + type + ")";
+            }
         }	
-        requete += ";";
         
+        System.out.println(requete);
         try {
-            Statement stmt = conn.createStatement();
+            this.stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(requete);
-            stmt.close();
+            //ResultSet rset = stmt.executeQuery("SELECT * FROM Article");
+            return rset;
         }
         catch (SQLException e) {
             System.err.println("Erreur pour faire la requête.");
             e.printStackTrace(System.err);
+            return null;
         }
-
-        return rset;
     }
 
-    public static ResultSet ajoutArticle(String nomArticle, int quantite, int numerReservation) {
+    public ResultSet ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
         String requete = new String("Insert into sontcommandes Values");
         requete += ("(" + nomArticle);
         requete += (", " + quantite);
         requete += (", " + numeroReservation);
 
         try {
-            Statement stmt = conn.createStatement();
+            this.stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(requete);
-            stmt.close();
+            return rset;
         }
         catch (SQLException e) {
             System.err.println("Erreur pour faire la requête.");
             e.printStackTrace(System.err);
+            return null;
         }
-
-        return rset;
     }
 }
 

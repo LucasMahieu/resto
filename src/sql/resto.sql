@@ -12,7 +12,8 @@ CREATE TABLE Tables (
 CREATE TABLE Client (
 	numeroClient INTEGER CONSTRAINT KnumeroClient PRIMARY KEY check (numeroClient > 0),
 	nomClient VARCHAR(20),
-	telephoneClient VARCHAR(20)
+	telephoneClient VARCHAR(20),
+    CONSTRAINT Kclient PRIMARY KEY (nomClient, telephoneClient)
 );
 
 CREATE TABLE Carte (
