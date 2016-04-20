@@ -5,6 +5,7 @@ import ControleurResto.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
+import javax.swing.table.*;
 
 public class InterfacePrincipale extends JFrame implements ActionListener {
 
@@ -152,10 +153,26 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				interfaceCommande.getPanelCommande().updateUI();
 				System.out.println("Bouton de Recherche de réservation");
 				String message = "";
-				message = interfaceCommande.getTextFieldNTable().getText()+" "+interfaceCommande.getTextFieldNom().getText() + " n°" + numResa;
+				message = interfaceCommande.getTextFieldNTable().getText()
+					+" "+interfaceCommande.getTextFieldNom().getText() + " n°" + numResa;
 				System.out.println(message);
 			}
+		}else if(source == interfaceSuiviCommande.getButtonRechercheSuivi()){
+			if ( interfaceSuiviCommande.getTextFieldNTable().getText().equals("") 
+					&& interfaceSuiviCommande.getTextFieldNom().getText().equals("")){
+				System.out.println("Erreur Recherche Commande");
+				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!",
+						"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
+			}else{
+				// Dans ce else on peut aboutir à une resa
 
+				Object[] o = {"llllllllll","111","000","ppp"};
+				((DefaultTableModel)interfaceSuiviCommande.getTableau().getModel()).addRow(o);
+			}
+		}else if (source == interfaceSuiviCommande.getButtonOuvrir()){
+		
+		}else if (source == interfaceSuiviCommande.getButtonFermer()){
+		
 		}
 	}
 }

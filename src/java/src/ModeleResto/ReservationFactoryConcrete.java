@@ -3,6 +3,7 @@ import java.sql.*;
 
 public class ReservationFactoryConcrete extends ReservationFactory{
 
+	private HashMap<Integer,ReservationConcrete> reservations;
     final private static ReservationFactoryConcrete instanceUnique = new ReservationFactoryConcrete();
 
     final public static Article article_BD = new Article();
@@ -35,7 +36,12 @@ public class ReservationFactoryConcrete extends ReservationFactory{
             System.err.println("ECHEC de la connection à la BD.");
             e.printStackTrace(System.err);
         }
+		reservations = new HashMap<Integer, ReservationConcrete>();
     }
+
+	public HashMap<Integer,ReservationConcrete> getReservations(){
+		return this.reservations;
+	}
 
     public static ReservationFactoryConcrete get() {
         return instanceUnique;

@@ -3,7 +3,7 @@ import VueResto.*;
 import ModeleResto.*;
 import ControleurResto.*;
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
@@ -21,6 +21,8 @@ public class InterfaceSuiviCommande extends Observateur{
 	private JButton buttonFermer;
 	private SModel sModel;
 	private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé","Heure d'arrivé"};
+	private JTable tableau;
+	private JScrollPane jScrollPane;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -41,10 +43,11 @@ public class InterfaceSuiviCommande extends Observateur{
 	private static final int TAILLE_FERMER = 25;
 	private static final int POS_X_FERMER = POS_X_OUVRIR + TAILLE_OUVRIR + 10;
 	private static final int POS_Y_FERMER = 30;
-	private static final int TAILLE_X_TAB = 500;
-	private static final int TAILLE_Y_TAB = 500;
+	private static final int TAILLE_X_TAB = 650;
+	private static final int TAILLE_Y_TAB = 550;
 	private static final int POS_X_TAB = 10;
-	private static final int POS_Y_TAB = 30 + 10;
+	private static final int POS_Y_TAB = POS_Y_TABLE + TAILLE_Y_FIELD_TABLE + 10;
+	private static final int TAILLE_LIGNE = 20;
 	public InterfaceSuiviCommande(){
 	// PANEL PRINCIPALE
 		this.panelSuiviCommande = new JPanel();
@@ -81,10 +84,32 @@ public class InterfaceSuiviCommande extends Observateur{
 		buttonFermer.setBounds(POS_X_FERMER,POS_Y_FERMER,TAILLE_FERMER,TAILLE_FERMER);
 		panelSuiviCommande.add(buttonFermer);
 
+		Object[][] data = {
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"}
+		};
 		this.sModel = new SModel(data,titre);
-		this.tableau = new JTable(sModel);
-		this.tableau.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_TAB,TAILLE_TAB);
-		panelSuiviCommande.add(tableau);
+		//this.tableau = new JTable(sModel);
+		this.tableau = new JTable(new DefaultTableModel(data,titre));
+		this.tableau.setRowHeight(TAILLE_LIGNE);
+		this.tableau.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
+		this.jScrollPane = new JScrollPane(tableau);
+		jScrollPane.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
+		panelSuiviCommande.add( jScrollPane);
+		Object[] o = {"tintin","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		((DefaultTableModel)tableau.getModel()).addRow(o);
+		Object[] o1 = {"tata","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		((DefaultTableModel)tableau.getModel()).addRow(o1);
+		Object[] o2 = {"toto","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		((DefaultTableModel)tableau.getModel()).addRow(o2);
+		Object[] o3 = {"tutu","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		((DefaultTableModel)tableau.getModel()).addRow(o3);
 	}
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
@@ -97,6 +122,10 @@ public class InterfaceSuiviCommande extends Observateur{
 	}
 
 	public void update(Observable o, Object arg){
+		// Notify lancé par une reservation
+		if(o instanceof Reservation){
+			
+		}
 	}
 	public JPanel getPanel(){
 		return this.panelSuiviCommande;
@@ -116,7 +145,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	public JLabel getLabelNom(){
 		return this.labelNom;
 	}
-	public JButton getButtonRecherche(){
+	public JButton getButtonRechercheSuivi(){
 		return this.buttonRechercheSuivi;
 	}
 	public JButton getButtonOuvrir(){
@@ -124,6 +153,9 @@ public class InterfaceSuiviCommande extends Observateur{
 	}
 	public JButton getButtonFermer(){
 		return this.buttonFermer;
+	}
+	public JTable getTableau(){
+		return this.tableau;
 	}
 
 	/**
@@ -133,8 +165,12 @@ public class InterfaceSuiviCommande extends Observateur{
 		private Object[][] data;
 		private String[] titre;
 
+		public void setData(Object[][] data){
+			this.data = data;
+		}
+
 		//Constructeur
-		public SModel(Object[][] data, String[] title){
+		public SModel(Object[][] data, String[] titre){
 			this.data = data;
 			this.titre = titre;
 		}
