@@ -30,8 +30,8 @@ public class Controleur{
 
     /* à modifier pour le patron Singleton */
     private Controleur(){
-        this.numResaCmdSelectionee = 0;
-        this.numResaSuiviSelectionee = 0;
+        numResaCmdSelectionee = 0;
+        numResaSuiviSelectionee = 0;
         date = new Date();
         dateNow = sdfDate.format(date);
         heureNow = sdfHeure.format(date);
@@ -73,10 +73,19 @@ public class Controleur{
         return this.serviceNow;
     }
 
-    public void creerReservation(String nom, String prenom, String date, String service,int nbPersonne, String localisation){
+    public static int creerReservation(String nom, String date, String service,int nbPersonne, String localisation, String tel){
         //Vérification des disponibilités des tables
         //si ok:
         //Appel à la création de réservation dans la BD
+		String tables = "10-11-12";
+		int tmp = ReservationFactoryConcrete.creerReservation(nom,date,service,nbPersonne,localisation, tel, tables);
+		if(tmp<0){
+			//erreur
+			return -1;
+		}
+		numResaSuiviSelectionee = tmp;
+		numResaCmdSelectionee = tmp;
+		return tmp;
     }
 
     public void modifierReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){

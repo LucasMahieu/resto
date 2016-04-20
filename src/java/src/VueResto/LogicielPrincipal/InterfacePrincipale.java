@@ -70,19 +70,43 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			System.out.println("Bouton de Reservation");
 			String message = "";
 			if ( interfaceReservation.getTexteNomReservation().getText().equals("") 
-					|| interfaceReservation.getTextePrenomReservation().getText().equals("")){
+					|| interfaceReservation.getTexteTelephoneReservation().getText().equals("")){
 
 				System.out.println("Erreur Reservation");
 				JOptionPane.showMessageDialog(this,"Des champs obligatoires n'ont pas été remplis",
 						"Erreur Reservation",JOptionPane.ERROR_MESSAGE);
 			}else{
 				message = interfaceReservation.getTexteNomReservation().getText() + " "
-					+ interfaceReservation.getTextePrenomReservation().getText() + " "
+					+ interfaceReservation.getTexteTelephoneReservation().getText() + " "
 					+ interfaceReservation.getSpinnerNombrePersonnes().getValue() + " "
 					+ new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
 					+ interfaceReservation.getComboBoxService().getSelectedItem() 
 					+ " " + interfaceReservation.getTexteLocalisation().getText();
 				System.out.println(message);
+				int resa = Controleur.creerReservation(
+						interfaceReservation.getTexteNomReservation().getText(),
+						new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()),
+						interfaceReservation.getComboBoxService().getSelectedItem().toString(),
+						Integer.parseInt(interfaceReservation.getSpinnerNombrePersonnes().getValue().toString()),
+						interfaceReservation.getTexteLocalisation().getText(),
+						interfaceReservation.getTexteTelephoneReservation().getText()
+						);
+				if(resa<0){
+				System.out.println("Erreur Réservation");
+				JOptionPane.showMessageDialog(this,"La Réservation a échouée",
+						"Erreur Réservation",JOptionPane.ERROR_MESSAGE);
+				}else {
+					System.out.println("Réservation réussite");
+					// Faire la requete pour savoir quelle table et attribuée
+					 int table = 0;
+					// table = Controleur.getTable(resa);
+					JOptionPane.showMessageDialog(this,
+							"La Réservation a réussi,\n"
+							+"la réservation a le n°"+resa 
+							+", la table n°"+table+" lui est réservée",
+							"Réservation réussite",JOptionPane.INFORMATION_MESSAGE
+					);
+				}
 			}
 		}else if(source == interfaceCommande.getButtonAjout()){
 			String message = "";

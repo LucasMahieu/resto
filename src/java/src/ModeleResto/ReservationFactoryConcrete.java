@@ -12,6 +12,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     final private Article article_BD = new Article();
     final private Client client_BD = new Client();
     final private Table table_BD = new Table();
+    final private Service Service_BD = new Service();
 
     static final String URL = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
     static final String USR = "devalonh";

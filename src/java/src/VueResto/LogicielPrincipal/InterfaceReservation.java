@@ -23,8 +23,8 @@ public class InterfaceReservation extends Observateur{
   private JButton boutonReservation = new JButton("Reserver");
   private JLabel labelNomReservation = new JLabel("Nom (Obligatoire)");
   private JTextField texteNomReservation = new JTextField(20);
-  private JLabel labelPrenomReservation = new JLabel("Prenom (Obligatoire)");
-  private JTextField textePrenomReservation = new JTextField(20);
+  private JLabel labelTelephoneReservation = new JLabel("Telephone (Obligatoire)");
+  private JTextField texteTelephoneReservation = new JTextField(20);
   private JLabel labelNombrePersonnes= new JLabel("Nombre de personnes");
   private SpinnerModel modelNombrePersonnes = new SpinnerNumberModel(1,1,100,1);     
   private JSpinner spinnerNombrePersonnes = new JSpinner(modelNombrePersonnes);
@@ -56,13 +56,13 @@ public class InterfaceReservation extends Observateur{
     nbBoutons++;
     this.panelReservation.add(texteNomReservation);
 
-    labelPrenomReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    labelTelephoneReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     nbBoutons++;
-    this.panelReservation.add(labelPrenomReservation);
+    this.panelReservation.add(labelTelephoneReservation);
 
-    textePrenomReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    texteTelephoneReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     nbBoutons++;
-    this.panelReservation.add(textePrenomReservation);
+    this.panelReservation.add(texteTelephoneReservation);
 
     labelNombrePersonnes.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     nbBoutons++;
@@ -130,20 +130,20 @@ public class InterfaceReservation extends Observateur{
     return this.texteNomReservation;
   } 
 
-  /** permet d'acceder a l'etiquette du prenom de l'interface de reservation
+  /** permet d'acceder a l'etiquette du telephone  de l'interface de reservation
    * 
    * @returns etiquette du prenom de reservation
    */
-  public JLabel getLabelPrenomReservation(){
-    return this.labelPrenomReservation;
+  public JLabel getLabelTelephoneReservation(){
+    return this.labelTelephoneReservation;
   } 
 
-  /** permet d'acceder au contenu du champ textuel du prenom de l'interface de reservation
+  /** permet d'acceder au contenu du champ textuel du telephone de l'interface de reservation
    * 
    * @returns champ du texte du prenom de reservation
    */
-  public JTextField getTextePrenomReservation(){
-    return this.textePrenomReservation;
+  public JTextField getTexteTelephoneReservation(){
+    return this.texteTelephoneReservation;
   } 
 
   /** permet d'acceder a l'etiquette du nombre de personnes de l'interface de reservation
