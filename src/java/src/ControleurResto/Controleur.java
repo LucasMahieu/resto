@@ -73,7 +73,7 @@ public class Controleur{
         return this.serviceNow;
     }
 
-    public void passerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
+    public void creerReservation(String nom, String prenom, String date, String service,int nbPersonne, String localisation){
         //Vérification des disponibilités des tables
         //si ok:
         //Appel à la création de réservation dans la BD
