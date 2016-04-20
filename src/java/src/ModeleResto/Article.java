@@ -31,10 +31,11 @@ public class Article extends Observable {
             requete += ("and article.specialite = " + specialite);
         }
         if (type != null) {
-            requete += ("having article.nomarticle in (SELECT * from " + type + " )");
+            requete += (" having article.nomarticle in (SELECT * from " + type + " )");
         }	
         requete += ";";
         
+        System.out.println(requete);
         try {
             Statement stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(requete);

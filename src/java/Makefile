@@ -36,4 +36,4 @@ documentation:
 	javadoc -d doc -sourcepath src/ -subpackages . 
 	
 clean:
-	rm -rf bin/*
+	rm -rf bin/*.class
