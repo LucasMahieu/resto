@@ -36,4 +36,7 @@ documentation:
 	javadoc -d doc -sourcepath src/ -subpackages . 
 	
 clean:
-	rm -rf bin/*
+	rm -rf bin/*.class
+	rm -rf ControleurResto/*.class
+	rm -rf ModeleResto/*.class
+	rm -rf VueResto/*.class

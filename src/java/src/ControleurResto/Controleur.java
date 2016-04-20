@@ -2,7 +2,10 @@ package ControleurResto;
 
 import VueResto.*;
 import ModeleResto.*;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.HashMap;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 
 /**
@@ -92,6 +95,7 @@ public class Controleur{
     public LinkedList<String> getListeArticles(String type)
     {
         LinkedList<String> resultat = new LinkedList<String>();
+        /*
         if (type == "boisson"){
             resultat.add("Fanta");
             resultat.add("Vin-chaud");
@@ -151,14 +155,23 @@ public class Controleur{
             resultat.add("Maitre");
             resultat.add("Tourista");
         }
-        /*
-        ResultSet rset = getArticles(null, -1, null, type);
-        while(rset.next())
-        {
-            resultat.add(rset.getString(1));
-        }
-        rset.close();
         */
+        try {
+            ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
+            if (rset == null) {
+                return resultat;
+            }
+            while(rset.next())
+            {
+                resultat.add(rset.getString(1));
+            }
+            rset.close();
+            ReservationFactoryConcrete.get().getArticleBD().getStmt().close();
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête.");
+            e.printStackTrace(System.err);
+        }
         return resultat;
     }
 
@@ -169,52 +182,52 @@ public class Controleur{
 
         //rset.close();
         //return resultat;
-		return (float)10.0;
+        return (float)10.0;
     }
 
-	public int getNumeroReservation(String date, int nTable, String service){
-		return 123456;
-	}
-	public int getNumeroReservation(String date, String nom, String service){
-		return 123456;
-	}
-	public int getNumeroReservation(String nom){
-		return 123456;
-	}
-	public int getNumeroReservation(int numTable){
-		return 123456;
-	}
-	/**
-	 * Donne une string comportant toutes les tables associée à une réservation
-	 * Convention : séparer les numeros par des '-'.
-	 */
-	public String getNumeroTables(int numResa){
-		return "10-11-12";
-	}
-	public String getNom(int numResa) {
-		return "M. Dieudo";
-	}
+    public int getNumeroReservation(String date, int nTable, String service){
+        return 123456;
+    }
+    public int getNumeroReservation(String date, String nom, String service){
+        return 123456;
+    }
+    public int getNumeroReservation(String nom){
+        return 123456;
+    }
+    public int getNumeroReservation(int numTable){
+        return 123456;
+    }
+    /**
+     * Donne une string comportant toutes les tables associée à une réservation
+     * Convention : séparer les numeros par des '-'.
+     */
+    public String getNumeroTables(int numResa){
+        return "10-11-12";
+    }
+    public String getNom(int numResa) {
+        return "M. Dieudo";
+    }
 
-	public HashMap<String,Integer> getArticlesCommandes(int numResa){
-		HashMap<String,Integer> h = new HashMap<String,Integer>();
-		h.put("Menu du roi",1);
-		h.put("Quenelles Farcies", 2);
-		h.put("Hugarden", 100);
-		h.put("Menu Tourista",1);
-		h.put("Frite",7);
-		return h;
-	}
+    public HashMap<String,Integer> getArticlesCommandes(int numResa){
+        HashMap<String,Integer> h = new HashMap<String,Integer>();
+        h.put("Menu du roi",1);
+        h.put("Quenelles Farcies", 2);
+        h.put("Hugarden", 100);
+        h.put("Menu Tourista",1);
+        h.put("Frite",7);
+        return h;
+    }
 
-	public int getNumResaCmdSelectionne(){
-		return this.numResaCmdSelectionee;
-	}
-	public int getNumResaSuiviSelectionne(){
-		return this.numResaSuiviSelectionee;
-	}
-	public void setNumResaCmdSelectionne(int n){
-		this.numResaCmdSelectionee = n;
-	}
-	public void setNumResaSuiviSelectionne(int n){
-		this.numResaSuiviSelectionee = n;
-	}
+    public int getNumResaCmdSelectionne(){
+        return this.numResaCmdSelectionee;
+    }
+    public int getNumResaSuiviSelectionne(){
+        return this.numResaSuiviSelectionee;
+    }
+    public void setNumResaCmdSelectionne(int n){
+        this.numResaCmdSelectionee = n;
+    }
+    public void setNumResaSuiviSelectionne(int n){
+        this.numResaSuiviSelectionee = n;
+    }
 }
