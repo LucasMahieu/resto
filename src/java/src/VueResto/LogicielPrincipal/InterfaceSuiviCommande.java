@@ -123,9 +123,6 @@ public class InterfaceSuiviCommande extends Observateur{
 
 	public void update(Observable o, Object arg){
 		// Notify lancé par une reservation
-		if(o instanceof Reservation){
-			
-		}
 	}
 	public JPanel getPanel(){
 		return this.panelSuiviCommande;
