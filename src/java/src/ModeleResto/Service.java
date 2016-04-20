@@ -27,17 +27,17 @@ public class Service extends Observable {
 		try {
             this.stmt = conn.createStatement();
             rset = stmt.executeQuery(requete);
+            if(!rset.next()){
+                return false;
+            }
+            else {
+                return true;
+            }
         }
         catch (SQLException e) {
             System.err.println("Erreur lors de la requête 'Service'.");
             e.printStackTrace(System.err);
             return false;
         }
-		if(!rset.next()){
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
+    }
 }

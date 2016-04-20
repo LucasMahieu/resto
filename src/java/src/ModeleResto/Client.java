@@ -49,6 +49,7 @@ public class Client extends Observable {
         try {
             this.stmt = conn.createStatement();
             stmt.executeUpdate(requete);
+            stmt.close();
             lastNb++;
             return lastNb;
         }

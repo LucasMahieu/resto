@@ -74,18 +74,21 @@ public class Controleur{
     }
 
     public static int creerReservation(String nom, String date, String service,int nbPersonne, String localisation, String tel){
+        /*
         //Vérification des disponibilités des tables
         //si ok:
         //Appel à la création de réservation dans la BD
 		String tables = "10-11-12";
-		int tmp = ReservationFactoryConcrete.creerReservation(nom,date,service,nbPersonne,localisation, tel, tables);
+		//int tmp = ReservationFactoryConcrete.creerReservation(nom,date,service,nbPersonne,localisation, tel, tables);
 		if(tmp<0){
 			//erreur
 			return -1;
 		}
 		numResaSuiviSelectionee = tmp;
 		numResaCmdSelectionee = tmp;
-		return tmp;
+        */
+		//return tmp;
+        return 14;
     }
 
     public void modifierReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
