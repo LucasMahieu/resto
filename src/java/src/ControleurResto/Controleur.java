@@ -89,9 +89,144 @@ public class Controleur{
         return 14;
     }
 
-	public static ArrayList<Integer> trouverTable(int NbPersonne, String localisation, String service){
-		ArrayList<Integer> ret = new ArrayList<Integer>();
-		return ret;
+	public static ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
+		ArrayList<Integer> res = new ArrayList<Integer>();
+		ArrayList<Integer> table = new ArrayList<Integer>();
+		try {
+            ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getTableLibre(localisation, date, service);
+            if (rset == null) {
+				//erreur à gerer
+                return null;
+            }
+            while(rset.next()){
+                res.add(rset.getInt(1));
+            }
+            rset.close();
+            ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+			// Res contient toutes les tables libres pour ce jour, service , localisation
+			int nbPlace = 0;
+			int resteMin = 1000;
+			int config = 0;
+			int tableIdeal = 0;
+			for(Integer i : res){
+				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				if(nbPlace>=nbPersonnes){
+					if(nbPlace-nbPersonnes<resteMin){
+						resteMin = nbPlace - nbPersonnes;
+						tableIdeal = i;
+					}
+				}
+			}
+			// Si tableIdeal != 0 alors il y a une table qui convient sans accolement
+			if(tableIdeal!=0){
+				table.add(tableIdeal);
+				return table;
+			}
+			//Sinon on essaye d'accoler une table
+			config++;
+			int tableVoisine[] = {0,0};
+			int nbPlaceVoisine[] = {0,0};
+			int j=0;
+			int tableIdealAccolee[] = {0,0};
+			resteMin = 1000;
+			for(Integer i : res){
+				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+
+				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
+				if (!rset.isBeforeFirst()) {
+					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+					continue;
+				}else{
+					j=0;
+					while(rset.next()){
+						tableVoisine[j] = rset.getInt(1);
+						j++;
+					}
+				}
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0],config);
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1],config);
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				// on a donc le nombre de place accolée1 des deux voisines 
+				if(nbPlace+nbPlaceVoisine[0]>=nbPersonnes){
+					if(nbPlace+nbPlaceVoisine[0]-nbPersonnes<resteMin){
+						resteMin = nbPlace+nbPlaceVoisine[0] - nbPersonnes;
+						tableIdealAccolee[0] = i;
+						tableIdealAccolee[1] = tableVoisine[0];
+					}
+				}
+				if(nbPlace+nbPlaceVoisine[1]>=nbPersonnes){
+					if(nbPlace+nbPlaceVoisine[1]-nbPersonnes<resteMin){
+						resteMin = nbPlace+nbPlaceVoisine[1] - nbPersonnes;
+						tableIdealAccolee[0] = i;
+						tableIdealAccolee[1] = tableVoisine[1];
+					}
+				}
+			}
+			if(tableIdealAccolee[0]!=0 && tableIdealAccolee[1]!=0){
+				table.add(tableIdealAccolee[0]);
+				table.add(tableIdealAccolee[1]);
+				return table;
+			}
+			//Sinon on essaye d'accoler deux table
+			config++;
+			j=0;
+			int tableIdealAccolee2[] = {0,0,0};
+			resteMin = 1000;
+			for(Integer i : res){
+				// Table i
+				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				// les tables voisines de i
+				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
+				if (!rset.isBeforeFirst()) {
+					// Pas de voisin, on passe à i++
+					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+					continue;
+				}else{
+					j=0;
+					while(rset.next()){
+						tableVoisine[j] = rset.getInt(1);
+						j++;
+					}
+				}
+				//On recupere le nombre de places des 2 voisins pour un accolement à i
+				//ATENTION les tables voisines vont etre en accolement simple
+				//seul i est en accolement double -> on utilise config-1 pour les voisines
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0],config-1);
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1],config-1);
+				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				// on a donc le nombre de place accolée1 des deux voisines 
+				if(nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1]>=nbPersonnes){
+					if(nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1]-nbPersonnes<resteMin){
+						resteMin = nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1] - nbPersonnes;
+						tableIdealAccolee2[0] = i;
+						tableIdealAccolee2[1] = tableVoisine[0];
+						tableIdealAccolee2[2] = tableVoisine[1];
+					}
+				}
+			}
+			if(tableIdealAccolee2[0]!=0 && tableIdealAccolee2[1]!=0){
+				table.add(tableIdealAccolee2[0]);
+				table.add(tableIdealAccolee2[1]);
+				table.add(tableIdealAccolee2[3]);
+				return table;
+			}
+			// Si on arrive la, c'est qu'il y a pas de table assez grande
+			// dans la localisation donnée
+			// il faudra refuser la reservation
+			return table;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête.");
+            e.printStackTrace(System.err);
+        }
+		return table;
 	}
     public void modifierReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification de l'existence de la réservation 

@@ -80,7 +80,7 @@ public class Table extends Observable {
 	 * Donne les tables libre d'une localisation pour une date et service
 	 * MARCHE DANS LA BD 
 	 */
-	public ResultSet tableLibre(String loc, String date, String service) {
+	public ResultSet getTableLibre(String loc, String date, String service) {
 		if (loc == "") {
 			return null;
 		}
@@ -147,8 +147,11 @@ public class Table extends Observable {
 				return -1;
 			}
 			else {
+				int i = 0;
 				while(rset.next()){
-					return rset.getInt(1);
+					i = rset.getInt(1);
+					rset.close();
+					return i;
 				}
 				return -1;
 			}
