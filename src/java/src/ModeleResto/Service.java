@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class Service extends Observable {
 	private Connection conn;
-    private Statement stmt;
+	private Statement stmt;
 
 	public Service(){
 	}
@@ -14,9 +14,9 @@ public class Service extends Observable {
 	public void setCon(Connection conn) {
 		this.conn = conn;
 	}
-    public Statement getStmt() {
-        return this.stmt;
-    }
+	public Statement getStmt() {
+		return this.stmt;
+	}
 
 	public boolean presenceService(String date, String typeService) {
 
@@ -25,19 +25,19 @@ public class Service extends Observable {
 		System.out.println(requete);
 		ResultSet rset;
 		try {
-            this.stmt = conn.createStatement();
-            rset = stmt.executeQuery(requete);
-            if(!rset.next()){
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur lors de la requête 'Service'.");
-            e.printStackTrace(System.err);
-            return false;
-        }
-    }
+			this.stmt = conn.createStatement();
+			rset = stmt.executeQuery(requete);
+			if(!rset.next()){
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur lors de la requête 'Service'.");
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
 }

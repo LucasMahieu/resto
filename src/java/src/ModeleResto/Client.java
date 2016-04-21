@@ -4,6 +4,7 @@ import java.sql.*;
 public class Client extends Observable {
     private Connection conn;
     private Statement stmt;
+	// Ca sert à quoi ? 
     private int lastNb = 1;
 
 	public Client(){
