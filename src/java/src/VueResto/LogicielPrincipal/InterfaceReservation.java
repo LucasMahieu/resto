@@ -31,9 +31,9 @@ public class InterfaceReservation extends Observateur{
   private JLabel labelDate= new JLabel("Date");
   private SpinnerModel modelDate= new SpinnerDateModel();     
   private JSpinner spinnerDate = new JSpinner(modelDate);
-  private JSpinner.DateEditor editorDate = new JSpinner.DateEditor(spinnerDate, "dd-MM-yyyy");
+  private JSpinner.DateEditor editorDate = new JSpinner.DateEditor(spinnerDate, "dd/MM/yyyy");
   private JLabel labelService = new JLabel("Service");
-  private String[] service = {"Midi","Soir"};
+  private String[] service = {"MIDI","SOIR"};
   private JComboBox<String> comboBoxService= new JComboBox<String>(service);
   private JLabel labelLocalisation = new JLabel("Localisation");
   private JTextField texteLocalisation = new JTextField(20);

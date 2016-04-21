@@ -72,21 +72,45 @@ public class Controleur{
         return this.serviceNow;
     }
 
-    public static int creerReservation(String nom, String date, String service,int nbPersonne, String localisation, String tel){
-        /*
+    public static int creerReservation(String nom, String date, String service,int nbPersonnes, String localisation, String tel){
         //Vérification des disponibilités des tables
         //Appel à la création de réservation dans la BD
-		String tables = "10-11-12";
-		//int tmp = ReservationFactoryConcrete.creerReservation(nom,date,service,nbPersonne,localisation, tel, tables);
+		String tables = "";
+		//tables = "10-11-12";
+		ArrayList<Integer> tablesArray = trouverTable(localisation, date, service, nbPersonnes);
+		boolean isFirst = true;
+		System.out.println("tableau=" + tablesArray);
+		if(tablesArray == null){
+			//erreur
+			System.out.println("tablesArray=null");
+			return -1;
+		}else if(tablesArray.size()==0){
+			//Pas de table dispo
+			System.out.println("tablesArray.size()=0");
+			return 0;
+		}
+
+		System.out.println("tables sont dispo");
+		for(int i=0; i<tablesArray.size(); i++){
+			if(!isFirst){
+				tables+="-";
+			}
+			tables+=tablesArray.get(i).toString();
+		}
+		int tmp = ReservationFactoryConcrete.creerReservation(nom, date, service, nbPersonnes, localisation, tel, tables);
 		if(tmp<0){
 			//erreur
+			System.out.println("erreur creation resa");
 			return -1;
 		}
+		if(tmp==0){
+			System.out.println("probleme creation resa");
+			return tmp;
+		}
 		numResaSuiviSelectionee = tmp;
-		numResaCmdSelectionee = tmp;
-        */
-		//return tmp;
-        return 14;
+		numResaCmdSelectionee = tmp; 
+		return tmp;
+        //return 14;
     }
 
 	public static ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
@@ -218,8 +242,10 @@ public class Controleur{
 				return table;
 			}
 			// Si on arrive la, c'est qu'il y a pas de table assez grande
-			// dans la localisation donnée
-			// il faudra refuser la reservation
+			// dans la localisation donnée Donc on fait la recherche dans les autres loc
+			if(localisation!=null){
+				table = trouverTable(null,date,service,nbPersonnes);
+			}
 			return table;
         }
         catch (SQLException e) {
@@ -235,13 +261,13 @@ public class Controleur{
         //Appel à la modification de réservation dans la BD
     }
 
-    public void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
+    public static void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification de l'existence de la réservation 
         //si ok:
         //Appel à la suppression de réservation dans la BD
     }
 
-    public LinkedList<String> getListeArticles(String type)
+    public static  LinkedList<String> getListeArticles(String type)
     {
         LinkedList<String> resultat = new LinkedList<String>();
         /*
@@ -323,7 +349,7 @@ public class Controleur{
         return resultat;
     }
 
-    public float getPrixArticle(String nomArticle)
+    public static float getPrixArticle(String nomArticle)
     {
         //ResultSet rset = getArticles(nomArticle, -1, null, null);
         //rset.getFloat(2);
@@ -333,16 +359,16 @@ public class Controleur{
         return (float)10.0;
     }
 
-    public int getNumeroReservation(String date, int nTable, String service){
+    public static  int getNumeroReservation(String date, int nTable, String service){
         return 123456;
     }
-    public int getNumeroReservation(String date, String nom, String service){
+    public static int getNumeroReservation(String date, String nom, String service){
         return 123456;
     }
-    public int getNumeroReservation(String nom){
+    public static int getNumeroReservation(String nom){
         return 123456;
     }
-	public int getNumeroReservation(int numTable){
+	public static int getNumeroReservation(int numTable){
 		int resultat = 0;
 		try {
 			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
@@ -373,7 +399,7 @@ public class Controleur{
 	 * Donne une string comportant toutes les tables associée à une réservation
 	 * Convention : séparer les numeros par des '-'.
 	 */
-	public String getNumeroTables(int numResa){
+	public static String getNumeroTables(int numResa){
 		String resultat = "";
 		try {
 			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
@@ -407,7 +433,7 @@ public class Controleur{
 		return "M. Dieudo";
 	}
 
-	public HashMap<String,Integer> getArticlesCommandes(int numResa){
+	public static HashMap<String,Integer> getArticlesCommandes(int numResa){
 		HashMap<String,Integer> h = new HashMap<String,Integer>();
 		h.put("Menu du roi",1);
 		h.put("Quenelles Farcies", 2);
@@ -417,16 +443,16 @@ public class Controleur{
 		return h;
 	}
 
-	public int getNumResaCmdSelectionne(){
-		return this.numResaCmdSelectionee;
+	public static int getNumResaCmdSelectionne(){
+		return numResaCmdSelectionee;
 	}
-	public int getNumResaSuiviSelectionne(){
-		return this.numResaSuiviSelectionee;
+	public static int getNumResaSuiviSelectionne(){
+		return numResaSuiviSelectionee;
 	}
-	public void setNumResaCmdSelectionne(int n){
-		this.numResaCmdSelectionee = n;
+	public static void setNumResaCmdSelectionne(int n){
+		numResaCmdSelectionee = n;
 	}
-	public void setNumResaSuiviSelectionne(int n){
-		this.numResaSuiviSelectionee = n;
+	public static void setNumResaSuiviSelectionne(int n){
+		numResaSuiviSelectionee = n;
 	}
 }

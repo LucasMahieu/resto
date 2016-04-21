@@ -88,29 +88,21 @@ public class Table extends Observable {
 		int t=0;
 		String requete = new String(
 				"SELECT t.numeroTable "
-				+"FROM tables t "
-				+"WHERE t.localisation='"+loc+"' "
-				+"MINUS "
-				+"SELECT er.numerotable "
-				+"FROM estreservee er, reservation r "
-				+"WHERE er.numeroreservation = r.numeroreservation "
-				+"AND r.dateService='"+date+"' "
-				+"AND r.typeService='"+service+"' "
-				);
+				+"FROM tables t ");
+		if(loc!=null){
+				requete+="WHERE t.localisation='"+loc+"' ";
+		}
+		requete+="MINUS "
+			+"SELECT er.numerotable "
+			+"FROM estreservee er, reservation r "
+			+"WHERE er.numeroreservation = r.numeroreservation "
+			+"AND r.dateService='"+date+"' "
+			+"AND r.typeService='"+service+"' "
+			;
 		try {
 			this.stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(requete);
 			return rset;
-		/*	if (!rset.isBeforeFirst()) {
-				return ret;
-			}
-			else {
-				while(rset.next()){
-					ret.add(rset.getInt(1));
-				}
-				return ret;
-			}
-			*/
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête tableLibre.");

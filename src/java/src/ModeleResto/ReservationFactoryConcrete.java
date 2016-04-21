@@ -43,7 +43,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		reservations = new HashMap<Integer, ReservationConcrete>();
     }
 
-    public int creerReservation(String nomClient, String date, String service, int nbPersonnes, String localisation, String telephoneClient) {
+    public static int creerReservation(String nomClient, String date, String service, int nbPersonnes, String localisation, String telephoneClient, String numTables) {
         return 0;
     }
 
