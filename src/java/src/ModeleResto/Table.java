@@ -14,6 +14,9 @@ public class Table extends Observable {
     public void setCon(Connection conn) {
         this.conn = conn;
     }
+	public Statement getStmt(){
+		return this.stmt;
+	}
 
     /*
      * Si localisation est NULL, on renvoit le plus petit groupe de table possible.
@@ -74,26 +77,31 @@ public class Table extends Observable {
         return null;
     }
 	/**
-	 * Donne les tables libre d'une localisation.
-	 * MARCHE sur la BD
+	 * Donne les tables libre d'une localisation pour une date et service
+	 * MARCHE DANS LA BD 
 	 */
-	public ArrayList<Integer> tableLibre(String loc) {
+	public ResultSet tableLibre(String loc, String date, String service) {
 		if (loc == "") {
-			return -1;
+			return null;
 		}
 		ArrayList<Integer> ret = new ArrayList<Integer>(); 
 		int t=0;
-		String requete = new String("SELECT numeroTable "
+		String requete = new String(
+				"SELECT t.numeroTable "
 				+"FROM tables t "
 				+"WHERE t.localisation='"+loc+"' "
-				+"GROUP BY numeroTable "
-				+"HAVING t.numeroTable NOT IN "
-				+"( SELECT numeroTable FROM estreservee ) "
+				+"MINUS "
+				+"SELECT er.numerotable "
+				+"FROM estreservee er, reservation r "
+				+"WHERE er.numeroreservation = r.numeroreservation "
+				+"AND r.dateService='"+date+"' "
+				+"AND r.typeService='"+service+"' "
 				);
 		try {
 			this.stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(requete);
-			if (!rset.isBeforeFirst()) {
+			return rset;
+		/*	if (!rset.isBeforeFirst()) {
 				return ret;
 			}
 			else {
@@ -102,6 +110,7 @@ public class Table extends Observable {
 				}
 				return ret;
 			}
+			*/
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête tableLibre.");
@@ -121,11 +130,11 @@ public class Table extends Observable {
 		int ret=0;
 		String requete = new String("SELECT ");
 		if(config == 0){
-			requete += "nombrePlaceIsolee "
+			requete += "nombrePlaceIsolee ";
 		}else if(config == 1){
-			requete += "nombrePlaceAccolee1 "
+			requete += "nombrePlaceAccolee1 ";
 		}else if(config == 2){
-			requete += "nombrePlaceAccolee2 "
+			requete += "nombrePlaceAccolee2 ";
 		}else {
 			return -1;
 		}
@@ -154,7 +163,7 @@ public class Table extends Observable {
 	 * Retourne la liste des tables voisine à une table donnée
 	 * MARCHE SUR LA BD
 	 */
-	public ArrayList<Integer> getTableVoisine(int tab){
+	public ResultSet getTableVoisine(int tab){
 		if (tab <= 0) {
 			return null;
 		}
@@ -162,13 +171,14 @@ public class Table extends Observable {
 				+"sv.numerotable2 "
 				+"FROM tables t, sontvoisines sv "
 				+"WHERE t.numerotable='"+tab+"' " 
-				+"t.numerotable=sv.numerotable1 "
+				+"AND t.numerotable=sv.numerotable1 "
 			);
 		ArrayList<Integer> ret = new ArrayList<Integer>(); 
 		try {
 			this.stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(requete);
-			if (!rset.isBeforeFirst()) {
+			return rset;
+		/*	if (!rset.isBeforeFirst()) {
 				return ret;
 			}
 			else {
@@ -177,9 +187,56 @@ public class Table extends Observable {
 				}
 				return ret;
 			}
+			*/
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getTableVoisin.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+	/**
+	 * Donne les numeros de table d'une resa
+	 */
+	public ResultSet getNumeroTable(int numResa){
+		if (numResa <= 0) {
+			return null;
+		}
+		String requete = new String("SELECT "
+				+"er.numerotable "
+				+"FROM estreservee er "
+				+"WHERE er.numeroreservation='"+numResa+"' " 
+			);
+		try {
+			this.stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(requete);
+			return rset;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getNumeroTable.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+	/**
+	 * Donne le numéro de resa pour une table donnée
+	 */
+	public ResultSet getNumeroReservation(int numTable){
+		if (numTable <= 0) {
+			return null;
+		}
+		String requete = new String("SELECT "
+				+"er.numeroreservation "
+				+"FROM estreservee er "
+				+"WHERE er.numerotable ='"+numTable+"' " 
+			);
+		try {
+			this.stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(requete);
+			return rset;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getNumeroReservation(table).");
 			e.printStackTrace(System.err);
 			return null;
 		}

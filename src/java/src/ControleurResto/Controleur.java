@@ -2,9 +2,8 @@ package ControleurResto;
 
 import VueResto.*;
 import ModeleResto.*;
+import java.util.*;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.HashMap;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
@@ -76,7 +75,6 @@ public class Controleur{
     public static int creerReservation(String nom, String date, String service,int nbPersonne, String localisation, String tel){
         /*
         //Vérification des disponibilités des tables
-        //si ok:
         //Appel à la création de réservation dans la BD
 		String tables = "10-11-12";
 		//int tmp = ReservationFactoryConcrete.creerReservation(nom,date,service,nbPersonne,localisation, tel, tables);
@@ -91,6 +89,10 @@ public class Controleur{
         return 14;
     }
 
+	public static ArrayList<Integer> trouverTable(int NbPersonne, String localisation, String service){
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		return ret;
+	}
     public void modifierReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification de l'existence de la réservation 
         //Vérification des disponibilités des tables
@@ -173,8 +175,7 @@ public class Controleur{
             if (rset == null) {
                 return resultat;
             }
-            while(rset.next())
-            {
+            while(rset.next()){
                 resultat.add(rset.getString(1));
             }
             rset.close();
@@ -206,40 +207,91 @@ public class Controleur{
     public int getNumeroReservation(String nom){
         return 123456;
     }
-    public int getNumeroReservation(int numTable){
-        return 123456;
-    }
-    /**
-     * Donne une string comportant toutes les tables associée à une réservation
-     * Convention : séparer les numeros par des '-'.
-     */
-    public String getNumeroTables(int numResa){
-        return "10-11-12";
-    }
-    public String getNom(int numResa) {
-        return "M. Dieudo";
-    }
+	public int getNumeroReservation(int numTable){
+		int resultat = 0;
+		try {
+			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
+			if (rset == null) {
+				return resultat;
+			}
+			// Pas de tuples renvoyé
+			if (!rset.isBeforeFirst()) {
+				return resultat;
+			}
+			else {
+				while(rset.next()){
+					resultat = rset.getInt(1);
+				}
+			}
+			rset.close();
+			ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getNumeroTable.");
+			e.printStackTrace(System.err);
+			resultat = -1;
+		}
+		return resultat;
 
-    public HashMap<String,Integer> getArticlesCommandes(int numResa){
-        HashMap<String,Integer> h = new HashMap<String,Integer>();
-        h.put("Menu du roi",1);
-        h.put("Quenelles Farcies", 2);
-        h.put("Hugarden", 100);
-        h.put("Menu Tourista",1);
-        h.put("Frite",7);
-        return h;
-    }
+	}
+	/**
+	 * Donne une string comportant toutes les tables associée à une réservation
+	 * Convention : séparer les numeros par des '-'.
+	 */
+	public String getNumeroTables(int numResa){
+		String resultat = "";
+		try {
+			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
+			if (rset == null) {
+				return resultat;
+			}
+			// Pas de tuples renvoyé
+			if (!rset.isBeforeFirst()) {
+				return resultat;
+			}
+			else {
+				boolean isFirst=true;
+				while(rset.next()){
+					if(!isFirst){
+						resultat += "-";
+						isFirst = false;
+					}
+					resultat += rset.getString(1);
+				}
+			}
+			rset.close();
+			ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getNumeroTable.");
+			e.printStackTrace(System.err);
+		}
+		return resultat;
+	}
+	public String getNom(int numResa) {
+		return "M. Dieudo";
+	}
 
-    public int getNumResaCmdSelectionne(){
-        return this.numResaCmdSelectionee;
-    }
-    public int getNumResaSuiviSelectionne(){
-        return this.numResaSuiviSelectionee;
-    }
-    public void setNumResaCmdSelectionne(int n){
-        this.numResaCmdSelectionee = n;
-    }
-    public void setNumResaSuiviSelectionne(int n){
-        this.numResaSuiviSelectionee = n;
-    }
+	public HashMap<String,Integer> getArticlesCommandes(int numResa){
+		HashMap<String,Integer> h = new HashMap<String,Integer>();
+		h.put("Menu du roi",1);
+		h.put("Quenelles Farcies", 2);
+		h.put("Hugarden", 100);
+		h.put("Menu Tourista",1);
+		h.put("Frite",7);
+		return h;
+	}
+
+	public int getNumResaCmdSelectionne(){
+		return this.numResaCmdSelectionee;
+	}
+	public int getNumResaSuiviSelectionne(){
+		return this.numResaSuiviSelectionee;
+	}
+	public void setNumResaCmdSelectionne(int n){
+		this.numResaCmdSelectionee = n;
+	}
+	public void setNumResaSuiviSelectionne(int n){
+		this.numResaSuiviSelectionee = n;
+	}
 }
