@@ -73,27 +73,137 @@ public class Table extends Observable {
         }  
         return null;
     }
-
-    /*
-     * Ajoute une table à une réservation.
-     */
-    public int ajouterTable(int numeroTable, int numeroReservation) {
-        if (numeroTable <= 0 || numeroReservation <= 0) {
-            return -1;
-        }
-        String requete = new String("INSERT INTO estReservee VALUES (");
-        requete += numeroTable + ", " + numeroReservation + ")";
-        try {
-            this.stmt = conn.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
-            return 0;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête.");
-            e.printStackTrace(System.err);
-            return -1;
-        }
-    }
+	/**
+	 * Donne les tables libre d'une localisation.
+	 * MARCHE sur la BD
+	 */
+	public ArrayList<Integer> tableLibre(String loc) {
+		if (loc == "") {
+			return -1;
+		}
+		ArrayList<Integer> ret = new ArrayList<Integer>(); 
+		int t=0;
+		String requete = new String("SELECT numeroTable "
+				+"FROM tables t "
+				+"WHERE t.localisation='"+loc+"' "
+				+"GROUP BY numeroTable "
+				+"HAVING t.numeroTable NOT IN "
+				+"( SELECT numeroTable FROM estreservee ) "
+				);
+		try {
+			this.stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(requete);
+			if (!rset.isBeforeFirst()) {
+				return ret;
+			}
+			else {
+				while(rset.next()){
+					ret.add(rset.getInt(1));
+				}
+				return ret;
+			}
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête tableLibre.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+	/**
+	 * Donne le nombre de place d'une table donnée.
+	 * @param tab numero de la table 
+	 * @param config 0 pour table isolée, 1 pour accolée à 1 table, 2 pour accolée2 à 2 table voisines
+	 */
+	public int nbPlaceTable(int tab, int config) {
+		if (tab <= 0) {
+			return -1;
+		}
+		int ret=0;
+		String requete = new String("SELECT ");
+		if(config == 0){
+			requete += "nombrePlaceIsolee "
+		}else if(config == 1){
+			requete += "nombrePlaceAccolee1 "
+		}else if(config == 2){
+			requete += "nombrePlaceAccolee2 "
+		}else {
+			return -1;
+		}
+		requete +="FROM Tables t "
+			+"WHERE t.numeroTable='"+tab+"' ";
+		try {
+			this.stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(requete);
+			if (!rset.isBeforeFirst()) {
+				return -1;
+			}
+			else {
+				while(rset.next()){
+					return rset.getInt(1);
+				}
+				return -1;
+			}
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête nbPlaceTable.");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
+	/**
+	 * Retourne la liste des tables voisine à une table donnée
+	 * MARCHE SUR LA BD
+	 */
+	public ArrayList<Integer> getTableVoisine(int tab){
+		if (tab <= 0) {
+			return null;
+		}
+		String requete = new String("SELECT "
+				+"sv.numerotable2 "
+				+"FROM tables t, sontvoisines sv "
+				+"WHERE t.numerotable='"+tab+"' " 
+				+"t.numerotable=sv.numerotable1 "
+			);
+		ArrayList<Integer> ret = new ArrayList<Integer>(); 
+		try {
+			this.stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(requete);
+			if (!rset.isBeforeFirst()) {
+				return ret;
+			}
+			else {
+				while(rset.next()){
+					ret.add(rset.getInt(1));
+				}
+				return ret;
+			}
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getTableVoisin.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+	/**
+	 * Ajoute une table à une réservation.
+	 */
+	public int ajouterTable(int numeroTable, int numeroReservation) {
+		if (numeroTable <= 0 || numeroReservation <= 0) {
+			return -1;
+		}
+		String requete = new String("INSERT INTO estReservee VALUES (");
+		requete += numeroTable + ", " + numeroReservation + ")";
+		try {
+			this.stmt = conn.createStatement();
+			stmt.executeUpdate(requete);
+			stmt.close();
+			return 0;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête.");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
 
 }
