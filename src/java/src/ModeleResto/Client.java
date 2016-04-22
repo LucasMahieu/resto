@@ -29,8 +29,8 @@ public class Client extends Observable {
 			e.printStackTrace(System.err);
 			return -1;
 		}
-
 	}
+
 	public int exists(String nomClient, String nTel) {
 		if (nomClient == null || nTel == null) {
 			return -1;
@@ -45,14 +45,12 @@ public class Client extends Observable {
 				return 0;
 			}
 			else {
-				while (rset.next()) {
-					int ret = rset.getInt(1);
-					rset.close();
-					stmt.close();
-					return ret;
-				}
-				return 0;
-			}
+				rset.next();
+                int ret = rset.getInt(1);
+                rset.close();
+                stmt.close();
+                return ret;
+            }
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête.");

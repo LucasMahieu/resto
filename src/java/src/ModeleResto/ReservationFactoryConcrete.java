@@ -11,7 +11,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     final private Article article_BD = new Article();
     final private Client client_BD = new Client();
     final private Table table_BD = new Table();
-    final private Service Service_BD = new Service();
+    final private Service service_BD = new Service();
 
 	private static HashMap<Integer,ReservationConcrete> reservations;
 
@@ -32,11 +32,11 @@ public class ReservationFactoryConcrete extends ReservationFactory{
         PSWD = USR;
 
         try {
-            System.out.println("Chargement du driver Oracle ...");
+            System.out.println("Chargement du driver Oracle ... ");
             //DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             System.out.println("Chargement réussi.");
 
-            System.out.print("Connection à la base de données ...");
+            System.out.print("Connection à la base de données ... ");
             conn = DriverManager.getConnection(URL, USR, PSWD);
             System.out.println("Connection réussie.");
 
@@ -113,6 +113,10 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
     public Client getClientBD() {
         return this.client_BD;
+    }
+
+    public Service getServiceBD() {
+        return this.service_BD;
     }
 }
 

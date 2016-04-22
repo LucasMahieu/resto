@@ -28,9 +28,13 @@ public class Service extends Observable {
 			this.stmt = conn.createStatement();
 			rset = stmt.executeQuery(requete);
 			if(!rset.next()){
+                rset.close();
+                stmt.close();
 				return false;
 			}
 			else {
+                rset.close();
+                stmt.close();
 				return true;
 			}
 		}

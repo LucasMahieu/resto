@@ -18,9 +18,9 @@
 #   -classpath : repertoire dans lequel sont cherches les .class deja compiles
 #   -sourcepath : repertoire dans lequel sont cherchés les .java (dependances)
 
-all: Resto exeResto
+all: resto exeResto
 
-Resto:
+resto:
 	javac -encoding utf8 -d bin -sourcepath src:src/* src/Resto.java
 
 # Execution:

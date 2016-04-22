@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
  * et les informations, états, variables du controleur sera cohérent 
  * entre toutes les autres classes
  *
+ * -> Ce n'est plus utile avec le patron Singleton car instance unique de cette classe
+ *
  */
 public class Controleur{
     private static int numResaCmdSelectionee;
@@ -27,7 +29,6 @@ public class Controleur{
 
     final private static Controleur instanceUnique = new Controleur();
 
-    /* à modifier pour le patron Singleton */
     private Controleur(){
         numResaCmdSelectionee = 0;
         numResaSuiviSelectionee = 0;
@@ -74,25 +75,27 @@ public class Controleur{
 
 	/**
 	 * Cette fonction doit :
-	 *		- Verifier si le service exite 
-	 *		- Trouver si une table optimale est dispo
-	 *		- Trouver le client (si exite sinon le creer)
-	 *		- Creer la reservation
+	 *		- Vérifier si il y a un service ce jour là
+	 *		- Trouver un groupe de table optimal
+	 *		- Trouver le client (si il existe, sinon le créer)
+	 *		- Créer la réservation
 	 *		- Associer la table à la résa
-	 *		- retourner le numero de resa
-	 *	@param nom nom du client qui reserve 
+	 *		- Retourner le numero de résa
+	 *	@param nom nom du client qui réserve 
 	 *	@param date date de la reservation
-	 *	@param service pour lequel le client reserve
-	 *	@param nbPersonnes nombre de personnes qui souhaite reservé
+	 *	@param service pour lequel le client réserve
+	 *	@param nbPersonnes nombre de personnes qui souhaitent réserver
 	 *	@param localisation de la table souhaitée
-	 *	@param tel telephone du client
-	 *	@return numero de la resa créé : -1 en cas d'erreur, 0 en cas d'indisponibilité
+	 *	@param tel téléphone du client
+	 *	@return numéro de la résa créé : -1 en cas d'erreur, 0 en cas d'indisponibilité
 	 */
-    public static int creerReservation(String nom, String date, String service,int nbPersonnes, String localisation, String tel){
-        //Vérification des disponibilités des tables
-        //Appel à la création de réservation dans la BD
-		String tables = "";
-		// ATTENTIONNNNNNN IL FAUT VERIFIER SI IL EXITE UN SERVICE CE JOUR CI !! 
+    public static int creerReservation(String nom, String date, String service, int nbPersonnes, String localisation, String tel) {
+        // Vérification du service
+        if (!ReservationFactoryConcrete.get().getServiceBD().presenceService(date, service)) {
+            return 0;
+        }
+
+        // Vérification des tables
 		ArrayList<Integer> tablesArray = trouverTable(localisation, date, service, nbPersonnes);
 		System.out.println("tableau=" + tablesArray);
 		if(tablesArray == null){
@@ -105,12 +108,15 @@ public class Controleur{
 			return 0;
 		}
 		System.out.println("tables sont dispo");
-		// On doit alors touver le numeroClient
+
+		// Vérification si le client existe / création nouveau client
 		int numClient = trouverClient(nom,tel);
 		if(numClient == -1){
 			//erreur
 			System.out.println("erreur lors de recherche client");
 		}
+
+        // Création de la réservation
 		int numResa = ReservationFactoryConcrete.creerReservation(numClient, date, service, nbPersonnes);
 		if(numResa<0){
 			//erreur
@@ -125,14 +131,13 @@ public class Controleur{
 		numResaCmdSelectionee = numResa; 
 		// ici la resa est crée et son num se trouve dans tmp
 		// On associe donc la(les) table(s) trouvée(s) à ce num de resa
-		for(int i=0; i<tablesArray.size(); i++){
-			if( ReservationFactoryConcrete.get().getTableBD().ajouterTable(tablesArray.get(i),numResa) !=0 ){
+		for (int i = 0; i < tablesArray.size(); i++) {
+			if (ReservationFactoryConcrete.get().getTableBD().ajouterTable(tablesArray.get(i),numResa) != 0) {
 				System.out.println("probleme lors des ajouts de table");
 				return -1;
 			}
 		}
 		return numResa;
-        //return 14;
     }
 
 	public static int trouverClient(String nomC, String telC){
@@ -172,7 +177,6 @@ public class Controleur{
 			int tableIdeal = 0;
 			for(Integer i : res){
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 				if(nbPlace>=nbPersonnes){
 					if(nbPlace-nbPersonnes<resteMin){
 						resteMin = nbPlace - nbPersonnes;
@@ -194,7 +198,6 @@ public class Controleur{
 			resteMin = 1000;
 			for(Integer i : res){
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 
 				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
 				if (!rset.isBeforeFirst()) {
@@ -292,6 +295,7 @@ public class Controleur{
         }
 		return table;
 	}
+
     public void modifierReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification de l'existence de la réservation 
         //Vérification des disponibilités des tables
@@ -308,67 +312,6 @@ public class Controleur{
     public static  LinkedList<String> getListeArticles(String type)
     {
         LinkedList<String> resultat = new LinkedList<String>();
-        /*
-        if (type == "boisson"){
-            resultat.add("Fanta");
-            resultat.add("Vin-chaud");
-            resultat.add("Coca");
-            resultat.add("Vin-Blanc");
-            resultat.add("perrier");
-            resultat.add("champagneeee");
-            resultat.add("Limonade");
-            resultat.add("Duvel");
-            resultat.add("Hougarden");
-            resultat.add("Vodka");
-            resultat.add("Wisky");
-            resultat.add("Grenadine");
-            resultat.add("Lait-fraise");
-            resultat.add("Jus de papaye");
-            resultat.add("eau de vie");
-            resultat.add("sirop de caoutchou");
-            resultat.add("infusion de chaussettes");
-        }else if (type=="entree"){
-            resultat.add("salade");
-            resultat.add("chevre chaud");
-            resultat.add("foie gras");
-            resultat.add("charcuterie");
-            resultat.add("surimi");
-            resultat.add("bouillabesse");
-            resultat.add("os à moelle");
-            resultat.add("oeuf de caille");
-            resultat.add("frillant au bleu");
-            resultat.add("taboulet");
-        }else if(type=="plat"){
-            resultat.add("langue de boeuf");
-            resultat.add("knaki");
-            resultat.add("poulet rotis");
-            resultat.add("couscous");
-            resultat.add("raclette");
-            resultat.add("fondu");
-            resultat.add("plat du jour");
-            resultat.add("steak frite");
-            resultat.add("bolognaire");
-            resultat.add("carbonara");
-            resultat.add("sanglier mariné");
-            resultat.add("poulpe");
-            resultat.add("choux farcie");
-            resultat.add("rognon");
-            resultat.add("choucroutte");
-            resultat.add("cassoulet");
-            resultat.add("pizza");
-        }else if (type=="dessert"){
-            resultat.add("Ils-flottante");
-            resultat.add("yaourt");
-            resultat.add("glace");
-            resultat.add("fruit");
-            resultat.add("gaateau");
-            resultat.add("chaucolot");
-        }else if (type=="menu"){
-            resultat.add("Chef");
-            resultat.add("Maitre");
-            resultat.add("Tourista");
-        }
-        */
         try {
             ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
             if (rset == null) {
