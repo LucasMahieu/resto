@@ -25,6 +25,7 @@ public class Table extends Observable {
      * Si les deux sont nuls, on renvoit toutes les tables libres.
      */
     public ResultSet consultationTableLibre (String localisation, int nombrePlace) {
+		/*
 
         String requeteNombreMaxTable = new String("SELECT count(*) from tables group by tables.localisation");
         //On fait la requete et on met le resultat dans un int nbTable
@@ -73,7 +74,8 @@ public class Table extends Observable {
             //??? sait pas comment faire
 
 
-        }  
+        } 
+	   */	
         return null;
     }
 	/**

@@ -65,20 +65,35 @@ public class Controleur{
         return this.heureNow;
     }
     public String getServiceNow() {
-        serviceNow = "midi";
+        serviceNow = "MIDI";
         if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
-            serviceNow = "soir";
+            serviceNow = "MIDI";
         }
         return this.serviceNow;
     }
 
+	/**
+	 * Cette fonction doit :
+	 *		- Verifier si le service exite 
+	 *		- Trouver si une table optimale est dispo
+	 *		- Trouver le client (si exite sinon le creer)
+	 *		- Creer la reservation
+	 *		- Associer la table à la résa
+	 *		- retourner le numero de resa
+	 *	@param nom nom du client qui reserve 
+	 *	@param date date de la reservation
+	 *	@param service pour lequel le client reserve
+	 *	@param nbPersonnes nombre de personnes qui souhaite reservé
+	 *	@param localisation de la table souhaitée
+	 *	@param tel telephone du client
+	 *	@return numero de la resa créé : -1 en cas d'erreur, 0 en cas d'indisponibilité
+	 */
     public static int creerReservation(String nom, String date, String service,int nbPersonnes, String localisation, String tel){
         //Vérification des disponibilités des tables
         //Appel à la création de réservation dans la BD
 		String tables = "";
-		//tables = "10-11-12";
+		// ATTENTIONNNNNNN IL FAUT VERIFIER SI IL EXITE UN SERVICE CE JOUR CI !! 
 		ArrayList<Integer> tablesArray = trouverTable(localisation, date, service, nbPersonnes);
-		boolean isFirst = true;
 		System.out.println("tableau=" + tablesArray);
 		if(tablesArray == null){
 			//erreur
@@ -89,29 +104,51 @@ public class Controleur{
 			System.out.println("tablesArray.size()=0");
 			return 0;
 		}
-
 		System.out.println("tables sont dispo");
-		for(int i=0; i<tablesArray.size(); i++){
-			if(!isFirst){
-				tables+="-";
-			}
-			tables+=tablesArray.get(i).toString();
+		// On doit alors touver le numeroClient
+		int numClient = trouverClient(nom,tel);
+		if(numClient == -1){
+			//erreur
+			System.out.println("erreur lors de recherche client");
 		}
-		int tmp = ReservationFactoryConcrete.creerReservation(nom, date, service, nbPersonnes, localisation, tel, tables);
-		if(tmp<0){
+		int numResa = ReservationFactoryConcrete.creerReservation(numClient, date, service, nbPersonnes);
+		if(numResa<0){
 			//erreur
 			System.out.println("erreur creation resa");
 			return -1;
 		}
-		if(tmp==0){
-			System.out.println("probleme creation resa");
-			return tmp;
+		if(numResa==0){
+			System.out.println("problème creation resa");
+			return numResa;
 		}
-		numResaSuiviSelectionee = tmp;
-		numResaCmdSelectionee = tmp; 
-		return tmp;
+		numResaSuiviSelectionee = numResa;
+		numResaCmdSelectionee = numResa; 
+		// ici la resa est crée et son num se trouve dans tmp
+		// On associe donc la(les) table(s) trouvée(s) à ce num de resa
+		for(int i=0; i<tablesArray.size(); i++){
+			if( ReservationFactoryConcrete.get().getTableBD().ajouterTable(tablesArray.get(i),numResa) !=0 ){
+				System.out.println("probleme lors des ajouts de table");
+				return -1;
+			}
+		}
+		return numResa;
         //return 14;
     }
+
+	public static int trouverClient(String nomC, String telC){
+		int numClient = ReservationFactoryConcrete.get().getClientBD().exists(nomC, telC);
+		if(numClient == -1){
+			return -1;
+		}else if (numClient == 0){
+			numClient = ReservationFactoryConcrete.get().getClientBD().create(nomC, telC);
+			if(numClient == -1){
+				return -1;
+				// si ca n'a pas marcher, peu etre re essayer ?
+			}
+		}
+		return numClient;
+	}
+
 
 	public static ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
 		ArrayList<Integer> res = new ArrayList<Integer>();
@@ -125,6 +162,7 @@ public class Controleur{
             while(rset.next()){
                 res.add(rset.getInt(1));
             }
+			System.out.println("table libre = " + res);
             rset.close();
             ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 			// Res contient toutes les tables libres pour ce jour, service , localisation

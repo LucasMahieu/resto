@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ReservationFactoryConcrete extends ReservationFactory{
 
-	private HashMap<Integer,ReservationConcrete> reservations;
+	private static HashMap<Integer,ReservationConcrete> reservations;
     final private static ReservationFactoryConcrete instanceUnique = new ReservationFactoryConcrete();
 
     final private Article article_BD = new Article();
@@ -18,7 +18,11 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     static final String USR = "devalonh";
     static final String PSWD = "devalonh";
 
-    private Connection conn;
+    private static Connection conn;
+    private static Statement stmt;
+	public Statement getStmt(){
+		return this.stmt;
+	}
 
     private ReservationFactoryConcrete() {
         try {
@@ -43,12 +47,26 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		reservations = new HashMap<Integer, ReservationConcrete>();
     }
 
-    public static int creerReservation(String nomClient, String date, String service, int nbPersonnes, String localisation, String telephoneClient, String numTables) {
-        return 0;
+    public static int creerReservation(int numClient, String date, String service, int nbPersonnes) {
+		int numResa = reservations.size()+1;
+		String requete = new String("INSERT INTO Reservation VALUES (");
+		requete += numResa +","+ nbPersonnes +","+"0"+","+numClient+",'"+service+"','"+date+ "')";
+		try {
+			stmt = conn.createStatement();
+			stmt.executeUpdate(requete);
+			stmt.close();
+			reservations.put(numResa,new ReservationConcrete(numResa));
+			return numResa;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête de création de resa");
+			e.printStackTrace(System.err);
+			return -1;
+		}
     }
 
 	public HashMap<Integer,ReservationConcrete> getReservations(){
-		return this.reservations;
+		return reservations;
 	}
 
     public static ReservationFactoryConcrete get() {

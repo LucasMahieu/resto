@@ -37,7 +37,7 @@ CREATE TABLE Service (
 CREATE TABLE Reservation (
 	numeroReservation INTEGER check (numeroReservation > 0),
 	nbPersonnes INTEGER check (nbPersonnes > 0),
-	prixTotal INTEGER check (prixTotal > 0),
+	prixTotal INTEGER check (prixTotal >= 0),
     -- Attributs liés aux cardinalités 1..1
     numeroClient INTEGER REFERENCES Client(numeroClient),
 	typeService VARCHAR(20),
