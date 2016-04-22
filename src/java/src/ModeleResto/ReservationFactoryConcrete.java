@@ -6,7 +6,6 @@ import java.util.*;
 
 public class ReservationFactoryConcrete extends ReservationFactory{
 
-	private static HashMap<Integer,ReservationConcrete> reservations;
     final private static ReservationFactoryConcrete instanceUnique = new ReservationFactoryConcrete();
 
     final private Article article_BD = new Article();
@@ -14,9 +13,11 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     final private Table table_BD = new Table();
     final private Service Service_BD = new Service();
 
+	private static HashMap<Integer,ReservationConcrete> reservations;
+
     static final String URL = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
-    static final String USR = "devalonh";
-    static final String PSWD = "devalonh";
+    private String USR;
+    private String PSWD;
 
     private static Connection conn;
     private static Statement stmt;
@@ -25,6 +26,11 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 	}
 
     private ReservationFactoryConcrete() {
+        System.out.print("Entrez votre nom d'utilisateur pour vous connecter à votre BD : ");
+        Scanner sc = new Scanner(System.in);
+        USR = sc.next();
+        PSWD = USR;
+
         try {
             System.out.println("Chargement du driver Oracle ...");
             //DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
@@ -55,7 +61,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 			stmt = conn.createStatement();
 			stmt.executeUpdate(requete);
 			stmt.close();
-			reservations.put(numResa,new ReservationConcrete(numResa));
+			reservations.put(numResa, new ReservationConcrete(numResa));
 			return numResa;
 		}
 		catch (SQLException e) {

@@ -12,8 +12,7 @@ CREATE TABLE Tables (
 CREATE TABLE Client (
 	numeroClient INTEGER CONSTRAINT KnumeroClient PRIMARY KEY check (numeroClient > 0),
 	nomClient VARCHAR(20),
-	telephoneClient VARCHAR(20),
-    CONSTRAINT Kclient PRIMARY KEY (nomClient, telephoneClient)
+	telephoneClient VARCHAR(20)
 );
 
 CREATE TABLE Carte (
@@ -37,7 +36,6 @@ CREATE TABLE Service (
 CREATE TABLE Reservation (
 	numeroReservation INTEGER check (numeroReservation > 0),
 	nbPersonnes INTEGER check (nbPersonnes > 0),
-	prixTotal INTEGER check (prixTotal >= 0),
     -- Attributs liés aux cardinalités 1..1
     numeroClient INTEGER REFERENCES Client(numeroClient),
 	typeService VARCHAR(20),

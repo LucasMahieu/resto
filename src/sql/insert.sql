@@ -62,13 +62,13 @@ insert into Service
 
 -- RESERVATION
 insert into Reservation
-	Values(1, 5, 120, 1, 'SOIR', '21/07/2015');
+	Values(1, 5, 1, 'SOIR', '21/07/2015');
 insert into Reservation
-	Values(3, 5, 190, 1, 'MIDI', '21/07/2015');
+	Values(3, 5, 1, 'MIDI', '21/07/2015');
 insert into Reservation
-	Values(2, 3, 110, 2, 'SOIR', '21/07/2015');
+	Values(2, 3, 2, 'SOIR', '21/07/2015');
 insert into Reservation
-	Values(4, 6, 180, 3, 'SOIR', '21/07/2015');
+	Values(4, 6, 3, 'SOIR', '21/07/2015');
 	
 -- CHOIX
 insert into Choix
