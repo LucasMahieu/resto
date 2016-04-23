@@ -17,15 +17,15 @@ import java.text.SimpleDateFormat;
  *
  */
 public class Controleur{
-    private static int numResaCmdSelectionee;
-    private static int numResaSuiviSelectionee;
-    private static Date date;
-    private static final SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-    private static final SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
-    private static String dateNow;
-    private static String heureNow;
-    private static String serviceNow;
-    private static final int DEBUT_SERVICE_SOIR = 17;
+    private int numResaCmdSelectionee;
+    private int numResaSuiviSelectionee;
+    private Date date;
+    private final SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
+    private String dateNow;
+    private String heureNow;
+    private String serviceNow;
+    private final int DEBUT_SERVICE_SOIR = 17;
 
     final private static Controleur instanceUnique = new Controleur();
 
@@ -89,7 +89,7 @@ public class Controleur{
 	 *	@param tel téléphone du client
 	 *	@return numéro de la résa créé : -1 en cas d'erreur, 0 en cas d'indisponibilité
 	 */
-    public static int creerReservation(String nom, String date, String service, int nbPersonnes, String localisation, String tel) {
+    public int creerReservation(String nom, String date, String service, int nbPersonnes, String localisation, String tel) {
         // Vérification du service
         if (!ReservationFactoryConcrete.get().getServiceBD().presenceService(date, service)) {
             return 0;
@@ -117,7 +117,7 @@ public class Controleur{
 		}
 
         // Création de la réservation
-		int numResa = ReservationFactoryConcrete.creerReservation(numClient, date, service, nbPersonnes);
+		int numResa = ReservationFactoryConcrete.get().creerReservation(numClient, date, service, nbPersonnes);
 		if(numResa<0){
 			//erreur
 			System.out.println("erreur creation resa");
@@ -140,7 +140,7 @@ public class Controleur{
 		return numResa;
     }
 
-	public static int trouverClient(String nomC, String telC){
+	public int trouverClient(String nomC, String telC){
 		int numClient = ReservationFactoryConcrete.get().getClientBD().exists(nomC, telC);
 		if(numClient == -1){
 			return -1;
@@ -155,22 +155,16 @@ public class Controleur{
 	}
 
 
-	public static ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
-		ArrayList<Integer> res = new ArrayList<Integer>();
+	public ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
+		//ArrayList<Integer> res = new ArrayList<Integer>();
+		LinkedList<Integer> res;
 		ArrayList<Integer> table = new ArrayList<Integer>();
 		try {
-            ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getTableLibre(localisation, date, service);
-            if (rset == null) {
-				//erreur à gerer
-                return null;
+            res = ReservationFactoryConcrete.get().getTableBD().getTableLibre(localisation, date, service);
+            if (res == null) {
+                throw (new SQLException());
             }
-            while(rset.next()) {
-                res.add(rset.getInt(1));
-            }
-            // res contient toutes les tables libres.
 			System.out.println("table libre = " + res);
-            rset.close();
-            ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 			// Res contient toutes les tables libres pour ce jour, service , localisation
 			int nbPlace = 0;
 			int resteMin = 1000;
@@ -217,20 +211,16 @@ public class Controleur{
                 // Pour chaque table libre, on regarde ses voisines.
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
 
-				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
+				LinkedList<Integer> voisines = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
                 // Si la table considérée n'a pas de voisines, on regarde la suivante.
-				if (!rset.isBeforeFirst()) {
-                    rset.close();
-					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				if (voisines.isEmpty()) {
 					continue;
-				}else{
+				}
+                else{
 					j=0;
-					while(rset.next()){
-						tableVoisine[j] = rset.getInt(1);
-						j++;
+                    for (Integer t : voisines) {
+						tableVoisine[j++] = t;
 					}
-                    rset.close();
-                    ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 				}
 
                 // On en déduit le nombre de places des tables voisines si on les accole uniquement avec la table considérée.
@@ -276,20 +266,16 @@ public class Controleur{
 				// Table i
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i, config);
 				// les tables voisines de i
-				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
-				if (!rset.isBeforeFirst()) {
+				LinkedList<Integer> voisines2 = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
+				if (voisines2.isEmpty()) {
 					// Pas de voisin, on passe à i++
-                    rset.close();
-					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 					continue;
-				}else{
+				}
+                else{
 					j=0;
-					while(rset.next()){
-						tableVoisine[j] = rset.getInt(1);
-						j++;
+                    for (Integer t : voisines2) {
+						tableVoisine[j++] = t;
 					}
-                    rset.close();
-					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 				}
 				//On recupere le nombre de places des 2 voisins pour un accolement à i
 				//ATENTION les tables voisines vont etre en accolement simple
@@ -332,13 +318,13 @@ public class Controleur{
         //Appel à la modification de réservation dans la BD
     }
 
-    public static void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
+    public void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification de l'existence de la réservation 
         //si ok:
         //Appel à la suppression de réservation dans la BD
     }
 
-    public static  LinkedList<String> getListeArticles(String type)
+    public LinkedList<String> getListeArticles(String type)
     {
         LinkedList<String> resultat = new LinkedList<String>();
         try {
@@ -359,7 +345,7 @@ public class Controleur{
         return resultat;
     }
 
-    public static float getPrixArticle(String nomArticle)
+    public float getPrixArticle(String nomArticle)
     {
         //ResultSet rset = getArticles(nomArticle, -1, null, null);
         //rset.getFloat(2);
@@ -369,81 +355,68 @@ public class Controleur{
         return (float)10.0;
     }
 
-    public static  int getNumeroReservation(String date, int nTable, String service){
+    public int getNumeroReservation(String date, int nTable, String service){
         return 123456;
     }
-    public static int getNumeroReservation(String date, String nom, String service){
+    public int getNumeroReservation(String date, String nom, String service){
         return 123456;
     }
-    public static int getNumeroReservation(String nom){
+    public int getNumeroReservation(String nom){
         return 123456;
     }
-	public static int getNumeroReservation(int numTable){
-		int resultat = 0;
-		try {
-			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
-			if (rset == null) {
-				return resultat;
-			}
-			// Pas de tuples renvoyé
-			if (!rset.isBeforeFirst()) {
-				return resultat;
-			}
-			else {
-				while(rset.next()){
-					resultat = rset.getInt(1);
-				}
-			}
-			rset.close();
-			ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-		}
-		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête getNumeroTable.");
-			e.printStackTrace(System.err);
-			resultat = -1;
-		}
-		return resultat;
 
+	public int getNumeroReservation(int numTable){
+
+        if (numTable <= 0) {
+            return -1;
+        }
+        return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
 	}
 	/**
 	 * Donne une string comportant toutes les tables associée à une réservation
 	 * Convention : séparer les numeros par des '-'.
 	 */
-	public static String getNumeroTables(int numResa){
+	public LinkedList<Integer> getNumeroTables(int numResa){
+        if (numResa <= 0) {
+            return null;
+        }
+        LinkedList<Integer> tables = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
+        return tables;
+        /*
 		String resultat = "";
 		try {
-			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
-			if (rset == null) {
+			if (tables == null) {
 				return resultat;
 			}
 			// Pas de tuples renvoyé
-			if (!rset.isBeforeFirst()) {
+			if (tables.isEmpty()) {
 				return resultat;
 			}
 			else {
 				boolean isFirst=true;
-				while(rset.next()){
+				//while(rset.next()){
+                for (Integer t : tables) {
 					if(!isFirst){
 						resultat += "-";
 						isFirst = false;
 					}
-					resultat += rset.getString(1);
+					resultat += t;
 				}
 			}
-			rset.close();
-			ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getNumeroTable.");
 			e.printStackTrace(System.err);
+            return null;
 		}
-		return resultat;
+        */
 	}
+
 	public String getNom(int numResa) {
 		return "M. Dieudo";
 	}
 
-	public static HashMap<String,Integer> getArticlesCommandes(int numResa){
+	public HashMap<String,Integer> getArticlesCommandes(int numResa){
 		HashMap<String,Integer> h = new HashMap<String,Integer>();
 		h.put("Menu du roi",1);
 		h.put("Quenelles Farcies", 2);
@@ -453,16 +426,16 @@ public class Controleur{
 		return h;
 	}
 
-	public static int getNumResaCmdSelectionne(){
+	public int getNumResaCmdSelectionne(){
 		return numResaCmdSelectionee;
 	}
-	public static int getNumResaSuiviSelectionne(){
+	public int getNumResaSuiviSelectionne(){
 		return numResaSuiviSelectionee;
 	}
-	public static void setNumResaCmdSelectionne(int n){
+	public void setNumResaCmdSelectionne(int n){
 		numResaCmdSelectionee = n;
 	}
-	public static void setNumResaSuiviSelectionne(int n){
+	public void setNumResaSuiviSelectionne(int n){
 		numResaSuiviSelectionee = n;
 	}
 }

@@ -13,14 +13,17 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     final private Table table_BD = new Table();
     final private Service service_BD = new Service();
 
-	private static HashMap<Integer,ReservationConcrete> reservations;
+	private HashMap<Integer,ReservationConcrete> reservations;
 
-    static final String URL = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
+    private final String URL = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
     private String USR;
     private String PSWD;
 
-    private static Connection conn;
-    private static Statement stmt;
+    private Connection conn;
+    private Statement stmt;
+
+    private int lastRes = 0;
+
 	public Statement getStmt(){
 		return this.stmt;
 	}
@@ -45,6 +48,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
             article_BD.setCon(conn);
             client_BD.setCon(conn);
             table_BD.setCon(conn);
+            service_BD.setCon(conn);
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la connection à la BD.");
@@ -53,16 +57,17 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		reservations = new HashMap<Integer, ReservationConcrete>();
     }
 
-    public static int creerReservation(int numClient, String date, String service, int nbPersonnes) {
-		int numResa = reservations.size()+1;
+    public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
 		String requete = new String("INSERT INTO Reservation VALUES (");
-		requete += numResa +","+ nbPersonnes +","+"0"+","+numClient+",'"+service+"','"+date+ "')";
+		requete += (lastRes + 1) +","+ nbPersonnes +","+"0"+","+numClient+",'"+service+"','"+date+ "')";
+        System.out.println(requete);
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate(requete);
 			stmt.close();
-			reservations.put(numResa, new ReservationConcrete(numResa));
-			return numResa;
+            lastRes++;
+			reservations.put(lastRes, new ReservationConcrete(lastRes));
+			return lastRes;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête de création de resa");
@@ -123,5 +128,4 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 /*
  * ATTENTION :
  * Il faudra penser à fermer la connection à la base de donnée en sortie de l'application !
- * On peut prévoir une méthode close() qui la ferme, à appeler à la fin.
  */

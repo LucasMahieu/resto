@@ -5,7 +5,6 @@ import java.sql.*;
 public class Article extends Observable {
     
     private Connection conn;
-    // Transaction actuelle
     private Statement stmt;
 
     public Article(){
@@ -53,7 +52,6 @@ public class Article extends Observable {
         try {
             this.stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(requete);
-            //ResultSet rset = stmt.executeQuery("SELECT * FROM Article");
             return rset;
         }
         catch (SQLException e) {
@@ -63,25 +61,26 @@ public class Article extends Observable {
         }
     }
 
-    public ResultSet ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
-        String requete = new String("Insert into sontcommandes Values");
-        requete += ("(" + nomArticle);
-        requete += (", " + quantite);
-        requete += (", " + numeroReservation);
+    public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
+        if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+            return -1;
+        }
+        String requete = new String("INSERT INTO sontCommandes VALUES");
+        requete += "(" + nomArticle;
+        requete += ", " + quantite;
+        requete += ", " + numeroReservation + ")";
 
+        System.out.println(requete);
         try {
             this.stmt = conn.createStatement();
-            ResultSet rset = stmt.executeQuery(requete);
-            return rset;
+			stmt.executeUpdate(requete);
+            stmt.close();
+            return 0;
         }
         catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête.");
+            System.err.println("Erreur pour faire la requête d'ajout d'article.");
             e.printStackTrace(System.err);
-            return null;
+            return -1;
         }
     }
 }
-
-/* ATTENTION
- * Il faut fermer les objets Statement et ResultSet et commit !
- */

@@ -3,6 +3,7 @@ import VueResto.*;
 import VueResto.LogicielPrincipal.*;
 import ControleurResto.*;
 import javax.swing.*;
+import java.util.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import javax.swing.table.*;
@@ -83,7 +84,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 					+ interfaceReservation.getComboBoxService().getSelectedItem() 
 					+ " " + interfaceReservation.getTexteLocalisation().getText();
 				System.out.println(message);
-				int resa = Controleur.creerReservation(
+				int resa = Controleur.get().creerReservation(
 						interfaceReservation.getTexteNomReservation().getText(),
 						new SimpleDateFormat("dd/MM/yyyy").format(interfaceReservation.getSpinnerDate().getValue()),
 						interfaceReservation.getComboBoxService().getSelectedItem().toString(),
@@ -103,12 +104,16 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				}else{
 					System.out.println("Réservation réussite");
 					// Faire la requete pour savoir quelle table et attribuée
-					String table = "";
-					table = Controleur.getNumeroTables(resa);
+					LinkedList<Integer> tables;
+					tables = Controleur.get().getNumeroTables(resa);
+                    String tablesString = "";
+                    if (tables != null) {
+                        tablesString = tables.toString();
+                    }
 					JOptionPane.showMessageDialog(this
 							,"La Réservation a réussi,\n"
 							+"la réservation a le n°"+resa 
-							+", la table n°"+table+" lui est réservée"
+							+", la table n°"+tablesString+" lui est réservée"
 							,"Réservation réussite",JOptionPane.INFORMATION_MESSAGE
 					);
 				}

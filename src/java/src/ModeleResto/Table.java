@@ -22,8 +22,9 @@ public class Table extends Observable {
 	 * Donne les tables libre d'une localisation pour une date et un service
      * ou toutes les tables libres si la localisation n'est pas précisée
 	 */
-	public ResultSet getTableLibre(String loc, String date, String service) {
-		int t=0;
+	public LinkedList<Integer> getTableLibre(String loc, String date, String service) {
+		int t = 0;
+        LinkedList<Integer> res = new LinkedList<Integer>();
         if (date == null || service == null) {
             return null;
         }
@@ -44,7 +45,12 @@ public class Table extends Observable {
 		try {
 			this.stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
+            while(rset.next()) {
+                res.add(rset.getInt(1));
+            }
+            rset.close();
+            this.stmt.close();
+			return res;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête tableLibre:");
@@ -103,7 +109,8 @@ public class Table extends Observable {
 	 * Retourne la liste des tables voisine à une table donnée
 	 * MARCHE SUR LA BD
 	 */
-	public ResultSet getTableVoisine(int tab){
+	public LinkedList<Integer> getTableVoisine(int tab){
+        LinkedList<Integer> res = new LinkedList<Integer>();
 		if (tab <= 0) {
 			return null;
 		}
@@ -116,7 +123,12 @@ public class Table extends Observable {
 		try {
 			this.stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
+            while (rset.next()) {
+                res.add(rset.getInt(1));
+            }
+            rset.close();
+            this.stmt.close();
+			return res;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getTableVoisin.");
@@ -125,10 +137,11 @@ public class Table extends Observable {
 		}
 	}
 
-	/**
+	/*
 	 * Donne les numeros de table d'une resa
 	 */
-	public ResultSet getNumeroTable(int numResa){
+	public LinkedList<Integer> getNumeroTable(int numResa) {
+        LinkedList<Integer> res = new LinkedList<Integer>();
 		if (numResa <= 0) {
 			return null;
 		}
@@ -141,7 +154,12 @@ public class Table extends Observable {
 		try {
 			this.stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
+            while (rset.next()) {
+                res.add(rset.getInt(1));
+            }
+            rset.close();
+            this.stmt.close();
+			return res;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getNumeroTable.");
@@ -153,9 +171,10 @@ public class Table extends Observable {
 	/**
 	 * Donne le numéro de resa pour une table donnée
 	 */
-	public ResultSet getNumeroReservation(int numTable){
+	public int getNumeroReservation(int numTable) {
+        int res = 0;
 		if (numTable <= 0) {
-			return null;
+			return -1;
 		}
 		String requete = new String("SELECT "
 				+"er.numeroreservation "
@@ -166,12 +185,19 @@ public class Table extends Observable {
 		try {
 			this.stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
+			if (!rset.isBeforeFirst()) {
+				return 0;
+			}
+            rset.next();
+            res = rset.getInt(1);
+            rset.close();
+            this.stmt.close();
+			return res;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getNumeroReservation(table).");
 			e.printStackTrace(System.err);
-			return null;
+			return -1;
 		}
 	}
 	/**
