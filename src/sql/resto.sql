@@ -21,7 +21,7 @@ CREATE TABLE Carte (
 
 CREATE TABLE Article (
 	nomArticle VARCHAR(100) CONSTRAINT KnomArticle PRIMARY KEY,
-	prixArticle REAL check (prixArticle > 0),
+	prixArticle FLOAT check (prixArticle > 0),
 	specialite VARCHAR(20)
 );
 

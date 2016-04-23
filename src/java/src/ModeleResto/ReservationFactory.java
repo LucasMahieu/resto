@@ -1,5 +1,5 @@
 package ModeleResto;
-public class ReservationFactory {
+public class ReservationFactory extends BDitem {
   public ReservationFactory(){
   }
 }

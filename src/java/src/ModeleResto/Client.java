@@ -1,19 +1,14 @@
 package ModeleResto;
 import java.util.*;
 import java.sql.*;
-public class Client extends Observable {
 
-    private Connection conn;
-    private Statement stmt;
+public class Client extends BDitem {
+
     // Numéro client du dernier client ajouté.
     private int lastClient = 0;
 
 	public Client() {
 	}
-
-    public void setCon(Connection conn) {
-        this.conn = conn;
-    }
 
     public int getLastClient() {
         return this.lastClient;
@@ -22,12 +17,12 @@ public class Client extends Observable {
 	public int getNombreClient() {
 		String requete = "SELECT COUNT(*) FROM Client";
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
 			while (rset.next()) {
 				int ret = rset.getInt(1);
 				rset.close();
-				stmt.close();
+				getStmt().close();
 				return ret;
 			}
 			return -1;
@@ -47,8 +42,8 @@ public class Client extends Observable {
 		requete += "nomClient = '" + nomClient +"' AND ";
 		requete += "telephoneClient = '" + nTel +"'";
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
 			if (!rset.isBeforeFirst()) {
 				return 0;
 			}
@@ -56,7 +51,7 @@ public class Client extends Observable {
 				rset.next();
                 int ret = rset.getInt(1);
                 rset.close();
-                stmt.close();
+                getStmt().close();
                 return ret;
             }
 		}
@@ -76,9 +71,9 @@ public class Client extends Observable {
 		requete += (lastClient + 1) + ", " + nomClient + ", " + nTel + ")";
         System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			stmt.executeUpdate(requete);
-			stmt.close();
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
 			return ++lastClient;
 		}
 		catch (SQLException e) {

@@ -4,18 +4,9 @@ import ControleurResto.*;
 import java.util.*;
 import java.sql.*;
 
-public class Service extends Observable {
-	private Connection conn;
-	private Statement stmt;
+public class Service extends BDitem {
 
 	public Service(){
-	}
-
-	public void setCon(Connection conn) {
-		this.conn = conn;
-	}
-	public Statement getStmt() {
-		return this.stmt;
 	}
 
 	public boolean presenceService(String date, String typeService) {
@@ -25,16 +16,16 @@ public class Service extends Observable {
 		System.out.println(requete);
 		ResultSet rset;
 		try {
-			this.stmt = conn.createStatement();
-			rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			rset = getStmt().executeQuery(requete);
 			if(!rset.isBeforeFirst()){
                 rset.close();
-                stmt.close();
+                getStmt().close();
 				return false;
 			}
 			else {
                 rset.close();
-                stmt.close();
+                getStmt().close();
 				return true;
 			}
 		}

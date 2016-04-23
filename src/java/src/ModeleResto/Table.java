@@ -3,20 +3,11 @@ package ModeleResto;
 import ControleurResto.*;
 import java.util.*;
 import java.sql.*;
-public class Table extends Observable {
 
-    private Connection conn;
-    private Statement stmt;
+public class Table extends BDitem {
 
     public Table(){
     }
-
-    public void setCon(Connection conn) {
-        this.conn = conn;
-    }
-	public Statement getStmt(){
-		return this.stmt;
-	}
 
 	/**
 	 * Donne les tables libre d'une localisation pour une date et un service
@@ -43,13 +34,13 @@ public class Table extends Observable {
 			;
         System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
             while(rset.next()) {
                 res.add(rset.getInt(1));
             }
             rset.close();
-            this.stmt.close();
+            this.getStmt().close();
 			return res;
 		}
 		catch (SQLException e) {
@@ -82,11 +73,11 @@ public class Table extends Observable {
 			+"WHERE t.numeroTable="+tab;
         System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
 			if (!rset.isBeforeFirst()) {
                 rset.close();
-                this.stmt.close();
+                this.getStmt().close();
 				return -1;
 			}
 			else {
@@ -94,7 +85,7 @@ public class Table extends Observable {
                 rset.next();
                 i = rset.getInt(1);
                 rset.close();
-                this.stmt.close();
+                this.getStmt().close();
                 return i;
 			}
 		}
@@ -121,13 +112,13 @@ public class Table extends Observable {
 			);
         System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
             while (rset.next()) {
                 res.add(rset.getInt(1));
             }
             rset.close();
-            this.stmt.close();
+            this.getStmt().close();
 			return res;
 		}
 		catch (SQLException e) {
@@ -152,13 +143,13 @@ public class Table extends Observable {
 			);
         System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
             while (rset.next()) {
                 res.add(rset.getInt(1));
             }
             rset.close();
-            this.stmt.close();
+            this.getStmt().close();
 			return res;
 		}
 		catch (SQLException e) {
@@ -183,15 +174,15 @@ public class Table extends Observable {
 			);
         System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
 			if (!rset.isBeforeFirst()) {
 				return 0;
 			}
             rset.next();
             res = rset.getInt(1);
             rset.close();
-            this.stmt.close();
+            this.getStmt().close();
 			return res;
 		}
 		catch (SQLException e) {
@@ -210,9 +201,9 @@ public class Table extends Observable {
 		String requete = new String("INSERT INTO estReservee VALUES (");
 		requete += numeroTable + ", " + numeroReservation + ")";
 		try {
-			this.stmt = conn.createStatement();
-			stmt.executeUpdate(requete);
-			stmt.close();
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
 			return 0;
 		}
 		catch (SQLException e) {

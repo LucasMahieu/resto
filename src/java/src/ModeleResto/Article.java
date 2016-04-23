@@ -2,20 +2,9 @@ package ModeleResto;
 import java.util.*;
 import java.sql.*;
 
-public class Article extends Observable {
+public class Article extends BDitem {
     
-    private Connection conn;
-    private Statement stmt;
-
     public Article(){
-    }
-
-    public void setCon(Connection conn) {
-        this.conn = conn;
-    }
-
-    public Statement getStmt() {
-        return this.stmt;
     }
 
     public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
@@ -50,8 +39,8 @@ public class Article extends Observable {
         
         System.out.println(requete);
         try {
-            this.stmt = conn.createStatement();
-            ResultSet rset = stmt.executeQuery(requete);
+            setStmt(getCon().createStatement());
+            ResultSet rset = getStmt().executeQuery(requete);
             return rset;
         }
         catch (SQLException e) {
@@ -72,9 +61,9 @@ public class Article extends Observable {
 
         System.out.println(requete);
         try {
-            this.stmt = conn.createStatement();
-			stmt.executeUpdate(requete);
-            stmt.close();
+            setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+            getStmt().close();
             return 0;
         }
         catch (SQLException e) {

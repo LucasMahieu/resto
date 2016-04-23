@@ -19,14 +19,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     private String USR;
     private String PSWD;
 
-    private Connection conn;
-    private Statement stmt;
-
     private int lastRes = 0;
-
-	public Statement getStmt(){
-		return this.stmt;
-	}
 
     private ReservationFactoryConcrete() {
         System.out.print("Entrez votre nom d'utilisateur pour vous connecter à votre BD : ");
@@ -40,15 +33,15 @@ public class ReservationFactoryConcrete extends ReservationFactory{
             System.out.println("Chargement réussi.");
 
             System.out.print("Connection à la base de données ... ");
-            conn = DriverManager.getConnection(URL, USR, PSWD);
+            setCon(DriverManager.getConnection(URL, USR, PSWD));
             System.out.println("Connection réussie.");
 
-            conn.setAutoCommit(false);
+            getCon().setAutoCommit(false);
 
-            article_BD.setCon(conn);
-            client_BD.setCon(conn);
-            table_BD.setCon(conn);
-            service_BD.setCon(conn);
+            article_BD.setCon(getCon());
+            client_BD.setCon(getCon());
+            table_BD.setCon(getCon());
+            service_BD.setCon(getCon());
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la connection à la BD.");
@@ -62,9 +55,9 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		requete += (lastRes + 1) +","+ nbPersonnes +","+"0"+","+numClient+",'"+service+"','"+date+ "')";
         System.out.println(requete);
 		try {
-			stmt = conn.createStatement();
-			stmt.executeUpdate(requete);
-			stmt.close();
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
             lastRes++;
 			reservations.put(lastRes, new ReservationConcrete(lastRes));
 			return lastRes;
@@ -86,7 +79,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
     public void close() {
         try {
-            conn.close();
+            getCon().close();
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la fermeture de la connection.");
@@ -94,13 +87,9 @@ public class ReservationFactoryConcrete extends ReservationFactory{
         }
     }
 
-    public Connection getCon() {
-        return this.conn;
-    }
-
     public void validate() {
         try {
-            conn.commit();
+            getCon().commit();
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la validation de la transaction.");

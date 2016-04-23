@@ -40,6 +40,7 @@ public class Controleur{
             serviceNow = "soir";
         }
     }
+
     public static Controleur get()
     {
         return instanceUnique;
@@ -48,11 +49,14 @@ public class Controleur{
 	/**
 	 * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
 	 */
-	public void ajouterArticle(String nom, int quantite, int numResa){
+	public int ajouterArticle(String nom, int quantite, int numResa){
 		// ajouter à la resa l'article donner avec les bonnes quantités dans la BD
+        return 666;
 	}
-	public void creerFacture(String client){
+
+	public int creerFacture(String client){
        // Facture factureFinale = new Facture();
+       return 999;
     }
 
     public String getDateNow(){
@@ -60,11 +64,13 @@ public class Controleur{
         dateNow = sdfDate.format(date);
         return this.dateNow;
     }
+
     public String getHeureNow(){
         date = new Date();
         heureNow = sdfHeure.format(date);
         return this.heureNow;
     }
+
     public String getServiceNow() {
         serviceNow = "MIDI";
         if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
@@ -153,7 +159,6 @@ public class Controleur{
 		}
 		return numClient;
 	}
-
 
 	public ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
 		//ArrayList<Integer> res = new ArrayList<Integer>();
@@ -358,9 +363,11 @@ public class Controleur{
     public int getNumeroReservation(String date, int nTable, String service){
         return 123456;
     }
+
     public int getNumeroReservation(String date, String nom, String service){
         return 123456;
     }
+
     public int getNumeroReservation(String nom){
         return 123456;
     }
@@ -372,6 +379,7 @@ public class Controleur{
         }
         return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
 	}
+
 	/**
 	 * Donne une string comportant toutes les tables associée à une réservation
 	 * Convention : séparer les numeros par des '-'.
@@ -429,12 +437,15 @@ public class Controleur{
 	public int getNumResaCmdSelectionne(){
 		return numResaCmdSelectionee;
 	}
+
 	public int getNumResaSuiviSelectionne(){
 		return numResaSuiviSelectionee;
 	}
+
 	public void setNumResaCmdSelectionne(int n){
 		numResaCmdSelectionee = n;
 	}
+
 	public void setNumResaSuiviSelectionne(int n){
 		numResaSuiviSelectionee = n;
 	}
