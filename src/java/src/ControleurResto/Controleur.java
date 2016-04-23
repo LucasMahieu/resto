@@ -164,9 +164,10 @@ public class Controleur{
 				//erreur à gerer
                 return null;
             }
-            while(rset.next()){
+            while(rset.next()) {
                 res.add(rset.getInt(1));
             }
+            // res contient toutes les tables libres.
 			System.out.println("table libre = " + res);
             rset.close();
             ReservationFactoryConcrete.get().getTableBD().getStmt().close();
@@ -175,8 +176,15 @@ public class Controleur{
 			int resteMin = 1000;
 			int config = 0;
 			int tableIdeal = 0;
-			for(Integer i : res){
+
+            /*
+             * CAS OU UNE SEULE TABLE SUFFIRAIT
+             */
+
+			for (Integer i : res) {
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
+                // On regardee toutes les tables pour voir si une seule pourrait suffir.
+                // On regarde celle qui produit le plus petit reste.
 				if(nbPlace>=nbPersonnes){
 					if(nbPlace-nbPersonnes<resteMin){
 						resteMin = nbPlace - nbPersonnes;
@@ -189,18 +197,30 @@ public class Controleur{
 				table.add(tableIdeal);
 				return table;
 			}
-			//Sinon on essaye d'accoler une table
-			config++;
+
+            /*
+             * CAS OU DEUX TABLES SUFFIRAIENT
+             */
+
+			config = 1;
+            // tableVoisine[] : numéros des tables voisines de la table considérée.
 			int tableVoisine[] = {0,0};
+            // nbPlaceVoisine[] : nombre de places des tables voisines de la table considérée,
+            // indexées dans ce tableau de la même façon que dans tableVoisine[]
 			int nbPlaceVoisine[] = {0,0};
+            // j : nombre de tables voisines de la table considérée.
 			int j=0;
+            // tableIdeoAccolee[] : les deux tables qu'on accolera finalement si cela marche.
 			int tableIdealAccolee[] = {0,0};
 			resteMin = 1000;
-			for(Integer i : res){
+			for(Integer i : res) {
+                // Pour chaque table libre, on regarde ses voisines.
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
 
 				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
+                // Si la table considérée n'a pas de voisines, on regarde la suivante.
 				if (!rset.isBeforeFirst()) {
+                    rset.close();
 					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 					continue;
 				}else{
@@ -209,13 +229,17 @@ public class Controleur{
 						tableVoisine[j] = rset.getInt(1);
 						j++;
 					}
+                    rset.close();
+                    ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 				}
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0],config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1],config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+
+                // On en déduit le nombre de places des tables voisines si on les accole uniquement avec la table considérée.
+                // Ce nombre peut être 0 ou -1 si la table voisine n'a pas de place ou s'il n'y en a qu'une seule.
+				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0], 1);
+				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1], 1);
 				// on a donc le nombre de place accolée1 des deux voisines 
+                // On regarde si un tel nombre de place est suffisant
+                // et on garde les tables qui permettent d'obtenir un reste minimum.
 				if(nbPlace+nbPlaceVoisine[0]>=nbPersonnes){
 					if(nbPlace+nbPlaceVoisine[0]-nbPersonnes<resteMin){
 						resteMin = nbPlace+nbPlaceVoisine[0] - nbPersonnes;
@@ -231,24 +255,31 @@ public class Controleur{
 					}
 				}
 			}
+
+            // Si on a trouvé deux tables qui conviennent, on les ajoutent à l'ensemble
+            // de résultat et on le renvoit.
 			if(tableIdealAccolee[0]!=0 && tableIdealAccolee[1]!=0){
 				table.add(tableIdealAccolee[0]);
 				table.add(tableIdealAccolee[1]);
 				return table;
 			}
-			//Sinon on essaye d'accoler deux table
-			config++;
+
+            /*
+             * CAS OU TROIS TABLES SUFFIRAIENT
+             */
+
+			config = 2;
 			j=0;
 			int tableIdealAccolee2[] = {0,0,0};
 			resteMin = 1000;
 			for(Integer i : res){
 				// Table i
-				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i, config);
 				// les tables voisines de i
 				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
 				if (!rset.isBeforeFirst()) {
 					// Pas de voisin, on passe à i++
+                    rset.close();
 					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 					continue;
 				}else{
@@ -257,17 +288,16 @@ public class Controleur{
 						tableVoisine[j] = rset.getInt(1);
 						j++;
 					}
+                    rset.close();
+					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 				}
 				//On recupere le nombre de places des 2 voisins pour un accolement à i
 				//ATENTION les tables voisines vont etre en accolement simple
 				//seul i est en accolement double -> on utilise config-1 pour les voisines
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0],config-1);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1],config-1);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0], 1);
+				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1], 1);
 				// on a donc le nombre de place accolée1 des deux voisines 
-				if(nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1]>=nbPersonnes){
+				if (nbPlace + nbPlaceVoisine[0] + nbPlaceVoisine[1] >= nbPersonnes) {
 					if(nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1]-nbPersonnes<resteMin){
 						resteMin = nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1] - nbPersonnes;
 						tableIdealAccolee2[0] = i;
@@ -284,13 +314,12 @@ public class Controleur{
 			}
 			// Si on arrive la, c'est qu'il y a pas de table assez grande
 			// dans la localisation donnée Donc on fait la recherche dans les autres loc
-			if(localisation!=null){
+			if (localisation != null){
 				table = trouverTable(null,date,service,nbPersonnes);
 			}
-			return table;
         }
         catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête.");
+            System.err.println("Erreur dans l'algorithme pour trouver les tables.");
             e.printStackTrace(System.err);
         }
 		return table;
