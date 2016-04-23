@@ -13,21 +13,22 @@ import java.text.SimpleDateFormat;
  * et les informations, états, variables du controleur sera cohérent 
  * entre toutes les autres classes
  *
+ * -> Ce n'est plus utile avec le patron Singleton car instance unique de cette classe
+ *
  */
 public class Controleur{
-    private static int numResaCmdSelectionee;
-    private static int numResaSuiviSelectionee;
-    private static Date date;
-    private static final SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-    private static final SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
-    private static String dateNow;
-    private static String heureNow;
-    private static String serviceNow;
-    private static final int DEBUT_SERVICE_SOIR = 17;
+    private int numResaCmdSelectionee;
+    private int numResaSuiviSelectionee;
+    private Date date;
+    private final SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat sdfHeure = new SimpleDateFormat("HH");
+    private String dateNow;
+    private String heureNow;
+    private String serviceNow;
+    private final int DEBUT_SERVICE_SOIR = 17;
 
     final private static Controleur instanceUnique = new Controleur();
 
-    /* à modifier pour le patron Singleton */
     private Controleur(){
         numResaCmdSelectionee = 0;
         numResaSuiviSelectionee = 0;
@@ -39,6 +40,7 @@ public class Controleur{
             serviceNow = "soir";
         }
     }
+
     public static Controleur get()
     {
         return instanceUnique;
@@ -47,11 +49,14 @@ public class Controleur{
 	/**
 	 * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
 	 */
-	public void ajouterArticle(String nom, int quantite, int numResa){
+	public int ajouterArticle(String nom, int quantite, int numResa){
 		// ajouter à la resa l'article donner avec les bonnes quantités dans la BD
+        return 666;
 	}
-	public void creerFacture(String client){
+
+	public int creerFacture(String client){
        // Facture factureFinale = new Facture();
+       return 999;
     }
 
     public String getDateNow(){
@@ -59,58 +64,126 @@ public class Controleur{
         dateNow = sdfDate.format(date);
         return this.dateNow;
     }
+
     public String getHeureNow(){
         date = new Date();
         heureNow = sdfHeure.format(date);
         return this.heureNow;
     }
+
     public String getServiceNow() {
-        serviceNow = "midi";
+        serviceNow = "MIDI";
         if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
-            serviceNow = "soir";
+            serviceNow = "MIDI";
         }
         return this.serviceNow;
     }
 
-    public static int creerReservation(String nom, String date, String service,int nbPersonne, String localisation, String tel){
-        /*
-        //Vérification des disponibilités des tables
-        //Appel à la création de réservation dans la BD
-		String tables = "10-11-12";
-		//int tmp = ReservationFactoryConcrete.creerReservation(nom,date,service,nbPersonne,localisation, tel, tables);
-		if(tmp<0){
+	/**
+	 * Cette fonction doit :
+	 *		- Vérifier si il y a un service ce jour là
+	 *		- Trouver un groupe de table optimal
+	 *		- Trouver le client (si il existe, sinon le créer)
+	 *		- Créer la réservation
+	 *		- Associer la table à la résa
+	 *		- Retourner le numero de résa
+	 *	@param nom nom du client qui réserve 
+	 *	@param date date de la reservation
+	 *	@param service pour lequel le client réserve
+	 *	@param nbPersonnes nombre de personnes qui souhaitent réserver
+	 *	@param localisation de la table souhaitée
+	 *	@param tel téléphone du client
+	 *	@return numéro de la résa créé : -1 en cas d'erreur, 0 en cas d'indisponibilité
+	 */
+    public int creerReservation(String nom, String date, String service, int nbPersonnes, String localisation, String tel) {
+        // Vérification du service
+        if (!ReservationFactoryConcrete.get().getServiceBD().presenceService(date, service)) {
+            return 0;
+        }
+
+        // Vérification des tables
+		ArrayList<Integer> tablesArray = trouverTable(localisation, date, service, nbPersonnes);
+		System.out.println("tableau=" + tablesArray);
+		if(tablesArray == null){
 			//erreur
+			System.out.println("tablesArray=null");
+			return -1;
+		}else if(tablesArray.size()==0){
+			//Pas de table dispo
+			System.out.println("tablesArray.size()=0");
+			return 0;
+		}
+		System.out.println("tables sont dispo");
+
+		// Vérification si le client existe / création nouveau client
+		int numClient = trouverClient(nom,tel);
+		if(numClient == -1){
+			//erreur
+			System.out.println("erreur lors de recherche client");
+		}
+
+        // Création de la réservation
+		int numResa = ReservationFactoryConcrete.get().creerReservation(numClient, date, service, nbPersonnes);
+		if(numResa<0){
+			//erreur
+			System.out.println("erreur creation resa");
 			return -1;
 		}
-		numResaSuiviSelectionee = tmp;
-		numResaCmdSelectionee = tmp;
-        */
-		//return tmp;
-        return 14;
+		if(numResa==0){
+			System.out.println("problème creation resa");
+			return numResa;
+		}
+		numResaSuiviSelectionee = numResa;
+		numResaCmdSelectionee = numResa; 
+		// ici la resa est crée et son num se trouve dans tmp
+		// On associe donc la(les) table(s) trouvée(s) à ce num de resa
+		for (int i = 0; i < tablesArray.size(); i++) {
+			if (ReservationFactoryConcrete.get().getTableBD().ajouterTable(tablesArray.get(i),numResa) != 0) {
+				System.out.println("probleme lors des ajouts de table");
+				return -1;
+			}
+		}
+		return numResa;
     }
 
-	public static ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
-		ArrayList<Integer> res = new ArrayList<Integer>();
+	public int trouverClient(String nomC, String telC){
+		int numClient = ReservationFactoryConcrete.get().getClientBD().exists(nomC, telC);
+		if(numClient == -1){
+			return -1;
+		}else if (numClient == 0){
+			numClient = ReservationFactoryConcrete.get().getClientBD().create(nomC, telC);
+			if(numClient == -1){
+				return -1;
+				// si ca n'a pas marcher, peu etre re essayer ?
+			}
+		}
+		return numClient;
+	}
+
+	public ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
+		//ArrayList<Integer> res = new ArrayList<Integer>();
+		LinkedList<Integer> res;
 		ArrayList<Integer> table = new ArrayList<Integer>();
 		try {
-            ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getTableLibre(localisation, date, service);
-            if (rset == null) {
-				//erreur à gerer
-                return null;
+            res = ReservationFactoryConcrete.get().getTableBD().getTableLibre(localisation, date, service);
+            if (res == null) {
+                throw (new SQLException());
             }
-            while(rset.next()){
-                res.add(rset.getInt(1));
-            }
-            rset.close();
-            ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+			System.out.println("table libre = " + res);
 			// Res contient toutes les tables libres pour ce jour, service , localisation
 			int nbPlace = 0;
 			int resteMin = 1000;
 			int config = 0;
 			int tableIdeal = 0;
-			for(Integer i : res){
+
+            /*
+             * CAS OU UNE SEULE TABLE SUFFIRAIT
+             */
+
+			for (Integer i : res) {
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+                // On regardee toutes les tables pour voir si une seule pourrait suffir.
+                // On regarde celle qui produit le plus petit reste.
 				if(nbPlace>=nbPersonnes){
 					if(nbPlace-nbPersonnes<resteMin){
 						resteMin = nbPlace - nbPersonnes;
@@ -123,34 +196,45 @@ public class Controleur{
 				table.add(tableIdeal);
 				return table;
 			}
-			//Sinon on essaye d'accoler une table
-			config++;
+
+            /*
+             * CAS OU DEUX TABLES SUFFIRAIENT
+             */
+
+			config = 1;
+            // tableVoisine[] : numéros des tables voisines de la table considérée.
 			int tableVoisine[] = {0,0};
+            // nbPlaceVoisine[] : nombre de places des tables voisines de la table considérée,
+            // indexées dans ce tableau de la même façon que dans tableVoisine[]
 			int nbPlaceVoisine[] = {0,0};
+            // j : nombre de tables voisines de la table considérée.
 			int j=0;
+            // tableIdeoAccolee[] : les deux tables qu'on accolera finalement si cela marche.
 			int tableIdealAccolee[] = {0,0};
 			resteMin = 1000;
-			for(Integer i : res){
+			for(Integer i : res) {
+                // Pour chaque table libre, on regarde ses voisines.
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 
-				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
-				if (!rset.isBeforeFirst()) {
-					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				LinkedList<Integer> voisines = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
+                // Si la table considérée n'a pas de voisines, on regarde la suivante.
+				if (voisines.isEmpty()) {
 					continue;
-				}else{
+				}
+                else{
 					j=0;
-					while(rset.next()){
-						tableVoisine[j] = rset.getInt(1);
-						j++;
+                    for (Integer t : voisines) {
+						tableVoisine[j++] = t;
 					}
 				}
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0],config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1],config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+
+                // On en déduit le nombre de places des tables voisines si on les accole uniquement avec la table considérée.
+                // Ce nombre peut être 0 ou -1 si la table voisine n'a pas de place ou s'il n'y en a qu'une seule.
+				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0], 1);
+				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1], 1);
 				// on a donc le nombre de place accolée1 des deux voisines 
+                // On regarde si un tel nombre de place est suffisant
+                // et on garde les tables qui permettent d'obtenir un reste minimum.
 				if(nbPlace+nbPlaceVoisine[0]>=nbPersonnes){
 					if(nbPlace+nbPlaceVoisine[0]-nbPersonnes<resteMin){
 						resteMin = nbPlace+nbPlaceVoisine[0] - nbPersonnes;
@@ -166,43 +250,45 @@ public class Controleur{
 					}
 				}
 			}
+
+            // Si on a trouvé deux tables qui conviennent, on les ajoutent à l'ensemble
+            // de résultat et on le renvoit.
 			if(tableIdealAccolee[0]!=0 && tableIdealAccolee[1]!=0){
 				table.add(tableIdealAccolee[0]);
 				table.add(tableIdealAccolee[1]);
 				return table;
 			}
-			//Sinon on essaye d'accoler deux table
-			config++;
+
+            /*
+             * CAS OU TROIS TABLES SUFFIRAIENT
+             */
+
+			config = 2;
 			j=0;
 			int tableIdealAccolee2[] = {0,0,0};
 			resteMin = 1000;
 			for(Integer i : res){
 				// Table i
-				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i, config);
 				// les tables voisines de i
-				rset = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
-				if (!rset.isBeforeFirst()) {
+				LinkedList<Integer> voisines2 = ReservationFactoryConcrete.get().getTableBD().getTableVoisine(i);
+				if (voisines2.isEmpty()) {
 					// Pas de voisin, on passe à i++
-					ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 					continue;
-				}else{
+				}
+                else{
 					j=0;
-					while(rset.next()){
-						tableVoisine[j] = rset.getInt(1);
-						j++;
+                    for (Integer t : voisines2) {
+						tableVoisine[j++] = t;
 					}
 				}
 				//On recupere le nombre de places des 2 voisins pour un accolement à i
 				//ATENTION les tables voisines vont etre en accolement simple
 				//seul i est en accolement double -> on utilise config-1 pour les voisines
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0],config-1);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1],config-1);
-				ReservationFactoryConcrete.get().getTableBD().getStmt().close();
+				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0], 1);
+				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1], 1);
 				// on a donc le nombre de place accolée1 des deux voisines 
-				if(nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1]>=nbPersonnes){
+				if (nbPlace + nbPlaceVoisine[0] + nbPlaceVoisine[1] >= nbPersonnes) {
 					if(nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1]-nbPersonnes<resteMin){
 						resteMin = nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1] - nbPersonnes;
 						tableIdealAccolee2[0] = i;
@@ -218,16 +304,18 @@ public class Controleur{
 				return table;
 			}
 			// Si on arrive la, c'est qu'il y a pas de table assez grande
-			// dans la localisation donnée
-			// il faudra refuser la reservation
-			return table;
+			// dans la localisation donnée Donc on fait la recherche dans les autres loc
+			if (localisation != null){
+				table = trouverTable(null,date,service,nbPersonnes);
+			}
         }
         catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête.");
+            System.err.println("Erreur dans l'algorithme pour trouver les tables.");
             e.printStackTrace(System.err);
         }
 		return table;
 	}
+
     public void modifierReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification de l'existence de la réservation 
         //Vérification des disponibilités des tables
@@ -244,67 +332,6 @@ public class Controleur{
     public LinkedList<String> getListeArticles(String type)
     {
         LinkedList<String> resultat = new LinkedList<String>();
-        /*
-        if (type == "boisson"){
-            resultat.add("Fanta");
-            resultat.add("Vin-chaud");
-            resultat.add("Coca");
-            resultat.add("Vin-Blanc");
-            resultat.add("perrier");
-            resultat.add("champagneeee");
-            resultat.add("Limonade");
-            resultat.add("Duvel");
-            resultat.add("Hougarden");
-            resultat.add("Vodka");
-            resultat.add("Wisky");
-            resultat.add("Grenadine");
-            resultat.add("Lait-fraise");
-            resultat.add("Jus de papaye");
-            resultat.add("eau de vie");
-            resultat.add("sirop de caoutchou");
-            resultat.add("infusion de chaussettes");
-        }else if (type=="entree"){
-            resultat.add("salade");
-            resultat.add("chevre chaud");
-            resultat.add("foie gras");
-            resultat.add("charcuterie");
-            resultat.add("surimi");
-            resultat.add("bouillabesse");
-            resultat.add("os à moelle");
-            resultat.add("oeuf de caille");
-            resultat.add("frillant au bleu");
-            resultat.add("taboulet");
-        }else if(type=="plat"){
-            resultat.add("langue de boeuf");
-            resultat.add("knaki");
-            resultat.add("poulet rotis");
-            resultat.add("couscous");
-            resultat.add("raclette");
-            resultat.add("fondu");
-            resultat.add("plat du jour");
-            resultat.add("steak frite");
-            resultat.add("bolognaire");
-            resultat.add("carbonara");
-            resultat.add("sanglier mariné");
-            resultat.add("poulpe");
-            resultat.add("choux farcie");
-            resultat.add("rognon");
-            resultat.add("choucroutte");
-            resultat.add("cassoulet");
-            resultat.add("pizza");
-        }else if (type=="dessert"){
-            resultat.add("Ils-flottante");
-            resultat.add("yaourt");
-            resultat.add("glace");
-            resultat.add("fruit");
-            resultat.add("gaateau");
-            resultat.add("chaucolot");
-        }else if (type=="menu"){
-            resultat.add("Chef");
-            resultat.add("Maitre");
-            resultat.add("Tourista");
-        }
-        */
         try {
             ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
             if (rset == null) {
@@ -336,73 +363,63 @@ public class Controleur{
     public int getNumeroReservation(String date, int nTable, String service){
         return 123456;
     }
+
     public int getNumeroReservation(String date, String nom, String service){
         return 123456;
     }
+
     public int getNumeroReservation(String nom){
         return 123456;
     }
-	public int getNumeroReservation(int numTable){
-		int resultat = 0;
-		try {
-			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
-			if (rset == null) {
-				return resultat;
-			}
-			// Pas de tuples renvoyé
-			if (!rset.isBeforeFirst()) {
-				return resultat;
-			}
-			else {
-				while(rset.next()){
-					resultat = rset.getInt(1);
-				}
-			}
-			rset.close();
-			ReservationFactoryConcrete.get().getTableBD().getStmt().close();
-		}
-		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête getNumeroTable.");
-			e.printStackTrace(System.err);
-			resultat = -1;
-		}
-		return resultat;
 
+	public int getNumeroReservation(int numTable){
+
+        if (numTable <= 0) {
+            return -1;
+        }
+        return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
 	}
+
 	/**
 	 * Donne une string comportant toutes les tables associée à une réservation
 	 * Convention : séparer les numeros par des '-'.
 	 */
-	public String getNumeroTables(int numResa){
+	public LinkedList<Integer> getNumeroTables(int numResa){
+        if (numResa <= 0) {
+            return null;
+        }
+        LinkedList<Integer> tables = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
+        return tables;
+        /*
 		String resultat = "";
 		try {
-			ResultSet rset = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
-			if (rset == null) {
+			if (tables == null) {
 				return resultat;
 			}
 			// Pas de tuples renvoyé
-			if (!rset.isBeforeFirst()) {
+			if (tables.isEmpty()) {
 				return resultat;
 			}
 			else {
 				boolean isFirst=true;
-				while(rset.next()){
+				//while(rset.next()){
+                for (Integer t : tables) {
 					if(!isFirst){
 						resultat += "-";
 						isFirst = false;
 					}
-					resultat += rset.getString(1);
+					resultat += t;
 				}
 			}
-			rset.close();
-			ReservationFactoryConcrete.get().getTableBD().getStmt().close();
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getNumeroTable.");
 			e.printStackTrace(System.err);
+            return null;
 		}
-		return resultat;
+        */
 	}
+
 	public String getNom(int numResa) {
 		return "M. Dieudo";
 	}
@@ -418,15 +435,18 @@ public class Controleur{
 	}
 
 	public int getNumResaCmdSelectionne(){
-		return this.numResaCmdSelectionee;
+		return numResaCmdSelectionee;
 	}
+
 	public int getNumResaSuiviSelectionne(){
-		return this.numResaSuiviSelectionee;
+		return numResaSuiviSelectionee;
 	}
+
 	public void setNumResaCmdSelectionne(int n){
-		this.numResaCmdSelectionee = n;
+		numResaCmdSelectionee = n;
 	}
+
 	public void setNumResaSuiviSelectionne(int n){
-		this.numResaSuiviSelectionee = n;
+		numResaSuiviSelectionee = n;
 	}
 }

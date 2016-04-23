@@ -259,7 +259,8 @@ public class InterfaceCommande extends Observateur{
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		labelRecapCommande.add(new JLabel("Table n°"+Controleur.get().getNumeroTables(numResa)));
+        LinkedList<Integer> tables = Controleur.get().getNumeroTables(numResa);
+		labelRecapCommande.add(new JLabel("Table n°"+ (tables == null ? "" : tables.toString())));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;

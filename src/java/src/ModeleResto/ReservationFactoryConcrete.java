@@ -6,35 +6,42 @@ import java.util.*;
 
 public class ReservationFactoryConcrete extends ReservationFactory{
 
-	private HashMap<Integer,ReservationConcrete> reservations;
     final private static ReservationFactoryConcrete instanceUnique = new ReservationFactoryConcrete();
 
     final private Article article_BD = new Article();
     final private Client client_BD = new Client();
     final private Table table_BD = new Table();
-    final private Service Service_BD = new Service();
+    final private Service service_BD = new Service();
 
-    static final String URL = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
-    static final String USR = "devalonh";
-    static final String PSWD = "devalonh";
+	private HashMap<Integer,ReservationConcrete> reservations;
 
-    private Connection conn;
+    private final String URL = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
+    private String USR;
+    private String PSWD;
+
+    private int lastRes = 0;
 
     private ReservationFactoryConcrete() {
+        System.out.print("Entrez votre nom d'utilisateur pour vous connecter à votre BD : ");
+        Scanner sc = new Scanner(System.in);
+        USR = sc.next();
+        PSWD = USR;
+
         try {
-            System.out.println("Chargement du driver Oracle ...");
+            System.out.println("Chargement du driver Oracle ... ");
             //DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             System.out.println("Chargement réussi.");
 
-            System.out.print("Connection à la base de données ...");
-            conn = DriverManager.getConnection(URL, USR, PSWD);
+            System.out.print("Connection à la base de données ... ");
+            setCon(DriverManager.getConnection(URL, USR, PSWD));
             System.out.println("Connection réussie.");
 
-            conn.setAutoCommit(false);
+            getCon().setAutoCommit(false);
 
-            article_BD.setCon(conn);
-            client_BD.setCon(conn);
-            table_BD.setCon(conn);
+            article_BD.setCon(getCon());
+            client_BD.setCon(getCon());
+            table_BD.setCon(getCon());
+            service_BD.setCon(getCon());
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la connection à la BD.");
@@ -43,12 +50,27 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		reservations = new HashMap<Integer, ReservationConcrete>();
     }
 
-    public int creerReservation(String nomClient, String date, String service, int nbPersonnes, String localisation, String telephoneClient) {
-        return 0;
+    public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
+		String requete = new String("INSERT INTO Reservation VALUES (");
+		requete += (lastRes + 1) +","+ nbPersonnes +","+"0"+","+numClient+",'"+service+"','"+date+ "')";
+        System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
+            lastRes++;
+			reservations.put(lastRes, new ReservationConcrete(lastRes));
+			return lastRes;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête de création de resa");
+			e.printStackTrace(System.err);
+			return -1;
+		}
     }
 
 	public HashMap<Integer,ReservationConcrete> getReservations(){
-		return this.reservations;
+		return reservations;
 	}
 
     public static ReservationFactoryConcrete get() {
@@ -57,7 +79,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
     public void close() {
         try {
-            conn.close();
+            getCon().close();
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la fermeture de la connection.");
@@ -65,13 +87,9 @@ public class ReservationFactoryConcrete extends ReservationFactory{
         }
     }
 
-    public Connection getCon() {
-        return this.conn;
-    }
-
     public void validate() {
         try {
-            conn.commit();
+            getCon().commit();
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la validation de la transaction.");
@@ -90,10 +108,13 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     public Client getClientBD() {
         return this.client_BD;
     }
+
+    public Service getServiceBD() {
+        return this.service_BD;
+    }
 }
 
 /*
  * ATTENTION :
  * Il faudra penser à fermer la connection à la base de donnée en sortie de l'application !
- * On peut prévoir une méthode close() qui la ferme, à appeler à la fin.
  */

@@ -3,6 +3,7 @@ import VueResto.*;
 import VueResto.LogicielPrincipal.*;
 import ControleurResto.*;
 import javax.swing.*;
+import java.util.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import javax.swing.table.*;
@@ -79,32 +80,41 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				message = interfaceReservation.getTexteNomReservation().getText() + " "
 					+ interfaceReservation.getTexteTelephoneReservation().getText() + " "
 					+ interfaceReservation.getSpinnerNombrePersonnes().getValue() + " "
-					+ new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
+					+ new SimpleDateFormat("dd/MM/yyyy").format(interfaceReservation.getSpinnerDate().getValue()) + " "
 					+ interfaceReservation.getComboBoxService().getSelectedItem() 
 					+ " " + interfaceReservation.getTexteLocalisation().getText();
 				System.out.println(message);
-				int resa = Controleur.creerReservation(
+				int resa = Controleur.get().creerReservation(
 						interfaceReservation.getTexteNomReservation().getText(),
-						new SimpleDateFormat("dd-MM-yyyy").format(interfaceReservation.getSpinnerDate().getValue()),
+						new SimpleDateFormat("dd/MM/yyyy").format(interfaceReservation.getSpinnerDate().getValue()),
 						interfaceReservation.getComboBoxService().getSelectedItem().toString(),
 						Integer.parseInt(interfaceReservation.getSpinnerNombrePersonnes().getValue().toString()),
 						interfaceReservation.getTexteLocalisation().getText(),
 						interfaceReservation.getTexteTelephoneReservation().getText()
 						);
+				System.out.println("resa=" + resa);
 				if(resa<0){
-				System.out.println("Erreur Réservation");
-				JOptionPane.showMessageDialog(this,"La Réservation a échouée",
+					System.out.println("Erreur Réservation");
+					JOptionPane.showMessageDialog(this,"La Réservation a échouée",
 						"Erreur Réservation",JOptionPane.ERROR_MESSAGE);
-				}else {
+				}else if(resa==0){
+					System.out.println("Le resto est plein");
+					JOptionPane.showMessageDialog(this,"Le resto est full, A+",
+						"Le resto est plein",JOptionPane.INFORMATION_MESSAGE);
+				}else{
 					System.out.println("Réservation réussite");
 					// Faire la requete pour savoir quelle table et attribuée
-					 int table = 0;
-					// table = Controleur.getTable(resa);
-					JOptionPane.showMessageDialog(this,
-							"La Réservation a réussi,\n"
+					LinkedList<Integer> tables;
+					tables = Controleur.get().getNumeroTables(resa);
+                    String tablesString = "";
+                    if (tables != null) {
+                        tablesString = tables.toString();
+                    }
+					JOptionPane.showMessageDialog(this
+							,"La Réservation a réussi,\n"
 							+"la réservation a le n°"+resa 
-							+", la table n°"+table+" lui est réservée",
-							"Réservation réussite",JOptionPane.INFORMATION_MESSAGE
+							+", la table n°"+tablesString+" lui est réservée"
+							,"Réservation réussite",JOptionPane.INFORMATION_MESSAGE
 					);
 				}
 			}

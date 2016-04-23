@@ -3,125 +3,56 @@ package ModeleResto;
 import ControleurResto.*;
 import java.util.*;
 import java.sql.*;
-public class Table extends Observable {
 
-    private Connection conn;
-    private Statement stmt;
+public class Table extends BDitem {
 
     public Table(){
     }
 
-    public void setCon(Connection conn) {
-        this.conn = conn;
-    }
-	public Statement getStmt(){
-		return this.stmt;
-	}
-
-    /*
-     * Si localisation est NULL, on renvoit le plus petit groupe de table possible.
-     * Sinon, on renvoit le plus petit groupe de table possible dans cette localisation.
-     * Si nombrePlace = 0, on renvoit les tables libres de cette localisation.
-     * Si les deux sont nuls, on renvoit toutes les tables libres.
-     */
-    public ResultSet consultationTableLibre (String localisation, int nombrePlace) {
-
-        String requeteNombreMaxTable = new String("SELECT count(*) from tables group by tables.localisation");
-        //On fait la requete et on met le resultat dans un int nbTable
-        int nombreMaxTable = 56;
-        int nbTableActuel = 0;
-        int nombrePlaceDisponible = 0;
-
-        while (!(nbTableActuel <= nombreMaxTable)) {
-            nbTableActuel += 1;
-            String requete = new String("SELECT ");
-
-            //on ajoute nbTableActuel tables à la requete 
-            for(int i = 0; i < nbTableActuel; i++) { 
-                requete += ("T" + i + ".numerotable,");
-            }
-
-            //on calcule la somme des tables considérées
-            requete += "SUM(";
-            for(int i = 0; i < nbTableActuel; i++) { 
-                requete += ("T" + i + ".nombreplaceisolee + ");
-            }
-            //on enlève le "+ " de fin
-            requete = requete.substring(0, requete.length() - 2);
-            requete += ")as somme";
-            requete += "CASE ";
-            requete += "when somme >= 'nombre' THEN 'OK' ELSE '0' ";
-            requete += "END";
-            requete += "FROM estreservee E, ";
-            for(int i = 0; i < nbTableActuel; i++) { 
-                requete += "tables T" + i + ", ";
-            }
-            //on enlève le ", " de fin
-            requete = requete.substring(0, requete.length() - 2);
-            requete += "WHERE T0.numerotable not in (SELECT numeroreservation From estreservee)";
-            //on rajoute la meme condition, en partant de 1 cette fois
-            for(int i = 1; i < nbTableActuel; i++) { 
-                requete += "and T" + i + ".numerotable not in SELECT numeroreservation From estreservee)";
-            }
-            //Il faut que les tables soient voisines s'il y en a plusieurs (on va jusqu'à -1 du coup
-            for(int i = 0; i < nbTableActuel - 1; i++) { 
-                requete += "and exists (SELECT SS.numerotable" + i + ", SS.numerotable" + (i+1) + "From sontvoisine SS where (SS.numerotable" + i + " = T" + i + ".numerotable and SS.numerotable" + (i+1) + " = T" + (i+1) + ".numerotable) or (SS.numerotable" + i + " = T" + (i+1) + ".numerotable and SS.numerotable" + (i+1) + " = T" + (i+1) + ".numerotable)";
-            }
-
-
-            //on fait la requete et on met la réponse dans nombrePlaceDisponible
-            //??? sait pas comment faire
-
-
-        }  
-        return null;
-    }
 	/**
-	 * Donne les tables libre d'une localisation pour une date et service
-	 * MARCHE DANS LA BD 
+	 * Donne les tables libre d'une localisation pour une date et un service
+     * ou toutes les tables libres si la localisation n'est pas précisée
 	 */
-	public ResultSet getTableLibre(String loc, String date, String service) {
-		if (loc == "") {
-			return null;
-		}
-		ArrayList<Integer> ret = new ArrayList<Integer>(); 
-		int t=0;
+	public LinkedList<Integer> getTableLibre(String loc, String date, String service) {
+		int t = 0;
+        LinkedList<Integer> res = new LinkedList<Integer>();
+        if (date == null || service == null) {
+            return null;
+        }
 		String requete = new String(
 				"SELECT t.numeroTable "
-				+"FROM tables t "
-				+"WHERE t.localisation='"+loc+"' "
-				+"MINUS "
-				+"SELECT er.numerotable "
-				+"FROM estreservee er, reservation r "
-				+"WHERE er.numeroreservation = r.numeroreservation "
-				+"AND r.dateService='"+date+"' "
-				+"AND r.typeService='"+service+"' "
-				);
+				+"FROM tables t ");
+		if(loc!=null && loc != ""){
+				requete+="WHERE t.localisation='"+loc+"' ";
+		}
+		requete+="MINUS "
+			+"SELECT er.numerotable "
+			+"FROM estreservee er, reservation r "
+			+"WHERE er.numeroreservation = r.numeroreservation "
+			+"AND r.dateService!='"+date+"' "
+			+"AND r.typeService!='"+service+"' "
+			;
+        System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
-		/*	if (!rset.isBeforeFirst()) {
-				return ret;
-			}
-			else {
-				while(rset.next()){
-					ret.add(rset.getInt(1));
-				}
-				return ret;
-			}
-			*/
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+            while(rset.next()) {
+                res.add(rset.getInt(1));
+            }
+            rset.close();
+            this.getStmt().close();
+			return res;
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête tableLibre.");
+			System.err.println("Erreur pour faire la requête tableLibre:");
 			e.printStackTrace(System.err);
 			return null;
 		}
 	}
 	/**
-	 * Donne le nombre de place d'une table donnée.
+	 * Donne le nombre de places restantes d'une table donnée.
 	 * @param tab numero de la table 
-	 * @param config 0 pour table isolée, 1 pour accolée à 1 table, 2 pour accolée2 à 2 table voisines
+	 * @param config 0 pour table isolée, 1 pour accolée à 1 table, 2 pour accolée à 2 tables voisines
 	 */
 	public int nbPlaceTable(int tab, int config) {
 		if (tab <= 0) {
@@ -139,21 +70,23 @@ public class Table extends Observable {
 			return -1;
 		}
 		requete +="FROM Tables t "
-			+"WHERE t.numeroTable='"+tab+"' ";
+			+"WHERE t.numeroTable="+tab;
+        System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
 			if (!rset.isBeforeFirst()) {
+                rset.close();
+                this.getStmt().close();
 				return -1;
 			}
 			else {
 				int i = 0;
-				while(rset.next()){
-					i = rset.getInt(1);
-					rset.close();
-					return i;
-				}
-				return -1;
+                rset.next();
+                i = rset.getInt(1);
+                rset.close();
+                this.getStmt().close();
+                return i;
 			}
 		}
 		catch (SQLException e) {
@@ -162,35 +95,31 @@ public class Table extends Observable {
 			return -1;
 		}
 	}
+
 	/**
 	 * Retourne la liste des tables voisine à une table donnée
 	 * MARCHE SUR LA BD
 	 */
-	public ResultSet getTableVoisine(int tab){
+	public LinkedList<Integer> getTableVoisine(int tab){
+        LinkedList<Integer> res = new LinkedList<Integer>();
 		if (tab <= 0) {
 			return null;
 		}
 		String requete = new String("SELECT "
 				+"sv.numerotable2 "
-				+"FROM tables t, sontvoisines sv "
-				+"WHERE t.numerotable='"+tab+"' " 
-				+"AND t.numerotable=sv.numerotable1 "
+				+"FROM sontvoisines sv "
+				+"WHERE sv.numerotable1="+tab
 			);
-		ArrayList<Integer> ret = new ArrayList<Integer>(); 
+        System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
-		/*	if (!rset.isBeforeFirst()) {
-				return ret;
-			}
-			else {
-				while(rset.next()){
-					ret.add(rset.getInt(1));
-				}
-				return ret;
-			}
-			*/
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+            while (rset.next()) {
+                res.add(rset.getInt(1));
+            }
+            rset.close();
+            this.getStmt().close();
+			return res;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getTableVoisin.");
@@ -198,22 +127,30 @@ public class Table extends Observable {
 			return null;
 		}
 	}
-	/**
+
+	/*
 	 * Donne les numeros de table d'une resa
 	 */
-	public ResultSet getNumeroTable(int numResa){
+	public LinkedList<Integer> getNumeroTable(int numResa) {
+        LinkedList<Integer> res = new LinkedList<Integer>();
 		if (numResa <= 0) {
 			return null;
 		}
 		String requete = new String("SELECT "
 				+"er.numerotable "
 				+"FROM estreservee er "
-				+"WHERE er.numeroreservation='"+numResa+"' " 
+				+"WHERE er.numeroreservation="+numResa
 			);
+        System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+            while (rset.next()) {
+                res.add(rset.getInt(1));
+            }
+            rset.close();
+            this.getStmt().close();
+			return res;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getNumeroTable.");
@@ -221,27 +158,37 @@ public class Table extends Observable {
 			return null;
 		}
 	}
+
 	/**
 	 * Donne le numéro de resa pour une table donnée
 	 */
-	public ResultSet getNumeroReservation(int numTable){
+	public int getNumeroReservation(int numTable) {
+        int res = 0;
 		if (numTable <= 0) {
-			return null;
+			return -1;
 		}
 		String requete = new String("SELECT "
 				+"er.numeroreservation "
 				+"FROM estreservee er "
-				+"WHERE er.numerotable ='"+numTable+"' " 
+				+"WHERE er.numerotable ="+numTable
 			);
+        System.out.println(requete);
 		try {
-			this.stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(requete);
-			return rset;
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			if (!rset.isBeforeFirst()) {
+				return 0;
+			}
+            rset.next();
+            res = rset.getInt(1);
+            rset.close();
+            this.getStmt().close();
+			return res;
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête getNumeroReservation(table).");
 			e.printStackTrace(System.err);
-			return null;
+			return -1;
 		}
 	}
 	/**
@@ -254,9 +201,9 @@ public class Table extends Observable {
 		String requete = new String("INSERT INTO estReservee VALUES (");
 		requete += numeroTable + ", " + numeroReservation + ")";
 		try {
-			this.stmt = conn.createStatement();
-			stmt.executeUpdate(requete);
-			stmt.close();
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
 			return 0;
 		}
 		catch (SQLException e) {
