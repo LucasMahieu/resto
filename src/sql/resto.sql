@@ -72,14 +72,14 @@ CREATE TABLE Menu (
 );
 -- Traduction des entités faibles : aucunes
 -- Traduction des multiplicités 1..1 : OK (voir ci dessus)
--- Traduction des multiplicités 0..1
+-- Traduction des multiplicités 0..1 : aucunes
+-- Traduction des multiplicités ?..* (et 0..2)
 CREATE TABLE estReservee (
     numeroTable INTEGER REFERENCES Tables(numeroTable),
     numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
-	CONSTRAINT KestReservee PRIMARY KEY (numeroTable)
+	CONSTRAINT KestReservee PRIMARY KEY (numeroTable, numeroReservation)
 );
 
--- Traduction des multiplicités ?..* (et 0..2)
 CREATE TABLE sontCommandes (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
 	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),

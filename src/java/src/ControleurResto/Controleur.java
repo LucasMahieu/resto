@@ -213,6 +213,10 @@ public class Controleur{
 			int tableIdealAccolee[] = {0,0};
 			resteMin = 1000;
 			for(Integer i : res) {
+                // Réinitialisation des tableaux
+                tableVoisine[0] = tableVoisine[1] = 0;
+                nbPlaceVoisine[0] = nbPlaceVoisine[1] = 0;
+
                 // Pour chaque table libre, on regarde ses voisines.
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i,config);
 
@@ -227,6 +231,9 @@ public class Controleur{
 						tableVoisine[j++] = t;
 					}
 				}
+                System.out.println("voisines: " + voisines);
+                System.out.println("tableVoisine[0] = " + tableVoisine[0]);
+                System.out.println("tableVoisine[1] = " + tableVoisine[1]);
 
                 // On en déduit le nombre de places des tables voisines si on les accole uniquement avec la table considérée.
                 // Ce nombre peut être 0 ou -1 si la table voisine n'a pas de place ou s'il n'y en a qu'une seule.
@@ -268,6 +275,10 @@ public class Controleur{
 			int tableIdealAccolee2[] = {0,0,0};
 			resteMin = 1000;
 			for(Integer i : res){
+                // Réinitialisation des tableaux
+                tableVoisine[0] = tableVoisine[1] = 0;
+                nbPlaceVoisine[0] = nbPlaceVoisine[1] = 0;
+
 				// Table i
 				nbPlace = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(i, config);
 				// les tables voisines de i
@@ -297,10 +308,10 @@ public class Controleur{
 					}
 				}
 			}
-			if(tableIdealAccolee2[0]!=0 && tableIdealAccolee2[1]!=0){
+			if(tableIdealAccolee2[0]!=0 && tableIdealAccolee2[1]!=0 && tableIdealAccolee2[2]!=0){
 				table.add(tableIdealAccolee2[0]);
 				table.add(tableIdealAccolee2[1]);
-				table.add(tableIdealAccolee2[3]);
+				table.add(tableIdealAccolee2[2]);
 				return table;
 			}
 			// Si on arrive la, c'est qu'il y a pas de table assez grande

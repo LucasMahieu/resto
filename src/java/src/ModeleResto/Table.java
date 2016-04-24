@@ -29,8 +29,8 @@ public class Table extends BDitem {
 			+"SELECT er.numerotable "
 			+"FROM estreservee er, reservation r "
 			+"WHERE er.numeroreservation = r.numeroreservation "
-			+"AND r.dateService!='"+date+"' "
-			+"AND r.typeService!='"+service+"' "
+			+"AND r.dateService='"+date+"' "
+			+"AND r.typeService='"+service+"' "
 			;
         System.out.println(requete);
 		try {
@@ -200,6 +200,7 @@ public class Table extends BDitem {
 		}
 		String requete = new String("INSERT INTO estReservee VALUES (");
 		requete += numeroTable + ", " + numeroReservation + ")";
+        System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
 			getStmt().executeUpdate(requete);
