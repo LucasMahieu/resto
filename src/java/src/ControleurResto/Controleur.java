@@ -90,7 +90,7 @@ public class Controleur{
     public String getServiceNow() {
         serviceNow = "MIDI";
         if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
-            serviceNow = "MIDI";
+            serviceNow = "SOIR";
         }
         return this.serviceNow;
     }
