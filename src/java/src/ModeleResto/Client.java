@@ -39,7 +39,7 @@ public class Client extends BDitem {
 		}
 	}
 
-	public int exists(String nomClient, String nTel) {
+	public int existsClient(String nomClient, String nTel) {
 		if (nomClient == null || nTel == null) {
 			return -1;
 		}
