@@ -98,14 +98,14 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				System.out.println("resa=" + resa);
 				if(resa<0){
 					System.out.println("Erreur Réservation");
-					JOptionPane.showMessageDialog(this,"La Réservation a échouée",
+					JOptionPane.showMessageDialog(this,"La Réservation a échoué",
 						"Erreur Réservation",JOptionPane.ERROR_MESSAGE);
 				}else if(resa==0){
 					System.out.println("Le resto est plein");
 					JOptionPane.showMessageDialog(this,"Le resto est full, A+",
 						"Le resto est plein",JOptionPane.INFORMATION_MESSAGE);
 				}else{
-					System.out.println("Réservation réussite");
+					System.out.println("Réservation réussie");
 					// Faire la requete pour savoir quelle table et attribuée
 					LinkedList<Integer> tables;
 					tables = Controleur.get().getNumeroTables(resa);

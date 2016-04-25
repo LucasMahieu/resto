@@ -35,7 +35,7 @@ public class Article extends BDitem {
 			else {
 				requete += "(SELECT * FROM " + type + ")";
 			}
-		}	
+		}
 
 		System.out.println(requete);
 		try {
@@ -70,6 +70,62 @@ public class Article extends BDitem {
 		}
 		catch (SQLException e) {
 			System.err.println("Erreur pour faire la requête d'ajout d'article.");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
+
+	public HashMap<String, Integer> getArticlesCommandes(int numRes) {
+
+		HashMap<String, Integer> res = new HashMap<String, Integer>();
+		if (numRes <= 0) {
+			return res;
+		}
+		String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes ");
+		requete += "WHERE numeroReservation = " + numRes;
+
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			while (rset.next()) {
+				res.put(rset.getString(1), rset.getInt(2));
+			}
+			return res;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
+	public float getPrix(String nomArticle) {	   	       
+		float res = 0;
+		if (nomArticle == null) {
+			System.out.println("Le nom de l'article est vide, son prix est donc null");
+			return -1;
+		}
+
+		String requete = new String("SELECT prixArticle "
+				+"FROM Article "
+				+"WHERE prixArticle = '"+nomArticle+"'"
+				);
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			if (!rset.isBeforeFirst()) {
+				return -1;
+			}
+			rset.next();
+			res = rset.getInt(1);
+			rset.close();
+			getStmt().close();
+			return res;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getPrixArticle(article).");
 			e.printStackTrace(System.err);
 			return -1;
 		}
