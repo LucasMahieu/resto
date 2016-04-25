@@ -1,5 +1,7 @@
 package VueResto.InterfaceTextReservation;
 import VueResto.*;
+import java.util.*;
+import ControleurResto.*;
 import java.util.Scanner;
 
 import java.util.Observable;
@@ -8,11 +10,11 @@ public class InterfaceTextReservation extends Observateur{
 
 	private String label;
 	private String nom;
-	private String prenom;
 	private String nbPersonnes;
 	private String service;
 	private String date;
-	//protected ControllerSujet controller;
+	private String telephone;
+	private String localisation;
 	private Scanner sc = new Scanner(System.in);
 	private String personneFormulation;
 	private String serviceFormulation;
@@ -26,7 +28,7 @@ public class InterfaceTextReservation extends Observateur{
 	public void reserver() {
 		sc.reset();
 		choixNom();
-		choixPrenom();
+		choixTelephone();
 		choixNbPersonne();
 		choixDate();
 		choixService();
@@ -34,11 +36,28 @@ public class InterfaceTextReservation extends Observateur{
 
 		System.out.println("Valider la reservation : Oui/Non");
 		String validation = sc.nextLine();
-		if (validation.toLowerCase().equals("oui")) {}
+		if (validation.toLowerCase().equals("oui")) {
+		int reserv = Controleur.get().creerReservation(nom, date, service.toUpperCase(), Integer.parseInt(nbPersonnes), "", telephone);	
+				System.out.println("reservation : " + reserv);
+				if(reserv<0){
+					System.out.println("Erreur Réservation");					
+				}else if(reserv==0){
+					System.out.println("Le resto est plein");
+				}else{
+					System.out.println("Réservation réussie");
+					// Faire la requete pour savoir quelle table et attribuée
+					LinkedList<Integer> tables;
+					tables = Controleur.get().getNumeroTables(reserv);
+                    String tablesString = "";
+                    if (tables != null) {
+                        tablesString = tables.toString();
+                    }
+				}
+		}
 		
 		else if (validation.toLowerCase().equals("non")) {
 			System.out.println(" (1) Refaire la réservation (celle-ci sera annulée)");
-			System.out.println(" (2) Modifier le nom/prenom");
+			System.out.println(" (2) Modifier le nom et le numero de telephone");
 			System.out.println(" (3) Modifier la date et/ou le type de service");
 			System.out.println(" (4) Modifier le nombre de personne(s)");
 		
@@ -49,7 +68,7 @@ public class InterfaceTextReservation extends Observateur{
 				switch(choix) {
 					case "1": reserver();
 						break;
-					case "2": choixNom(); choixPrenom(); System.out.println(choix);
+					case "2": choixNom(); choixTelephone();
 						break;
 					case "3": choixDate(); choixService();
 						break;
@@ -74,10 +93,6 @@ public class InterfaceTextReservation extends Observateur{
 		nom = sc.nextLine();
 	}
 	
-	public void choixPrenom() {	
-		System.out.println("Prenom :");
-		prenom = sc.nextLine();
-	}
 	
 	public void choixNbPersonne() {
 		System.out.println("Combien y'aura-t-il de personnes ?");
@@ -98,6 +113,11 @@ public class InterfaceTextReservation extends Observateur{
 	public void choixDate() {	
 		System.out.println("A quelle date souhaitez-vous reserver JJ/MM/AAAA ?");
 		date = sc.nextLine();
+	}
+	
+	public void choixTelephone() {
+		System.out.println("Entrez votre numero de telephone svp");
+		telephone = sc.nextLine();
 	}
 	
 	public void choixService() {
@@ -121,7 +141,7 @@ public class InterfaceTextReservation extends Observateur{
 	}
 	
 	public void recapitulation() {
-			System.out.println("Vous avez reservé au nom de "+ nom + " " + prenom + " le " + date + serviceFormulation + " pour " + nbPersonnes + personneFormulation);
+			System.out.println("Vous avez reservé au nom de "+ nom + " le " + date + serviceFormulation + " pour " + nbPersonnes + personneFormulation + " numero de telephone : " + telephone);
 	}
 	
 	public void update(Observable o, Object arg) {
