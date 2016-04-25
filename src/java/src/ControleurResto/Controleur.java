@@ -54,6 +54,10 @@ public class Controleur{
         return 666;
 	}
 
+    public HashMap<String, Integer> getArticlesCommandes(int numResa) {
+        return ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa);
+    }
+
 	public int creerFacture(String client){
        // Facture factureFinale = new Facture();
        return 999;
@@ -374,23 +378,19 @@ public class Controleur{
     }
 
     public int getNumeroReservation(String date, int nTable, String service){
-        return 123456;
+        return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(nTable, date, service);
     }
 
     public int getNumeroReservation(String date, String nom, String service){
-        return 123456;
+        return 0;
     }
 
     public int getNumeroReservation(String nom){
-        return 123456;
+        return 0;
     }
 
 	public int getNumeroReservation(int numTable){
-
-        if (numTable <= 0) {
-            return -1;
-        }
-        return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable);
+        return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable, dateNow, serviceNow);
 	}
 
 	/**
@@ -436,11 +436,6 @@ public class Controleur{
 	public String getNom(int numResa) {
 		String resultat = ReservationFactoryConcrete.get().getTableBD().getNomRes(numResa);
     return resultat;
-	}
-
-	public HashMap<String,Integer> getArticlesCommandes(int numResa){
-		HashMap<String,Integer> h = ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa);
-		return h;
 	}
 
 	public int getNumResaCmdSelectionne(){

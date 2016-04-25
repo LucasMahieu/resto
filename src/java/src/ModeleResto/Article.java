@@ -73,69 +73,60 @@ public class Article extends BDitem {
         }
     }
 
+    public HashMap<String, Integer> getArticlesCommandes(int numRes) {
+
+        HashMap<String, Integer> res = new HashMap<String, Integer>();
+        if (numRes <= 0) {
+            return res;
+        }
+        String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes ");
+        requete += "WHERE numeroReservation = " + numRes;
+
+        System.out.println(requete);
+        try {
+            setStmt(getCon().createStatement());
+            ResultSet rset = getStmt().executeQuery(requete);
+            while (rset.next()) {
+                res.put(rset.getString(1), rset.getInt(2));
+            }
+            return res;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête.");
+            e.printStackTrace(System.err);
+            return null;
+        }
+    }
+
     public float getPrix(String nomArticle) {	   	       
         float res = 0;
-	if (nomArticle == null) {
-	    System.out.println("Le nom de l'article est vide, son prix est donc null");
-	    return -1;
-	}
-	
-	String requete = new String("SELECT prixArticle "
-				    +"FROM Article "
-				    +"WHERE prixArticle = '"+nomArticle+"'"
-				    );
+        if (nomArticle == null) {
+            System.out.println("Le nom de l'article est vide, son prix est donc null");
+            return -1;
+        }
+
+        String requete = new String("SELECT prixArticle "
+                +"FROM Article "
+                +"WHERE prixArticle = '"+nomArticle+"'"
+                );
         System.out.println(requete);
-	try {
-	    setStmt(getCon().createStatement());
-	    ResultSet rset = getStmt().executeQuery(requete);
-	    if (!rset.isBeforeFirst()) {
-		return -1;
-	    }
+        try {
+            setStmt(getCon().createStatement());
+            ResultSet rset = getStmt().executeQuery(requete);
+            if (!rset.isBeforeFirst()) {
+                return -1;
+            }
             rset.next();
             res = rset.getInt(1);
             rset.close();
             getStmt().close();
-	    return res;
-	}
-	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête getPrixArticle(article).");
-	    e.printStackTrace(System.err);
-	    return -1;
-	}
+            return res;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête getPrixArticle(article).");
+            e.printStackTrace(System.err);
+            return -1;
+        }
     }
 
-    public HashMap<String,Integer> getArticlesCommandes(int numResa) {
-	HashMap<String,Integer> h = new HashMap<String,Integer>();
-	if (numResa <= 0) {
-	    System.out.println("Le numero de reservation est négative");
-	    return null;
-	}
-	String requete = new String("SELECT nomarticle, prixArticle "
-				    +"FROM ArticleSontCommandes "
-				    +"WHERE numeroReservation = "+numResa
-				    );
-	System.out.println(requete);
-	try {
-	    setStmt(getCon().createStatement());
-	    ResultSet rset = getStmt().executeQuery(requete);
-	    if (!rset.isBeforeFirst()) {
-		return null;
-	    }
-	    String tmpS;
-	    int tmpI;
-	    while(rset.next()) {
-		tmpS = rset.getString(1);
-		tmpI = rset.getInt(1);
-		h.put(tmpS, tmpI);
-	    }
-	    rset.close();
-	    getStmt().close();
-	    return h;
-	}
-	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête getArticlecommandes(article).");
-	    e.printStackTrace(System.err);
-	    return null;
-	}
-    }
 }
