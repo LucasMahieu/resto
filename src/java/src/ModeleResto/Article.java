@@ -4,9 +4,13 @@ import java.sql.*;
 
 public class Article extends BDitem {
 
-	public Article(){
-	}
+    public Article(){
+    }
 
+    /**
+     * Ajoute un article
+     * -1 -> Erreur
+     */  
     public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
         if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
             return -1;
@@ -41,38 +45,42 @@ public class Article extends BDitem {
         }
     }
 
+    /**
+     * Combien de ce "nomArticle" ont été commandés
+     * -1 -> Erreur
+     */
+    
     public int dejaCommande(String nomArticle, int numeroReservation) {
-        if (nomArticle == null || numeroReservation <= 0) {
+        int ret = 0;
+	if (nomArticle == null || numeroReservation <= 0) {
             return -1;
         }
-        int ret;
         String requete = new String("SELECT quantiteArticle ");
         requete += "FROM sontCommandes ";
         requete += "WHERE nomArticle = '" + nomArticle +"' ";
         requete += "AND numeroReservation = " + numeroReservation;
-
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
             ResultSet rset = getStmt().executeQuery(requete);
-            if (!rset.isBeforeFirst()) {
-                ret = 0;
-            }
-            else {
-                rset.next();
-                ret = rset.getInt(1);
+            if (rset.next()) {
+		ret = rset.getInt(1);
             }
             rset.close();
             getStmt().close();
             return ret;
         }
         catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête d'ajout d'article."); 
+            System.err.println("Erreur pour faire la requête d'article."); 
             e.printStackTrace(System.err);
             return -1;
         }
     }
 
+    /**
+     * Retourne toutes les informations sur l'article en question
+     */
+    
     public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
         String requete = new String("SELECT * FROM Article ");
         if (nomArticle != null || prixArticle != -1 || specialite != null) {
@@ -102,7 +110,6 @@ public class Article extends BDitem {
                 requete += "(SELECT * FROM " + type + ")";
             }
         }
-
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
@@ -116,8 +123,11 @@ public class Article extends BDitem {
         }
     }
 
+    
+    /**
+     * Retourne les articles commandés pour une reservation
+     */
     public HashMap<String, Integer> getArticlesCommandes(int numRes) {
-
         HashMap<String, Integer> res = new HashMap<String, Integer>();
         if (numRes <= 0) {
             return res;
@@ -141,32 +151,31 @@ public class Article extends BDitem {
         }
     }
 
+    /**
+     * Retourne le prix de l'aticle demandé
+     */
     public float getPrix(String nomArticle) {	   	       
-        float res = 0;
+        float res = -1;
         if (nomArticle == null) {
-            System.out.println("Le nom de l'article est vide, son prix est donc null");
             return -1;
         }
-
         String requete = new String("SELECT prixArticle "
-                +"FROM Article "
-                +"WHERE nomArticle = '"+nomArticle+"'"
-                );
+				    +"FROM Article "
+				    +"WHERE nomArticle = '"+nomArticle+"'"
+				    );
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
             ResultSet rset = getStmt().executeQuery(requete);
-            if (!rset.isBeforeFirst()) {
-                return -1;
-            }
-            rset.next();
-            res = rset.getInt(1);
-            rset.close();
+            if (rset.next()) {
+		res = rset.getInt(1);
+	    }
+	    rset.close();
             getStmt().close();
             return res;
         }
         catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête getPrixArticle(article).");
+            System.err.println("Erreur pour faire la requête.");
             e.printStackTrace(System.err);
             return -1;
         }

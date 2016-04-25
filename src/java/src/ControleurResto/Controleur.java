@@ -341,9 +341,10 @@ public class Controleur{
         }
         return table;
     }
-
+	
+	//TODO mettre un int pour le retour
     public void supprimerReservation(int numeroTable, String date, String service){
-        if (ReservationFactoryConcrete.get().getTableBD().existsReservation(numeroTable, date, service)) {
+        if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) == 0) {
             ReservationFactoryConcrete.get().getTableBD().supprimerReservation(numeroTable, date, service);
         }
 
