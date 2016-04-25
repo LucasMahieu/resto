@@ -2,6 +2,7 @@ package VueResto.LogicielPrincipal;
 import VueResto.*;
 import VueResto.LogicielPrincipal.*;
 import ControleurResto.*;
+import ModeleResto.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.event.*;
@@ -18,6 +19,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		super("La bonne fourchetté");
 		addWindowListener( new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
+				ReservationFactoryConcrete.get().close();
 				System.exit(0);
 			}
 		}
@@ -67,6 +69,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e){
 		Object source = e.getSource();
+		/* RESERVATION */
 		if(source == interfaceReservation.getBoutonReservation()){
 			System.out.println("Bouton de Reservation");
 			String message = "";
@@ -118,6 +121,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 					);
 				}
 			}
+		/* COMMANDE */
 		}else if(source == interfaceCommande.getButtonAjout()){
 			String message = "";
 			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
@@ -127,15 +131,19 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelEntree()){
 				System.out.println("Bouton d'Ajout d'une Entrée");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleEntree());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelPlat()){
 				System.out.println("Bouton d'Ajout d'un Plat");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticlePlat());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelDessert()){
 				System.out.println("Bouton d'Ajout d'un Dessert");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleDessert());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelMenu()){
 				System.out.println("Bouton d'Ajout d'un Menu");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleMenu());
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
@@ -144,18 +152,23 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			message = "suppression de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelBoisson()){
 				System.out.println("Bouton de Suppression d'une Boisson");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleBoisson());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelEntree()){
 				System.out.println("Bouton de Suppression d'une Entrée");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleEntree());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelPlat()){
 				System.out.println("Bouton de Suppression d'un Plat");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticlePlat());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelDessert()){
 				System.out.println("Bouton de Suppression d'un Dessert");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleDessert());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelMenu()){
 				System.out.println("Bouton de Suppression d'un Menu");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleMenu());
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
@@ -191,6 +204,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 					+" "+interfaceCommande.getTextFieldNom().getText() + " n°" + numResa;
 				System.out.println(message);
 			}
+		/* SUIVI COMMANDE */
 		}else if(source == interfaceSuiviCommande.getButtonRechercheSuivi()){
           System.out.println("Bouton RechercherSuiviCommande");		
           interfaceSuiviCommande.effetBoutonRechercheSuivi();
