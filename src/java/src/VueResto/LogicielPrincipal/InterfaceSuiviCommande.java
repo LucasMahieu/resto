@@ -194,7 +194,7 @@ public class InterfaceSuiviCommande extends Observateur{
       ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
       // On recharge une nouvelle table correspondant à la recherche 
       // TODO : définir le nombre de tables
-      for(int table = 0; table < 1000; table++){
+      for(int table = 0; table < 100; table++){
         int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
         if ( numeroReservationCourant <= 0){
           continue;
@@ -209,6 +209,7 @@ public class InterfaceSuiviCommande extends Observateur{
           String tempsEtat = Controleur.get().getDateNow();
           System.out.println(etatCommande);
           Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+          ((DefaultTableModel)this.tableau.getModel()).addRow(o);
           ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
         }
       }
@@ -221,7 +222,7 @@ public class InterfaceSuiviCommande extends Observateur{
       ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
       // On recharge une nouvelle table correspondant à la recherche 
       // TODO : définir le nombre de tables
-      for(int table = 0; table < 1000; table++){
+      for(int table = 0; table < 100; table++){
         int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
         if ( numeroReservationCourant <= 0){
           continue;
@@ -235,6 +236,7 @@ public class InterfaceSuiviCommande extends Observateur{
           String tempsEtat = Controleur.get().getDateNow();
           System.out.println(etatCommande);
           Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+          ((DefaultTableModel)this.tableau.getModel()).addRow(o);
           ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
         }
       }
