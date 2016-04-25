@@ -161,26 +161,27 @@ public class Table extends BDitem {
 
 	/**
 	 * Donne le numéro de resa pour une table donnée
+     * avec une date et un service.
 	 */
-	public int getNumeroReservation(int numTable) {
+	public int getNumeroReservation(int numTable, String date, String service) {
         int res = 0;
-		if (numTable <= 0) {
+		if (numTable <= 0 || date == null || service == null) {
 			return -1;
 		}
-		String requete = new String("SELECT "
-				+"er.numeroreservation "
-				+"FROM estreservee er "
-				+"WHERE er.numerotable ="+numTable
-			);
+        String requete = new String("SELECT estReservee.numeroReservation ");
+        requete += "FROM estReservee, Reservation ";
+        requete += "WHERE estReservee.numeroReservation = Reservation.numeroReservation ";
+        requete += "AND numeroTable = " + numTable + " ";
+        requete += "AND dateService = '" + date + "' ";
+        requete += "AND typeService = '" + service + "'";
+
         System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
 			ResultSet rset = getStmt().executeQuery(requete);
-			if (!rset.isBeforeFirst()) {
-				return 0;
-			}
-            rset.next();
-            res = rset.getInt(1);
+            if (rset.next()) {
+                res = rset.getInt(1);
+            }
             rset.close();
             this.getStmt().close();
 			return res;
@@ -191,6 +192,7 @@ public class Table extends BDitem {
 			return -1;
 		}
 	}
+
 	/**
 	 * Ajoute une table à une réservation.
 	 */
