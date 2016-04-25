@@ -139,10 +139,11 @@ public class Controleur{
 		// On associe donc la(les) table(s) trouvée(s) à ce num de resa
 		for (int i = 0; i < tablesArray.size(); i++) {
 			if (ReservationFactoryConcrete.get().getTableBD().ajouterTable(tablesArray.get(i),numResa) != 0) {
-				System.out.println("probleme lors des ajouts de table");
+				System.out.println("problème lors des ajouts de table");
 				return -1;
 			}
 		}
+		ReservationFactoryConcrete.get().validate();
 		return numResa;
     }
 
@@ -196,11 +197,9 @@ public class Controleur{
 				table.add(tableIdeal);
 				return table;
 			}
-
             /*
              * CAS OU DEUX TABLES SUFFIRAIENT
              */
-
 			config = 1;
             // tableVoisine[] : numéros des tables voisines de la table considérée.
 			int tableVoisine[] = {0,0};
@@ -326,13 +325,6 @@ public class Controleur{
         }
 		return table;
 	}
-
-    public void modifierReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
-        //Vérification de l'existence de la réservation 
-        //Vérification des disponibilités des tables
-        //si ok:
-        //Appel à la modification de réservation dans la BD
-    }
 
     public void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
         //Vérification de l'existence de la réservation 

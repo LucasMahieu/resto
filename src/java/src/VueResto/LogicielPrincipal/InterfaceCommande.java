@@ -346,6 +346,17 @@ public class InterfaceCommande extends Observateur{
 			}
 		}
 	}
+	/**
+	 * Demande au controleur de supprimer les articles selectionnés
+	 */
+	public void supprimerArticlesSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				Controleur.get().supprimerArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
+			}
+		}
+	}
+
 	public void update(Observable o, Object arg){
 	}
 
