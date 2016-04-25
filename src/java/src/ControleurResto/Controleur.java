@@ -147,7 +147,7 @@ public class Controleur{
     }
 
 	public int trouverClient(String nomC, String telC){
-		int numClient = ReservationFactoryConcrete.get().getClientBD().exists(nomC, telC);
+		int numClient = ReservationFactoryConcrete.get().getClientBD().existsClient(nomC, telC);
 		if(numClient == -1){
 			return -1;
 		}else if (numClient == 0){
@@ -334,11 +334,16 @@ public class Controleur{
         //Appel à la modification de réservation dans la BD
     }
 
-    public void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
-        //Vérification de l'existence de la réservation 
+    public void supprimerReservation(int numeroTable, String date, String service){
+				if (ReservationFactoryConcrete.get().getTableBD().existsReservation(numeroTable, date, service)) {
+						ReservationFactoryConcrete.get().getTableBD().supprimerReservation(numeroTable, date, service);
+				}
+
+        //Vérification de l'existence de la réservation
         //si ok:
         //Appel à la suppression de réservation dans la BD
     }
+
 
     public LinkedList<String> getListeArticles(String type)
     {

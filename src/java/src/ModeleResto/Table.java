@@ -244,4 +244,69 @@ public class Table extends BDitem {
 	    return null;
 	}
     }
+
+    public void supprimerReservation(int numeroTable, String date, String service) {
+	int res = 0;
+	if (numeroTable <= 0) {
+	    System.out.println("Numero de Table négatif dans existsReservation"); //TODO peut etre lancer une erreur
+	    return;
+	}
+	String requete = new String("DELETE FROM Reservation" //supprimer la classe reservation que a été créée?
+				    + "FROM estReserve, Reservation"
+				    + "Where Reservation.date = '"+date+"' "
+				    + "AND Reservation.service = "+service+"' "
+				    + "Reservation.numeroreservation = estReserve.numeroreservation"
+				    + "estReserve.numerotable ="+ numeroTable);
+	System.out.println(requete);
+	try {
+	    setStmt(getCon().createStatement());
+	    getStmt().executeUpdate(requete);
+	    getStmt().close();
+	    return;
+	}
+	catch (SQLException e) {
+	    System.err.println("Erreur pour faire la requête supprimerReservation(table).");
+	    e.printStackTrace(System.err);
+	    return;
+	}
+    }
+    
+
+//probleme -> utiliser exists, il peut y avoir plusieurs résultats et c est pas vérifié
+    public boolean existsReservation(int numeroTable, String date, String service) {
+	if (numeroTable <= 0) {
+	    System.out.println("Numero de Table négatif dans existsReservation"); //TODO peut etre lancer une erreur
+	    return false;
+	}
+	String requete = new String("SELECT count(*)"
+				    + "FROM estReserve, Reservation"
+				    + "Where Reservation.date = '"+date+"' "
+				    + "AND Reservation.service = "+service+"' "
+				    + "Reservation.numeroreservation = estReserve.numeroreservation"
+				    + "estReserve.numerotable ="+ numeroTable);
+        System.out.println(requete);
+	try {
+	    setStmt(getCon().createStatement());
+	    ResultSet rset = getStmt().executeQuery(requete);
+	    rset.close();
+	    getStmt().close();
+	    if (!rset.isBeforeFirst()) {
+		return false;
+	    }
+            rset.next();
+	    int res = rset.getInt(1);
+	    if (res == 1) {
+		return true; //pas sur que ca marche
+	    } else {
+		System.out.println("Plusieurs reservations correspondent, ce n'est pas logique");
+		return false;
+	    }
+	}
+	catch (SQLException e) {
+	    System.err.println("Erreur pour faire la requête.");
+	    e.printStackTrace(System.err);
+	    return false;
+	}
+    }
+    
 }
