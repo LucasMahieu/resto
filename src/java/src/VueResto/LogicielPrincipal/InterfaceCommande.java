@@ -314,6 +314,7 @@ public class InterfaceCommande extends Observateur{
 		labelRecapCommande.add(new JLabel(String.format("%0$-70s","TOTAL = ") + somme + "€"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
+		panelCommande.updateUI();
 	}
 	
 	/**
@@ -346,6 +347,7 @@ public class InterfaceCommande extends Observateur{
 				Controleur.get().ajouterArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
 			}
 		}
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
 	}
 	/**
 	 * Demande au controleur de supprimer les articles selectionnés
@@ -360,7 +362,7 @@ public class InterfaceCommande extends Observateur{
 
 	public void update(Observable o, Object arg){
 		if(o instanceof Article){
-			System.out.println("un article à changé" + arg);
+			System.out.println("un article à changé arg= " + arg);
 		}
 	}
 

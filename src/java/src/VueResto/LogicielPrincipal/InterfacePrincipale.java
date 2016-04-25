@@ -16,7 +16,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 	private InterfaceSuiviCommande interfaceSuiviCommande; // observateur disposant d'un panel 
 
 	public InterfacePrincipale(){
-		super("La bonne fourchetté");
+		super("La bonne fourchettée");
 		addWindowListener( new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
 				ReservationFactoryConcrete.get().close();
@@ -147,7 +147,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
-			interfaceCommande.updateRecap(Controleur.get().getNumResaCmdSelectionne());
+			interfaceCommande.createNewRecap(Controleur.get().getNumResaCmdSelectionne());
 
 		}else if(source == interfaceCommande.getButtonSuppression()){
 			String message = "";
@@ -174,6 +174,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
+			interfaceCommande.createNewRecap(Controleur.get().getNumResaCmdSelectionne());
 		}else if(source == interfaceCommande.getButtonRecherche()){
 			if ( interfaceCommande.getTextFieldNTable().getText().equals("") && interfaceCommande.getTextFieldNom().getText().equals("")){
 				System.out.println("Erreur Recherche Commande");
@@ -199,7 +200,6 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				}
 				Controleur.get().setNumResaCmdSelectionne(numResa);
 				interfaceCommande.createNewRecap(numResa);
-				interfaceCommande.getPanelCommande().updateUI();
 				System.out.println("Bouton de Recherche de réservation");
 				String message = "";
 				message = interfaceCommande.getTextFieldNTable().getText()

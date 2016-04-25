@@ -7,168 +7,203 @@ public class Article extends BDitem {
 	public Article(){
 	}
 
-    public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
-        if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
-            return -1;
-        }
-        int nombreDejaCommande;
-        String requete;
-        nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
-        if (nombreDejaCommande > 0) {
-            requete = new String("UPDATE sontCommandes ");
-            requete += "SET quantiteArticle = " + (nombreDejaCommande + quantite) + " ";
-            requete += "WHERE nomArticle = '" + nomArticle +"' ";
-            requete += "AND numeroReservation = " + numeroReservation;
-        }
-        else {
-            requete = new String("INSERT INTO sontCommandes VALUES");
-            requete += "('" + nomArticle;
-            requete += "', " + numeroReservation;
-            requete += ", " + quantite + ")";
-        }
+	public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
+		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+			return -1;
+		}
+		int nombreDejaCommande;
+		String requete;
+		nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
+		if (nombreDejaCommande > 0) {
+			requete = new String("UPDATE sontCommandes ");
+			requete += "SET quantiteArticle = " + (nombreDejaCommande + quantite) + " ";
+			requete += "WHERE nomArticle = '" + nomArticle +"' ";
+			requete += "AND numeroReservation = " + numeroReservation;
+		}
+		else {
+			requete = new String("INSERT INTO sontCommandes VALUES");
+			requete += "('" + nomArticle;
+			requete += "', " + numeroReservation;
+			requete += ", " + quantite + ")";
+		}
 
-        System.out.println(requete);
-        try {
-            setStmt(getCon().createStatement());
-            getStmt().executeUpdate(requete);
-            getStmt().close();
-            return 0;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête d'ajout d'article."); 
-            e.printStackTrace(System.err);
-            return -1;
-        }
-    }
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
+			return 0;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête d'ajout d'article."); 
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
 
-    public int dejaCommande(String nomArticle, int numeroReservation) {
-        if (nomArticle == null || numeroReservation <= 0) {
-            return -1;
-        }
-        int ret;
-        String requete = new String("SELECT quantiteArticle ");
-        requete += "FROM sontCommandes ";
-        requete += "WHERE nomArticle = '" + nomArticle +"' ";
-        requete += "AND numeroReservation = " + numeroReservation;
+	/**
+	 * Supprime quantité nomArticle de la reservation n°numeroReservation
+	 */
+	public int supprimerArticle(String nomArticle, int quantite, int numeroReservation) {
+		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+			return -1;
+		}
+		int nombreDejaCommande;
+		String requete;
+		nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
+		if (nombreDejaCommande <= quantite) {
+			requete = new String("DELETE FROM sontCommandes ");
+			requete += "WHERE nomArticle = '" + nomArticle +"' ";
+			requete += "AND numeroReservation = " + numeroReservation;
+		}
+		else {
+			requete = new String("UPDATE sontCommandes ");
+			requete += "SET quantiteArticle=" + (nombreDejaCommande-quantite) + " ";
+			requete += "WHERE numeroReservation=" + numeroReservation + " ";
+			requete += "AND nomArticle='" + nomArticle + "' ";
+		}
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
+			return 0;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête de suppression d'article."); 
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
 
-        System.out.println(requete);
-        try {
-            setStmt(getCon().createStatement());
-            ResultSet rset = getStmt().executeQuery(requete);
-            if (!rset.isBeforeFirst()) {
-                ret = 0;
-            }
-            else {
-                rset.next();
-                ret = rset.getInt(1);
-            }
-            rset.close();
-            getStmt().close();
-            return ret;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête d'ajout d'article."); 
-            e.printStackTrace(System.err);
-            return -1;
-        }
-    }
+	public int dejaCommande(String nomArticle, int numeroReservation) {
+		if (nomArticle == null || numeroReservation <= 0) {
+			return -1;
+		}
+		int ret;
+		String requete = new String("SELECT quantiteArticle ");
+		requete += "FROM sontCommandes ";
+		requete += "WHERE nomArticle = '" + nomArticle +"' ";
+		requete += "AND numeroReservation = " + numeroReservation;
 
-    public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
-        String requete = new String("SELECT * FROM Article ");
-        if (nomArticle != null || prixArticle != -1 || specialite != null) {
-            requete += "WHERE ";
-        }
-        if (nomArticle != null) {
-            requete += ("Article.nomArticle = '" + nomArticle + "'");
-        }
-        if (prixArticle != -1) {
-            if (nomArticle != null) {	
-                requete += " AND ";
-            }
-            requete += ("Article.prixArticle = " + prixArticle);
-        }
-        if (specialite != null) {
-            if (nomArticle != null || prixArticle != -1) {	
-                requete += " AND ";
-            }
-            requete += ("AND Article.specialite = '" + specialite + "'");
-        }
-        if (type != null) {
-            requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
-            if (type == "menu") {
-                requete += "(SELECT Menu.nomMenu FROM " + type + ")";
-            }
-            else {
-                requete += "(SELECT * FROM " + type + ")";
-            }
-        }
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			if (!rset.isBeforeFirst()) {
+				ret = 0;
+			}
+			else {
+				rset.next();
+				ret = rset.getInt(1);
+			}
+			rset.close();
+			getStmt().close();
+			return ret;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête d'ajout d'article."); 
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
 
-        System.out.println(requete);
-        try {
-            setStmt(getCon().createStatement());
-            ResultSet rset = getStmt().executeQuery(requete);
-            return rset;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête.");
-            e.printStackTrace(System.err);
-            return null;
-        }
-    }
+	public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
+		String requete = new String("SELECT * FROM Article ");
+		if (nomArticle != null || prixArticle != -1 || specialite != null) {
+			requete += "WHERE ";
+		}
+		if (nomArticle != null) {
+			requete += ("Article.nomArticle = '" + nomArticle + "'");
+		}
+		if (prixArticle != -1) {
+			if (nomArticle != null) {	
+				requete += " AND ";
+			}
+			requete += ("Article.prixArticle = " + prixArticle);
+		}
+		if (specialite != null) {
+			if (nomArticle != null || prixArticle != -1) {	
+				requete += " AND ";
+			}
+			requete += ("AND Article.specialite = '" + specialite + "'");
+		}
+		if (type != null) {
+			requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
+			if (type == "menu") {
+				requete += "(SELECT Menu.nomMenu FROM " + type + ")";
+			}
+			else {
+				requete += "(SELECT * FROM " + type + ")";
+			}
+		}
 
-    public HashMap<String, Integer> getArticlesCommandes(int numRes) {
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			return rset;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
 
-        HashMap<String, Integer> res = new HashMap<String, Integer>();
-        if (numRes <= 0) {
-            return res;
-        }
-        String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes ");
-        requete += "WHERE numeroReservation = " + numRes;
+	public HashMap<String, Integer> getArticlesCommandes(int numRes) {
 
-        System.out.println(requete);
-        try {
-            setStmt(getCon().createStatement());
-            ResultSet rset = getStmt().executeQuery(requete);
-            while (rset.next()) {
-                res.put(rset.getString(1), rset.getInt(2));
-            }
-            return res;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête.");
-            e.printStackTrace(System.err);
-            return null;
-        }
-    }
+		HashMap<String, Integer> res = new HashMap<String, Integer>();
+		if (numRes <= 0) {
+			return res;
+		}
+		String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes ");
+		requete += "WHERE numeroReservation = " + numRes;
 
-    public float getPrix(String nomArticle) {	   	       
-        float res = 0;
-        if (nomArticle == null) {
-            System.out.println("Le nom de l'article est vide, son prix est donc null");
-            return -1;
-        }
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			while (rset.next()) {
+				res.put(rset.getString(1), rset.getInt(2));
+			}
+			return res;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
 
-        String requete = new String("SELECT prixArticle "
-                +"FROM Article "
-                +"WHERE nomArticle = '"+nomArticle+"'"
-                );
-        System.out.println(requete);
-        try {
-            setStmt(getCon().createStatement());
-            ResultSet rset = getStmt().executeQuery(requete);
-            if (!rset.isBeforeFirst()) {
-                return -1;
-            }
-            rset.next();
-            res = rset.getInt(1);
-            rset.close();
-            getStmt().close();
-            return res;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête getPrixArticle(article).");
-            e.printStackTrace(System.err);
-            return -1;
-        }
-    }
+	public float getPrix(String nomArticle) {	   	       
+		float res = 0;
+		if (nomArticle == null) {
+			System.out.println("Le nom de l'article est vide, son prix est donc null");
+			return -1;
+		}
+
+		String requete = new String("SELECT prixArticle "
+				+"FROM Article "
+				+"WHERE nomArticle = '"+nomArticle+"'"
+				);
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			if (!rset.isBeforeFirst()) {
+				return -1;
+			}
+			rset.next();
+			res = rset.getInt(1);
+			rset.close();
+			getStmt().close();
+			return res;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getPrixArticle(article).");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
 }

@@ -58,8 +58,8 @@ public class Controleur{
      * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
      */
     public int supprimerArticle(String nom, int quantite, int numResa){
-        // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-        return 666;
+        // supprimer à la resa l'article donner avec les bonnes quantités dans la BD
+        return ReservationFactoryConcrete.get().getArticleBD().supprimerArticle(nom, quantite, numResa);
     }
     public HashMap<String, Integer> getArticlesCommandes(int numResa) {
         return ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa);
