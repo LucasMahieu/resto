@@ -73,7 +73,7 @@ public class Client extends BDitem {
 		}
 
 		String requete = new String("INSERT INTO Client VALUES (");
-		requete += (lastClient + 1) + ", '" + nomClient + "', " + nTel + ")";
+		requete += (lastClient + 1) + ", '" + nomClient + "', '" + nTel + "')";
         System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
