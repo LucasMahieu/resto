@@ -66,29 +66,34 @@ public class Controleur{
 	}
 
 	public int creerFacture(String client){
-		// Facture factureFinale = new Facture();
-		return 999;
-	}
+       // Facture factureFinale = new Facture();
+       return 999;
+    }
 
-	public String getDateNow(){
-		date = new Date();
-		dateNow = sdfDate.format(date);
-		return this.dateNow;
-	}
+    public String getDateNow(){
+        date = new Date();
+        dateNow = sdfDate.format(date);
+        return this.dateNow;
+    }
 
-	public String getHeureNow(){
-		date = new Date();
-		heureNow = sdfHeure.format(date);
-		return this.heureNow;
-	}
+    public String getHeureNow(){
+        date = new Date();
+        heureNow = sdfHeure.format(date);
+        return this.heureNow;
+    }
+    
+    // TODO implémenter cette méthode
+    public String getEtatCommande(int numReservation){
+      return "BOISSON";
+    }
 
-	public String getServiceNow() {
-		serviceNow = "MIDI";
-		if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
-			serviceNow = "MIDI";
-		}
-		return this.serviceNow;
-	}
+    public String getServiceNow() {
+        serviceNow = "MIDI";
+        if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
+            serviceNow = "SOIR";
+        }
+        return this.serviceNow;
+    }
 
 	/**
 	 * Cette fonction doit :
@@ -159,7 +164,7 @@ public class Controleur{
 	}
 
 	public int trouverClient(String nomC, String telC){
-		int numClient = ReservationFactoryConcrete.get().getClientBD().exists(nomC, telC);
+		int numClient = ReservationFactoryConcrete.get().getClientBD().existsClient(nomC, telC);
 		if(numClient == -1){
 			return -1;
 		}else if (numClient == 0){
@@ -337,32 +342,38 @@ public class Controleur{
 		return table;
 	}
 
-	public void supprimerReservation(String nom, String prenom, int nbPersonnes, String date, String service, String localisation){
-		//Vérification de l'existence de la réservation 
-		//si ok:
-		//Appel à la suppression de réservation dans la BD
-	}
+<<<<<<< HEAD
+    public void supprimerReservation(int numeroTable, String date, String service){
+				if (ReservationFactoryConcrete.get().getTableBD().existsReservation(numeroTable, date, service)) {
+						ReservationFactoryConcrete.get().getTableBD().supprimerReservation(numeroTable, date, service);
+				}
 
-	public LinkedList<String> getListeArticles(String type)
-	{
-		LinkedList<String> resultat = new LinkedList<String>();
-		try {
-			ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
-			if (rset == null) {
-				return resultat;
-			}
-			while(rset.next()){
-				resultat.add(rset.getString(1));
-			}
-			rset.close();
-			ReservationFactoryConcrete.get().getArticleBD().getStmt().close();
-		}
-		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête.");
-			e.printStackTrace(System.err);
-		}
-		return resultat;
-	}
+        //Vérification de l'existence de la réservation
+        //si ok:
+        //Appel à la suppression de réservation dans la BD
+    }
+
+
+    public LinkedList<String> getListeArticles(String type)
+    {
+        LinkedList<String> resultat = new LinkedList<String>();
+        try {
+            ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
+            if (rset == null) {
+                return resultat;
+            }
+            while(rset.next()){
+                resultat.add(rset.getString(1));
+            }
+            rset.close();
+            ReservationFactoryConcrete.get().getArticleBD().getStmt().close();
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête.");
+            e.printStackTrace(System.err);
+        }
+        return resultat;
+    }
 
 	public float getPrixArticle(String nomArticle)
 	{
