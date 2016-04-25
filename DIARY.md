@@ -40,3 +40,9 @@
   * Affichage du récapitulatif de la commande
   * recherche par n° de table ou par n° de resa
 * Ajout que quelques methodes dans le controleur
+
+## Lundi 25 avril
+* Interface de suivi commande : affichage des réservations
+* Interface textuelle au poêle
+* Ajout de méthodes supplémentaires d'accès à la BD
+* Début du patron Observateur
