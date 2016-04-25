@@ -23,44 +23,73 @@ insert into Carte
 	Values('carte repas');
 insert into Carte
 	Values('carte bar');
+insert into Carte
+	Values('carte mer');
+insert into Carte
+	Values('carte terre');
 	
 -- ARTICLES
+insert into Article
+	Values('Tajine Boulettes', 17, 'arabe');
+insert into Article
+	Values('Kebab sto frites', 15, 'arabe');
 insert into Article
 	Values('couscous', 15, 'arabe');
 insert into Article
 	Values('salade tunisienne', 8, 'arabe');
+
 insert into Article
-	Values('glace', 5, 'italien');
+	Values('Pates bolo', 10, 'italien');
+insert into Article
+	Values('Pates carbo', 9, 'italien');
+insert into Article
+	Values('tiramissu', 7, 'italien');
+insert into Article
+	Values('Gnocchi', 18, 'italien');
+insert into Article
+	Values('salade de tomates', 8, 'italien');
+
+insert into Article
+	Values('Big Mac', 10, 'americain');
+insert into Article
+	Values('Hot Dog', 10, 'americain');
+insert into Article
+	Values('Nuggets', 10, 'americain');
 insert into Article
 	Values('steak frites', 10, 'americain');
 insert into Article
-	Values('salade de tomates', 8, 'italien');
-insert into Article
-	Values('carpaccio', 12, 'guineen');	
-insert into Article
-	Values('tiramisu', 12, 'italien');
-insert into Article
 	Values('coca', 3, 'americain');
+	
+insert into Article
+	Values('carpaccio', 12, 'français');
 insert into Article
 	Values('champagne', 25, 'français');
 insert into Article
-	Values('perrier', 2, 'français');				
+	Values('perrier', 2, 'français');
+
 insert into Article
-	Values('menu enfant', 13, NULL);
+	Values('menu enfant', 12, NULL);
 insert into Article
-	Values('menu arabe', 18, 'arabe');
+	Values('menu toqué', 18, NULL);
 insert into Article
-	Values('the a la menthe', 4, 'arabe');
+	Values('menu chasseur', 14, NULL);
+insert into Article
+	Values('menu pêcheur', 19, NULL);
+insert into Article
+	Values('menu Goulu', 100, NULL);
+
+insert into Article
+	Values('the glacé', 4, 'Britich');
 	
 -- SERVICE
+insert into Service
+	Values('SOIR', '25/04/2016', 'carte repas');
 insert into Service
 	Values('MIDI', '25/04/2016', 'carte bar');
 insert into Service
 	Values('MIDI', '21/07/2015', 'carte bar');
 insert into Service
 	Values('SOIR', '21/07/2015', 'carte repas');
-insert into Service
-	Values('SOIR', '25/04/2016', 'carte repas');
 
 -- RESERVATION
 insert into Reservation
@@ -93,8 +122,6 @@ insert into Choix
 	Values('champagne');
 insert into Choix
 	Values('perrier');
-insert into Choix
-	Values('the a la menthe');
 	
 
 -- PLAT
@@ -102,6 +129,20 @@ insert into Plat
 	Values('steak frites');
 insert into Plat
 	Values('couscous');
+insert into Plat
+	Values('Big Mac');
+insert into Plat
+	Values('Pates bolo');
+insert into Plat
+	Values('Pates carbo');
+insert into Plat
+	Values('Hot Dog');
+insert into Plat
+	Values('Nuggets');
+insert into Plat
+	Values('Gnocchi');
+insert into Plat
+	Values('Kebab sto frites');
 
 -- ENTREE	
 insert into Entree
@@ -126,7 +167,7 @@ insert into Boisson
     Values('perrier');
     
 insert into Boisson
-    Values('the a la menthe');
+    Values('the glacé');
 
 -- MENU
 insert into Menu
