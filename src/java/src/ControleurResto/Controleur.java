@@ -54,6 +54,13 @@ public class Controleur{
         return 666;
 	}
 
+	/**
+	 * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
+	 */
+	public int supprimerArticle(String nom, int quantite, int numResa){
+		// ajouter à la resa l'article donner avec les bonnes quantités dans la BD
+        return 666;
+	}
 	public int creerFacture(String client){
        // Facture factureFinale = new Facture();
        return 999;
