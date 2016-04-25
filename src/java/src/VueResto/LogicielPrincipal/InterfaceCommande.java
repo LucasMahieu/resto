@@ -1,5 +1,6 @@
 package VueResto.LogicielPrincipal;
 import VueResto.*;
+import ModeleResto.*;
 import ControleurResto.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -346,7 +347,21 @@ public class InterfaceCommande extends Observateur{
 			}
 		}
 	}
+	/**
+	 * Demande au controleur de supprimer les articles selectionnés
+	 */
+	public void supprimerArticlesSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				Controleur.get().supprimerArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
+			}
+		}
+	}
+
 	public void update(Observable o, Object arg){
+		if(o instanceof Article){
+			System.out.println("un article à changé" + arg);
+		}
 	}
 
 	/**
