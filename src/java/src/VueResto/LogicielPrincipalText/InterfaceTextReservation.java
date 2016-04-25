@@ -1,4 +1,4 @@
-package VueResto.InterfaceTextReservation;
+package VueResto.LogicielPrincipalText;
 import VueResto.*;
 import java.util.*;
 import ControleurResto.*;

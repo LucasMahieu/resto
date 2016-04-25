@@ -88,14 +88,6 @@ public class InterfaceSuiviCommande extends Observateur{
         // un bouton permet d'obtenir les détails de la commande sélectionnée
         // un autre bouton permet de fermer les détails de la commande ouverte.
 		Object[][] data = {
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"}
 		};
 
 		this.sModel = new SModel(data,titre);
@@ -106,14 +98,7 @@ public class InterfaceSuiviCommande extends Observateur{
 		this.jScrollPane = new JScrollPane(tableau);
 		jScrollPane.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
 		panelSuiviCommande.add( jScrollPane);
-		Object[] o = {"tintin","12345","5","10-11-12","BOISSON","10","5/10"};
-		((DefaultTableModel)tableau.getModel()).addRow(o);
-		Object[] o1 = {"tata","12345","5","10-11-12","BOISSON","10","5/10"};
-		((DefaultTableModel)tableau.getModel()).addRow(o1);
-		Object[] o2 = {"toto","12345","5","10-11-12","BOISSON","10","5/10"};
-		((DefaultTableModel)tableau.getModel()).addRow(o2);
-		Object[] o3 = {"tutu","12345","5","10-11-12","BOISSON","10","5/10"};
-		((DefaultTableModel)tableau.getModel()).addRow(o3);
+        this.remiseAZeroTableau();
 	}
 
 	/**

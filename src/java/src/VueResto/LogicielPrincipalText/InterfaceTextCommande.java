@@ -1,4 +1,4 @@
-package VueResto.InterfaceTextCommande;
+package VueResto.LogicielPrincipalText;
 import VueResto.*;
 import ControleurResto.*;
 import java.lang.*;
@@ -11,7 +11,7 @@ public class InterfaceTextCommande extends Observateur{
 	public InterfaceTextCommande(){
 	}
 
-	public void cadrePrincipale(){
+	public void commander(){
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Voici les différentes fonctions possibles:");
 		System.out.println("1)Prendre une commande individuel");

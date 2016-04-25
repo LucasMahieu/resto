@@ -1,6 +1,5 @@
 import VueResto.*;
-import VueResto.InterfaceTextCommande.*;
-import VueResto.InterfaceTextReservation.*;
+import VueResto.LogicielPrincipalText.*;
 import VueResto.LogicielPrincipal.*;
 import ModeleResto.*;
 import ControleurResto.*;
@@ -12,12 +11,12 @@ public class Resto{
 	public static void main(String[] args) {
 		// Interface Textuelle
 		/*
-		InterfaceTextReservation fenetrePrincipale = new InterfaceTextReservation();
-		fenetrePrincipale.reserver();
+		InterfaceTextPrincipale fenetrePrincipale = new InterfaceTextPrincipale();
+		fenetrePrincipale.lancer();
 		*/
 		
 		// Interface Graphique
-		 JFrame fenetrePrincipale = new InterfacePrincipale(); 
+		JFrame fenetrePrincipale = new InterfacePrincipale(); 
 
 		// -------------------------------------------------------- //
 
