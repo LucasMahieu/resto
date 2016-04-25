@@ -20,7 +20,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	private JButton buttonOuvrir;
 	private JButton buttonFermer;
 	private SModel sModel;
-	private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé","Heure d'arrivé"};
+	private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé"};
 	private JTable tableau;
 	private JScrollPane jScrollPane;
 	private static final int TAILLE_X_PANEL = 900;
@@ -84,16 +84,20 @@ public class InterfaceSuiviCommande extends Observateur{
 		buttonFermer.setBounds(POS_X_FERMER,POS_Y_FERMER,TAILLE_FERMER,TAILLE_FERMER);
 		panelSuiviCommande.add(buttonFermer);
 
+        // Tableau contenant les commandes :
+        // un bouton permet d'obtenir les détails de la commande sélectionnée
+        // un autre bouton permet de fermer les détails de la commande ouverte.
 		Object[][] data = {
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"},
-			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10","10:00"}
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"},
+			{"dieudo","12345","5","10-11-12","BOISSON","10","5/10"}
 		};
+
 		this.sModel = new SModel(data,titre);
 		//this.tableau = new JTable(sModel);
 		this.tableau = new JTable(new DefaultTableModel(data,titre));
@@ -102,15 +106,16 @@ public class InterfaceSuiviCommande extends Observateur{
 		this.jScrollPane = new JScrollPane(tableau);
 		jScrollPane.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
 		panelSuiviCommande.add( jScrollPane);
-		Object[] o = {"tintin","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		Object[] o = {"tintin","12345","5","10-11-12","BOISSON","10","5/10"};
 		((DefaultTableModel)tableau.getModel()).addRow(o);
-		Object[] o1 = {"tata","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		Object[] o1 = {"tata","12345","5","10-11-12","BOISSON","10","5/10"};
 		((DefaultTableModel)tableau.getModel()).addRow(o1);
-		Object[] o2 = {"toto","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		Object[] o2 = {"toto","12345","5","10-11-12","BOISSON","10","5/10"};
 		((DefaultTableModel)tableau.getModel()).addRow(o2);
-		Object[] o3 = {"tutu","12345","5","10-11-12","BOISSON","10","5/10","10:00"};
+		Object[] o3 = {"tutu","12345","5","10-11-12","BOISSON","10","5/10"};
 		((DefaultTableModel)tableau.getModel()).addRow(o3);
 	}
+
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
 	 *
@@ -155,6 +160,88 @@ public class InterfaceSuiviCommande extends Observateur{
 		return this.tableau;
 	}
 
+    /** effet de l'appui sur le bouton Ouvrir
+     */
+    public void effetBoutonOuvrir(){
+      System.out.println("Effet Bouton Ouvrir");
+      int selectedRow = this.tableau.getSelectedRow();
+      if(selectedRow != -1){
+        System.out.println("Selected row : " + selectedRow );
+        Object numReservationSelected = this.sModel.getValueAt(selectedRow,1);
+        System.out.println("Number of reservation : " + numReservationSelected);
+      }
+    }
+
+    /** effet de l'appui sur le bouton Fermer
+     */
+    public void effetBoutonFermer(){
+      // Efface les données du panneau de suivi de commande précis
+      System.out.println("Effet Bouton Fermer");
+
+    }
+
+    /** effet de l'appui sur le bouton RechercheSuivi
+     */
+    public void effetBoutonRechercheSuivi(){
+      // Affiche dans le tableau uniquement les données correspondant au numéro de table ou numéro de réservation sélectionné
+      System.out.println("Effet Bouton Recherche Suivi");
+      if(this.getTextFieldNTable().getText().equals("")){
+        this.remiseAZeroTableau();
+        return;
+      }
+      // On nettoie le tableau
+      ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
+      ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+      // On recharge une nouvelle table correspondant à la recherche 
+      // TODO : définir le nombre de tables
+      for(int table = 0; table < 100; table++){
+        int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
+        if ( numeroReservationCourant <= 0){
+          continue;
+        }
+        else if(Integer.parseInt(this.getTextFieldNTable().getText())==(table)){
+
+          System.out.println("Une ou  plusieurs réservations ont été trouvées ");
+          // On affiche les reservations trouvées
+          String etatCommande = Controleur.get().getEtatCommande(table);
+          String nomCommande = Controleur.get().getNom(table);
+          String date = Controleur.get().getDateNow();
+          String tempsEtat = Controleur.get().getDateNow();
+          System.out.println(etatCommande);
+          Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+          ((DefaultTableModel)this.tableau.getModel()).addRow(o);
+          ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+        }
+      }
+    }
+
+    public void remiseAZeroTableau(){
+      System.out.println("remiseAZeroTableau");
+      // On nettoie la table
+      ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
+      ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+      // On recharge une nouvelle table correspondant à la recherche 
+      // TODO : définir le nombre de tables
+      for(int table = 0; table < 100; table++){
+        int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
+        if ( numeroReservationCourant <= 0){
+          continue;
+        }
+        else{
+          System.out.println("Une ou  plusieurs réservations ont été trouvées ");
+          // On affiche les reservations trouvées
+          String etatCommande = Controleur.get().getEtatCommande(table);
+          String nomCommande = Controleur.get().getNom(table);
+          String date = Controleur.get().getDateNow();
+          String tempsEtat = Controleur.get().getDateNow();
+          System.out.println(etatCommande);
+          Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+          ((DefaultTableModel)this.tableau.getModel()).addRow(o);
+          ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+        }
+      }
+    }
+
 	/**
 	 * Cette classe est un TableModel Pour le tableau de suivi des commande
 	 */
@@ -165,6 +252,14 @@ public class InterfaceSuiviCommande extends Observateur{
 		public void setData(Object[][] data){
 			this.data = data;
 		}
+
+        /** accesseur du tableau
+         *
+         * @returns tableau de SModel
+         */
+        public Object[][] getData(){
+          return this.data;
+        }
 
 		//Constructeur
 		public SModel(Object[][] data, String[] titre){

@@ -2,6 +2,7 @@ package VueResto.LogicielPrincipal;
 import VueResto.*;
 import VueResto.LogicielPrincipal.*;
 import ControleurResto.*;
+import ModeleResto.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.event.*;
@@ -18,6 +19,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		super("La bonne fourchetté");
 		addWindowListener( new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
+				ReservationFactoryConcrete.get().close();
 				System.exit(0);
 			}
 		}
@@ -67,6 +69,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e){
 		Object source = e.getSource();
+		/* RESERVATION */
 		if(source == interfaceReservation.getBoutonReservation()){
 			System.out.println("Bouton de Reservation");
 			String message = "";
@@ -95,14 +98,14 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				System.out.println("resa=" + resa);
 				if(resa<0){
 					System.out.println("Erreur Réservation");
-					JOptionPane.showMessageDialog(this,"La Réservation a échouée",
+					JOptionPane.showMessageDialog(this,"La Réservation a échoué",
 						"Erreur Réservation",JOptionPane.ERROR_MESSAGE);
 				}else if(resa==0){
 					System.out.println("Le resto est plein");
 					JOptionPane.showMessageDialog(this,"Le resto est full, A+",
 						"Le resto est plein",JOptionPane.INFORMATION_MESSAGE);
 				}else{
-					System.out.println("Réservation réussite");
+					System.out.println("Réservation réussie");
 					// Faire la requete pour savoir quelle table et attribuée
 					LinkedList<Integer> tables;
 					tables = Controleur.get().getNumeroTables(resa);
@@ -118,6 +121,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 					);
 				}
 			}
+		/* COMMANDE */
 		}else if(source == interfaceCommande.getButtonAjout()){
 			String message = "";
 			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
@@ -127,15 +131,19 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelEntree()){
 				System.out.println("Bouton d'Ajout d'une Entrée");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleEntree());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelPlat()){
 				System.out.println("Bouton d'Ajout d'un Plat");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticlePlat());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelDessert()){
 				System.out.println("Bouton d'Ajout d'un Dessert");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleDessert());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelMenu()){
 				System.out.println("Bouton d'Ajout d'un Menu");
+				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleMenu());
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
@@ -144,18 +152,23 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			message = "suppression de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelBoisson()){
 				System.out.println("Bouton de Suppression d'une Boisson");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleBoisson());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelEntree()){
 				System.out.println("Bouton de Suppression d'une Entrée");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleEntree());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelPlat()){
 				System.out.println("Bouton de Suppression d'un Plat");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticlePlat());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelDessert()){
 				System.out.println("Bouton de Suppression d'un Dessert");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleDessert());
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelMenu()){
 				System.out.println("Bouton de Suppression d'un Menu");
+				interfaceCommande.supprimerArticlesSelectionnes(interfaceCommande.getButtonArticleMenu());
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
@@ -177,8 +190,8 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 						System.out.println("Erreur Recherche Commande");
 						JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir\n"
 							+"Le numéro de table entré ("+interfaceCommande.getTextFieldNTable().getText()
-							+") n'est pas un nombre"
-							+"\nBOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
+							+") n'est pas un nombre",
+							"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
 					}
 					numResa = Controleur.get().getNumeroReservation(numTable);
 				}
@@ -191,22 +204,16 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 					+" "+interfaceCommande.getTextFieldNom().getText() + " n°" + numResa;
 				System.out.println(message);
 			}
+		/* SUIVI COMMANDE */
 		}else if(source == interfaceSuiviCommande.getButtonRechercheSuivi()){
-			if ( interfaceSuiviCommande.getTextFieldNTable().getText().equals("") 
-					&& interfaceSuiviCommande.getTextFieldNom().getText().equals("")){
-				System.out.println("Erreur Recherche Commande");
-				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!",
-						"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
-			}else{
-				// Dans ce else on peut aboutir à une resa
-
-				Object[] o = {"llllllllll","111","000","ppp"};
-				((DefaultTableModel)interfaceSuiviCommande.getTableau().getModel()).addRow(o);
-			}
+          System.out.println("Bouton RechercherSuiviCommande");		
+          interfaceSuiviCommande.effetBoutonRechercheSuivi();
 		}else if (source == interfaceSuiviCommande.getButtonOuvrir()){
-		
+          System.out.println("Bouton ouvrir suiviCommande");		
+          interfaceSuiviCommande.effetBoutonOuvrir();
 		}else if (source == interfaceSuiviCommande.getButtonFermer()){
-		
+          System.out.println("Bouton fermer suiviCommande");		
+          interfaceSuiviCommande.effetBoutonFermer();
 		}
 	}
 }

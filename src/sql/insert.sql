@@ -59,6 +59,8 @@ insert into Service
 	Values('MIDI', '21/07/2015', 'carte bar');
 insert into Service
 	Values('SOIR', '21/07/2015', 'carte repas');
+insert into Service
+	Values('SOIR', '25/04/2016', 'carte repas');
 
 -- RESERVATION
 insert into Reservation
