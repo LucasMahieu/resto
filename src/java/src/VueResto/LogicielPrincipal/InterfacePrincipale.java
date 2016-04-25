@@ -99,29 +99,29 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				if(resa<0){
 					System.out.println("Erreur Réservation");
 					JOptionPane.showMessageDialog(this,"La Réservation a échoué",
-						"Erreur Réservation",JOptionPane.ERROR_MESSAGE);
+							"Erreur Réservation",JOptionPane.ERROR_MESSAGE);
 				}else if(resa==0){
 					System.out.println("Le resto est plein");
 					JOptionPane.showMessageDialog(this,"Le resto est full, A+",
-						"Le resto est plein",JOptionPane.INFORMATION_MESSAGE);
+							"Le resto est plein",JOptionPane.INFORMATION_MESSAGE);
 				}else{
 					System.out.println("Réservation réussie");
 					// Faire la requete pour savoir quelle table et attribuée
 					LinkedList<Integer> tables;
 					tables = Controleur.get().getNumeroTables(resa);
-                    String tablesString = "";
-                    if (tables != null) {
-                        tablesString = tables.toString();
-                    }
+					String tablesString = "";
+					if (tables != null) {
+						tablesString = tables.toString();
+					}
 					JOptionPane.showMessageDialog(this
 							,"La Réservation a réussi,\n"
 							+"la réservation a le n°"+resa 
 							+", la table n°"+tablesString+" lui est réservée"
 							,"Réservation réussite",JOptionPane.INFORMATION_MESSAGE
-					);
+							);
 				}
 			}
-		/* COMMANDE */
+			/* COMMANDE */
 		}else if(source == interfaceCommande.getButtonAjout()){
 			String message = "";
 			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
@@ -175,8 +175,9 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
 			interfaceCommande.createNewRecap(Controleur.get().getNumResaCmdSelectionne());
+
 		}else if(source == interfaceCommande.getButtonRecherche()){
-			if ( interfaceCommande.getTextFieldNTable().getText().equals("") && interfaceCommande.getTextFieldNom().getText().equals("")){
+			if ( interfaceCommande.getTextFieldNTable().getText().equals("") ){
 				System.out.println("Erreur Recherche Commande");
 				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!",
 						"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
@@ -184,38 +185,35 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				// Dans ce else on peut aboutir à une resa
 				int numResa = 0;
 				int numTable=0;
-				if(interfaceCommande.getTextFieldNTable().getText().equals("")){
-					numResa = Controleur.get().getNumeroReservation(interfaceCommande.getTextFieldNom().getText());
-				}else{
-					try{
-						numTable = Integer.parseInt(interfaceCommande.getTextFieldNTable().getText());
-					}catch ( NumberFormatException n){
-						System.out.println("Erreur Recherche Commande");
-						JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir\n"
+				try{
+					numTable = Integer.parseInt(interfaceCommande.getTextFieldNTable().getText());
+				}catch ( NumberFormatException n){
+					System.out.println("Erreur Recherche Commande");
+					JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir\n"
 							+"Le numéro de table entré ("+interfaceCommande.getTextFieldNTable().getText()
 							+") n'est pas un nombre",
 							"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
-					}
-					numResa = Controleur.get().getNumeroReservation(numTable);
 				}
+				numResa = Controleur.get().getNumeroReservation(numTable);
+
 				Controleur.get().setNumResaCmdSelectionne(numResa);
 				interfaceCommande.createNewRecap(numResa);
 				System.out.println("Bouton de Recherche de réservation");
 				String message = "";
-				message = interfaceCommande.getTextFieldNTable().getText()
-					+" "+interfaceCommande.getTextFieldNom().getText() + " n°" + numResa;
+				message = "Table n°"+interfaceCommande.getTextFieldNTable().getText()
+					+ " n° de resa = " + numResa;
 				System.out.println(message);
 			}
-		/* SUIVI COMMANDE */
+			/* SUIVI COMMANDE */
 		}else if(source == interfaceSuiviCommande.getButtonRechercheSuivi()){
-          System.out.println("Bouton RechercherSuiviCommande");		
-          interfaceSuiviCommande.effetBoutonRechercheSuivi();
+			System.out.println("Bouton RechercherSuiviCommande");		
+			interfaceSuiviCommande.effetBoutonRechercheSuivi();
 		}else if (source == interfaceSuiviCommande.getButtonOuvrir()){
-          System.out.println("Bouton ouvrir suiviCommande");		
-          interfaceSuiviCommande.effetBoutonOuvrir();
+			System.out.println("Bouton ouvrir suiviCommande");		
+			interfaceSuiviCommande.effetBoutonOuvrir();
 		}else if (source == interfaceSuiviCommande.getButtonFermer()){
-          System.out.println("Bouton fermer suiviCommande");		
-          interfaceSuiviCommande.effetBoutonFermer();
+			System.out.println("Bouton fermer suiviCommande");		
+			interfaceSuiviCommande.effetBoutonFermer();
 		}
 	}
 }

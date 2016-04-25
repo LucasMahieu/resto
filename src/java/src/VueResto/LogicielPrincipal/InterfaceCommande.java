@@ -25,14 +25,13 @@ public class InterfaceCommande extends Observateur{
 	private JPanel panelDessert;
 	private JPanel panelMenu;
 	private JTextField textFieldNTable;
-	private JTextField textFieldNom;
 	private JLabel labelNTable;
 	private JLabel labelNom;
 	private JButton buttonRecherche;
 	private JButton buttonAjout;
 	private JButton buttonSuppression;
 	private SpinnerModel modelQuantite;    
-	private JSpinner spinnerQuantite ;
+	private JSpinner spinnerQuantite;
 	private ArrayList<JToggleButton> buttonArticleBoisson;
 	private ArrayList<JToggleButton> buttonArticleEntree;
 	private ArrayList<JToggleButton> buttonArticlePlat;
@@ -45,11 +44,11 @@ public class InterfaceCommande extends Observateur{
 	private static final int TAILLE_Y_FIELD_TABLE = 20;
 	private static final int POS_X_TABLE = 10;
 	private static final int POS_Y_TABLE = 30;
-	private static final int TAILLE_X_FIELD_NOM = 100;
-	private static final int TAILLE_Y_FIELD_NOM = 20;
-	private static final int POS_X_NOM = 120;
-	private static final int POS_Y_NOM = 30;
-	private static final int TAILLE_X_PANEL_ARTICLE = 500;
+	private static final int TAILLE_X_RECHERCHE = 100;
+	private static final int TAILLE_Y_RECHERCHE = 20;
+	private static final int POS_X_RECHERCHE = POS_X_TABLE + TAILLE_X_FIELD_TABLE + 10;
+	private static final int POS_Y_RECHERCHE = 30;
+	private static final int TAILLE_X_PANEL_ARTICLE = 550;
 	private static final int TAILLE_Y_PANEL_ARTICLE = 600;
 	private static final int POS_X_ARTICLE = 0;
 	private static final int POS_Y_ARTICLE = 60;
@@ -62,26 +61,10 @@ public class InterfaceCommande extends Observateur{
 	private static final int POS_X_AJOUT = TAILLE_X_PANEL_ARTICLE - TAILLE_AJOUT - TAILLE_SUPPRESSION - 5;
 	private static final int POS_X_AJOUT_Q = TAILLE_X_PANEL_ARTICLE - TAILLE_SUPPRESSION - TAILLE_AJOUT - TAILLE_AJOUT_Q - 10;
 	private static final int POS_Y_AJOUT = 30;
-	private static final int POS_X_RECHERCHE = 240;
-	private static final int POS_Y_RECHERCHE = 30;
-	private static final int TAILLE_X_RECHERCHE = 80;
-	private static final int TAILLE_Y_RECHERCHE = 20;
-	private static final int POS_B = 20;
-	private static final int TAILLE_X_B = 80;
-	private static final int TAILLE_Y_B = 80;
-	private static final int POS_E = 20;
-	private static final int TAILLE_X_E = 100;
-	private static final int TAILLE_Y_E = 80;
-	private static final int POS_P = 20;
-	private static final int TAILLE_X_P = 100;
-	private static final int TAILLE_Y_P = 80;
-	private static final int POS_D = 20;
-	private static final int TAILLE_X_D = 80;
-	private static final int TAILLE_Y_D = 80;
-	private static final int POS_M = 20;
-	private static final int TAILLE_X_M = 80;
-	private static final int TAILLE_Y_M = 80;
-	private static final int POS_X_RECAP = TAILLE_X_PANEL_ARTICLE + 50;
+	private static final int POS_A = 15;
+	private static final int TAILLE_X_A = 150;
+	private static final int TAILLE_Y_A = 40;
+	private static final int POS_X_RECAP = TAILLE_X_PANEL_ARTICLE + 20;
 	private static final int POS_Y_RECAP = 10;
 	private static final int TAILLE_X_RECAP = TAILLE_X_PANEL - TAILLE_X_PANEL_ARTICLE;
 	private static final int TAILLE_Y_RECAP = 20;
@@ -100,13 +83,6 @@ public class InterfaceCommande extends Observateur{
 		labelNTable = new JLabel("Num. Table");
 		labelNTable.setBounds(POS_X_TABLE,10,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
 		panelCommande.add(labelNTable);
-		//CHAMP TEXT POUR CHOISIR LE NOM DE LA RESA
-		this.textFieldNom = new JTextField(TAILLE_X_FIELD_NOM);
-		textFieldNom.setBounds(POS_X_NOM,POS_Y_NOM,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelCommande.add(textFieldNom);
-		labelNom = new JLabel("Nom Resa.");
-		labelNom.setBounds(POS_X_NOM,10,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelCommande.add(labelNom);
 		// PANEL QUI VA CONTENIR LES ARTICLES
 		this.tabbedPaneArticle = new JTabbedPane(PLACEMENT_TAB_ARTICLE);
 		tabbedPaneArticle.setBounds(POS_X_ARTICLE,POS_Y_ARTICLE,TAILLE_X_PANEL_ARTICLE, TAILLE_Y_PANEL_ARTICLE);
@@ -139,11 +115,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleBoisson.size(); j++){
 			col++;
 			buttonArticleBoisson.add(new JToggleButton(listArticleBoisson.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_B)/TAILLE_X_B)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleBoisson.get(j).setBounds(POS_B+col*TAILLE_X_B,POS_B+lig*TAILLE_Y_B,TAILLE_X_B,TAILLE_Y_B);
+			buttonArticleBoisson.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelBoisson.add(buttonArticleBoisson.get(j));
 		}
 		//Ajout des bouttons pour article ENTREE
@@ -154,11 +130,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleEntree.size(); j++){
 			col++;
 			buttonArticleEntree.add(new JToggleButton(listArticleEntree.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_E)/TAILLE_X_E)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleEntree.get(j).setBounds(POS_E+col*TAILLE_X_E,POS_E+lig*TAILLE_Y_E,TAILLE_X_E,TAILLE_Y_E);
+			buttonArticleEntree.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelEntree.add(buttonArticleEntree.get(j));
 		}
 		//Ajout des bouttons pour article PLAT
@@ -169,11 +145,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticlePlat.size(); j++){
 			col++;
 			buttonArticlePlat.add(new JToggleButton(listArticlePlat.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_P)/TAILLE_X_P)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticlePlat.get(j).setBounds(POS_P+col*TAILLE_X_P,POS_P+lig*TAILLE_Y_P,TAILLE_X_P,TAILLE_Y_P);
+			buttonArticlePlat.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelPlat.add(buttonArticlePlat.get(j));
 		}
 		//Ajout des bouttons pour article Dessert
@@ -184,11 +160,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleDessert.size(); j++){
 			col++;
 			buttonArticleDessert.add(new JToggleButton(listArticleDessert.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_D)/TAILLE_X_D)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleDessert.get(j).setBounds(POS_D+col*TAILLE_X_D,POS_D+lig*TAILLE_Y_D,TAILLE_X_D,TAILLE_Y_D);
+			buttonArticleDessert.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelDessert.add(buttonArticleDessert.get(j));
 		}
 		//Ajout des bouttons pour article Menu
@@ -199,11 +175,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleMenu.size(); j++){
 			col++;
 			buttonArticleMenu.add(new JToggleButton(listArticleMenu.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_M)/TAILLE_X_M)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleMenu.get(j).setBounds(POS_M+col*TAILLE_X_M,POS_M+lig*TAILLE_Y_M,TAILLE_X_M,TAILLE_Y_M);
+			buttonArticleMenu.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelMenu.add(buttonArticleMenu.get(j));
 		}
 		
@@ -269,7 +245,7 @@ public class InterfaceCommande extends Observateur{
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		labelRecapCommande.add(new JLabel("---------------------------------------------"));
+		labelRecapCommande.add(new JLabel("----------------------------------------"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
@@ -300,18 +276,18 @@ public class InterfaceCommande extends Observateur{
 			prix = Controleur.get().getPrixArticle(a);
 			somme += prix*q;
 			labelRecapCommande.add(new JLabel(""
-						+ String.format("%0$-"+(65)+"s","- (x"+q+") "+a+" ")
+						+ String.format("%0$-"+(45)+"s","- (x"+q+") "+a+" ")
 						+ prix*q
 						+ "€"));
 			labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 			panelCommande.add(labelRecapCommande.get(j));
 			j++;
 		}
-		labelRecapCommande.add(new JLabel("---------------------------------------------"));
+		labelRecapCommande.add(new JLabel("----------------------------------------"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		labelRecapCommande.add(new JLabel(String.format("%0$-70s","TOTAL = ") + somme + "€"));
+		labelRecapCommande.add(new JLabel(String.format("%0$-50s","TOTAL = ") + somme + "€"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		panelCommande.updateUI();
@@ -402,9 +378,6 @@ public class InterfaceCommande extends Observateur{
 	}
 	public JTextField getTextFieldNTable(){
 		return this.textFieldNTable;
-	}
-	public JTextField getTextFieldNom(){
-		return this.textFieldNom;
 	}
 	public JLabel getLabelNTable(){
 		return this.labelNTable;
