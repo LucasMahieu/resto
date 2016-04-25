@@ -2,6 +2,7 @@ package VueResto.LogicielPrincipal;
 import VueResto.*;
 import VueResto.LogicielPrincipal.*;
 import ControleurResto.*;
+import ModeleResto.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.event.*;

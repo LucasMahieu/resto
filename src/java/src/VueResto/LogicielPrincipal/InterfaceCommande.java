@@ -1,5 +1,6 @@
 package VueResto.LogicielPrincipal;
 import VueResto.*;
+import ModeleResto.*;
 import ControleurResto.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -358,6 +359,9 @@ public class InterfaceCommande extends Observateur{
 	}
 
 	public void update(Observable o, Object arg){
+		if(o instanceof Article){
+			System.out.println("un article à changé" + arg);
+		}
 	}
 
 	/**
