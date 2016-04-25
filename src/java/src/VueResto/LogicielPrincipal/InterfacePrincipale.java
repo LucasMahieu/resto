@@ -177,8 +177,8 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 						System.out.println("Erreur Recherche Commande");
 						JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir\n"
 							+"Le numéro de table entré ("+interfaceCommande.getTextFieldNTable().getText()
-							+") n'est pas un nombre"
-							+"\nBOUGRRRR !!!","Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
+							+") n'est pas un nombre",
+							"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
 					}
 					numResa = Controleur.get().getNumeroReservation(numTable);
 				}
@@ -195,18 +195,16 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			if ( interfaceSuiviCommande.getTextFieldNTable().getText().equals("") 
 					&& interfaceSuiviCommande.getTextFieldNom().getText().equals("")){
 				System.out.println("Erreur Recherche Commande");
-				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre\n BOUGRRRR !!!",
+				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre",
 						"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
 			}else{
-				// Dans ce else on peut aboutir à une resa
-
-				Object[] o = {"llllllllll","111","000","ppp"};
-				((DefaultTableModel)interfaceSuiviCommande.getTableau().getModel()).addRow(o);
+              interfaceSuiviCommande.effetBoutonRechercheSuivi();
 			}
 		}else if (source == interfaceSuiviCommande.getButtonOuvrir()){
-		
+          interfaceSuiviCommande.effetBoutonOuvrir();
+          System.out.println("Bouton ouvrir suiviCommande");		
 		}else if (source == interfaceSuiviCommande.getButtonFermer()){
-		
+          System.out.println("Bouton fermer suiviCommande");		
 		}
 	}
 }
