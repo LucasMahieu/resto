@@ -147,6 +147,8 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
+			interfaceCommande.updateRecap(Controleur.get().getNumResaCmdSelectionne());
+
 		}else if(source == interfaceCommande.getButtonSuppression()){
 			String message = "";
 			message = "suppression de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
