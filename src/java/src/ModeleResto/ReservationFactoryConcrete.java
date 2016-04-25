@@ -19,7 +19,8 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     private String USR;
     private String PSWD;
 
-    private int lastRes = 0;
+    // On a déjà 4 réservations dans la BD
+    private int lastRes = 4;
 
     private ReservationFactoryConcrete() {
         System.out.print("Entrez votre nom d'utilisateur pour vous connecter à votre BD : ");
@@ -47,12 +48,15 @@ public class ReservationFactoryConcrete extends ReservationFactory{
             System.err.println("ECHEC de la connection à la BD.");
             e.printStackTrace(System.err);
         }
+
 		reservations = new HashMap<Integer, ReservationConcrete>();
+        lastRes = getNombreReservations();
+        client_BD.setLastClient(client_BD.getNombreClient());
     }
 
     public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
 		String requete = new String("INSERT INTO Reservation VALUES (");
-		requete += (lastRes + 1) +","+ nbPersonnes +","+"0"+","+numClient+",'"+service+"','"+date+ "')";
+		requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
         System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
@@ -68,6 +72,26 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 			return -1;
 		}
     }
+
+	public int getNombreReservations() {
+		String requete = "SELECT COUNT(*) FROM Reservation";
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			while (rset.next()) {
+				int ret = rset.getInt(1);
+				rset.close();
+				getStmt().close();
+				return ret;
+			}
+			return -1;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête getNbClient");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
 
 	public HashMap<Integer,ReservationConcrete> getReservations(){
 		return reservations;
@@ -90,6 +114,16 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     public void validate() {
         try {
             getCon().commit();
+        }
+        catch (SQLException e) {
+            System.err.println("ECHEC de la validation de la transaction.");
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public void cancel() {
+        try {
+            getCon().rollback();
         }
         catch (SQLException e) {
             System.err.println("ECHEC de la validation de la transaction.");

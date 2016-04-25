@@ -13,10 +13,26 @@ public class Resto{
 
         // Pour fermer la connection à la BD
         // à mettre surement ailleurs.
-        /*
-        System.out.print("Déconnection de la base de données ... ");
-        ReservationFactoryConcrete.get().close();
-        System.out.println("Déconnection réussie.");
-        */
+        
+        System.out.print("Valider les changements à la BD (0/1) ?");
+        Scanner sc = new Scanner(System.in);
+        if (sc.nextInt() == 1) {
+            System.out.print("Validation des changements ... ");
+            ReservationFactoryConcrete.get().validate();
+            System.out.println("Validation réussie.");
+
+            System.out.print("Déconnection de la base de données ... ");
+            ReservationFactoryConcrete.get().close();
+            System.out.println("Déconnection réussie.");
+        }
+        else {
+            System.out.print("Annulation des changements ... ");
+            ReservationFactoryConcrete.get().cancel();
+            System.out.println("Changements annulés.");
+
+            System.out.print("Déconnection de la base de données ... ");
+            ReservationFactoryConcrete.get().close();
+            System.out.println("Déconnection réussie.");
+        }
 	}
 }

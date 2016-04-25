@@ -5,10 +5,15 @@ import java.sql.*;
 public class Client extends BDitem {
 
     // Numéro client du dernier client ajouté.
+    // On en a déja 3.
     private int lastClient = 0;
 
 	public Client() {
 	}
+
+    public void setLastClient(int lC) {
+        this.lastClient = lC;
+    }
 
     public int getLastClient() {
         return this.lastClient;
@@ -68,7 +73,7 @@ public class Client extends BDitem {
 		}
 
 		String requete = new String("INSERT INTO Client VALUES (");
-		requete += (lastClient + 1) + ", " + nomClient + ", " + nTel + ")";
+		requete += (lastClient + 1) + ", '" + nomClient + "', " + nTel + ")";
         System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
