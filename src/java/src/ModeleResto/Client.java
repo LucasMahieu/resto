@@ -50,6 +50,8 @@ public class Client extends BDitem {
 			setStmt(getCon().createStatement());
 			ResultSet rset = getStmt().executeQuery(requete);
 			if (!rset.isBeforeFirst()) {
+                rset.close();
+                getStmt().close();
 				return 0;
 			}
 			else {

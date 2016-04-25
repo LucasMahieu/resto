@@ -1,5 +1,6 @@
 import VueResto.*;
 import VueResto.InterfaceTextCommande.*;
+import VueResto.InterfaceTextReservation.*;
 import VueResto.LogicielPrincipal.*;
 import ModeleResto.*;
 import ControleurResto.*;
@@ -9,7 +10,16 @@ import java.awt.event.*;
 
 public class Resto{
 	public static void main(String[] args) {
-		JFrame fenetrePrincipale = new InterfacePrincipale();
+		// Interface Textuelle
+		/*
+		InterfaceTextReservation fenetrePrincipale = new InterfaceTextReservation();
+		fenetrePrincipale.reserver();
+		*/
+		
+		// Interface Graphique
+		 JFrame fenetrePrincipale = new InterfacePrincipale(); 
+
+		// -------------------------------------------------------- //
 
         // Pour fermer la connection à la BD
         // à mettre surement ailleurs.

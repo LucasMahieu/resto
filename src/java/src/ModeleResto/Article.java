@@ -62,12 +62,12 @@ public class Article extends BDitem {
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
-			getStmt().executeUpdate(requete);
+						getStmt().executeUpdate(requete);
             getStmt().close();
             return 0;
         }
         catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête d'ajout d'article.");
+            System.err.println("Erreur pour faire la requête d'ajout d'article."); 
             e.printStackTrace(System.err);
             return -1;
         }
@@ -97,4 +97,36 @@ public class Article extends BDitem {
             return null;
         }
     }
+
+    public float getPrix(String nomArticle) {	   	       
+        float res = 0;
+        if (nomArticle == null) {
+            System.out.println("Le nom de l'article est vide, son prix est donc null");
+            return -1;
+        }
+
+        String requete = new String("SELECT prixArticle "
+                +"FROM Article "
+                +"WHERE prixArticle = '"+nomArticle+"'"
+                );
+        System.out.println(requete);
+        try {
+            setStmt(getCon().createStatement());
+            ResultSet rset = getStmt().executeQuery(requete);
+            if (!rset.isBeforeFirst()) {
+                return -1;
+            }
+            rset.next();
+            res = rset.getInt(1);
+            rset.close();
+            getStmt().close();
+            return res;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête getPrixArticle(article).");
+            e.printStackTrace(System.err);
+            return -1;
+        }
+    }
+
 }

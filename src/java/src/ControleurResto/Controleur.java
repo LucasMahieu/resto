@@ -367,12 +367,9 @@ public class Controleur{
 
     public float getPrixArticle(String nomArticle)
     {
-        //ResultSet rset = getArticles(nomArticle, -1, null, null);
-        //rset.getFloat(2);
-
-        //rset.close();
-        //return resultat;
-        return (float)10.0;
+        float resultat = -1;
+        resultat = ReservationFactoryConcrete.get().getArticleBD().getPrix(nomArticle);
+        return resultat;
     }
 
     public int getNumeroReservation(String date, int nTable, String service){
@@ -395,7 +392,7 @@ public class Controleur{
 	 * Donne une string comportant toutes les tables associée à une réservation
 	 * Convention : séparer les numeros par des '-'.
 	 */
-	public LinkedList<Integer> getNumeroTables(int numResa){
+	public LinkedList<Integer> getNumeroTables(int numResa) {
         if (numResa <= 0) {
             return null;
         }
@@ -432,7 +429,8 @@ public class Controleur{
 	}
 
 	public String getNom(int numResa) {
-		return "M. Dieudo";
+		String resultat = ReservationFactoryConcrete.get().getTableBD().getNomRes(numResa);
+    return resultat;
 	}
 
 	public int getNumResaCmdSelectionne(){
