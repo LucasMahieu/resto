@@ -46,3 +46,6 @@
 * Interface textuelle au poêle
 * Ajout de méthodes supplémentaires d'accès à la BD
 * Début du patron Observateur
+
+## Lundi 26 avril
+* Finalisation de l'interface de Commande : FINIE.
