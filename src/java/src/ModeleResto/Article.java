@@ -7,6 +7,29 @@ public class Article extends BDitem {
 	public Article(){
 	}
 
+    public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
+        if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+            return -1;
+        }
+        String requete = new String("INSERT INTO sontCommandes VALUES");
+        requete += "('" + nomArticle;
+        requete += "', " + quantite;
+        requete += ", " + numeroReservation + ")";
+
+        System.out.println(requete);
+        try {
+            setStmt(getCon().createStatement());
+            getStmt().executeUpdate(requete);
+            getStmt().close();
+            return 0;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête d'ajout d'article."); 
+            e.printStackTrace(System.err);
+            return -1;
+        }
+    }
+
 	public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
 		String requete = new String("SELECT * FROM Article ");
 		if (nomArticle != null || prixArticle != -1 || specialite != null) {
@@ -47,31 +70,6 @@ public class Article extends BDitem {
 			System.err.println("Erreur pour faire la requête.");
 			e.printStackTrace(System.err);
 			return null;
-		}
-	}
-
-	public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
-		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
-			return -1;
-		}
-		String requete = new String("INSERT INTO sontCommandes VALUES");
-		requete += "(" + nomArticle;
-		requete += ", " + quantite;
-		requete += ", " + numeroReservation + ")";
-
-		System.out.println(requete);
-		try {
-			setStmt(getCon().createStatement());
-			getStmt().executeUpdate(requete);
-			getStmt().close();
-			setChanged();
-			notifyObservers(numeroReservation);
-			return 0;
-		}
-		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête d'ajout d'article.");
-			e.printStackTrace(System.err);
-			return -1;
 		}
 	}
 
