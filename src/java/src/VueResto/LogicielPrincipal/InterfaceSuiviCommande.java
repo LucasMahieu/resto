@@ -185,26 +185,58 @@ public class InterfaceSuiviCommande extends Observateur{
     public void effetBoutonRechercheSuivi(){
       // Affiche dans le tableau uniquement les données correspondant au numéro de table ou numéro de réservation sélectionné
       System.out.println("Effet Bouton Recherche Suivi");
+      if(this.getTextFieldNTable().equals("") && this.getTextFieldNom().equals("")){
+        this.remiseAZeroTableau();
+        return;
+      }
+      // On nettoie le tableau
+      ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
+      ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+      // On recharge une nouvelle table correspondant à la recherche 
+      // TODO : définir le nombre de tables
+      for(int table = 0; table < 1000; table++){
+        int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
+        if ( table <= 0){
+          continue;
+        }
+        else if(Integer.parseInt(this.getTextFieldNTable().getText())==(table) ||
+            Integer.parseInt(this.getTextFieldNom().getText())==(numeroReservationCourant)){
+
+          System.out.println("Une ou  plusieurs réservations ont été trouvées ");
+          // On affiche les reservations trouvées
+          String etatCommande = Controleur.get().getEtatCommande(table);
+          String nomCommande = Controleur.get().getNom(table);
+          String date = Controleur.get().getDateNow();
+          String tempsEtat = Controleur.get().getDateNow();
+          System.out.println(etatCommande);
+          Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+          ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+        }
+      }
+    }
+
+    public void remiseAZeroTableau(){
+      System.out.println("remiseAZeroTableau");
       // On nettoie la table
       ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
       ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
       // On recharge une nouvelle table correspondant à la recherche 
       // TODO : définir le nombre de tables
-      for(int i = 0; i < 1000; i++){
-        int numeroReservationCourant = Controleur.get().getNumeroReservation(i );
-        if ( i <= 0){
+      for(int table = 0; table < 1000; table++){
+        int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
+        if ( table <= 0){
           continue;
         }
         else{
           System.out.println("Une ou  plusieurs réservations ont été trouvées ");
           // On affiche les reservations trouvées
-          Object[] o = {"tintin","12345","5","10-11-12","BOISSON","10","5/10"};
-          String etatCommande = Controleur.get().getEtatCommande(i);
-          String nomCommande = Controleur.get().getNom(i);
-          String date = Controleur.get().getDate();
-          String tempsEtat = Controleur.get().getDate();
-          String heureArrivee = Controleur.get().getDate();
+          String etatCommande = Controleur.get().getEtatCommande(table);
+          String nomCommande = Controleur.get().getNom(table);
+          String date = Controleur.get().getDateNow();
+          String tempsEtat = Controleur.get().getDateNow();
           System.out.println(etatCommande);
+          Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+          ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
         }
       }
     }

@@ -70,6 +70,11 @@ public class Controleur{
         heureNow = sdfHeure.format(date);
         return this.heureNow;
     }
+    
+    // TODO implémenter cette méthode
+    public String getEtatCommande(int numReservation){
+      return "BOISSON";
+    }
 
     public String getServiceNow() {
         serviceNow = "MIDI";

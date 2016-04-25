@@ -192,14 +192,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				System.out.println(message);
 			}
 		}else if(source == interfaceSuiviCommande.getButtonRechercheSuivi()){
-			if ( interfaceSuiviCommande.getTextFieldNTable().getText().equals("") 
-					&& interfaceSuiviCommande.getTextFieldNom().getText().equals("")){
-				System.out.println("Erreur Recherche Commande");
-				JOptionPane.showMessageDialog(this,"La recherche ne peut aboutir sans aucun paramètre",
-						"Erreur Recherche Commande",JOptionPane.ERROR_MESSAGE);
-			}else{
-              interfaceSuiviCommande.effetBoutonRechercheSuivi();
-			}
+          interfaceSuiviCommande.effetBoutonRechercheSuivi();
 		}else if (source == interfaceSuiviCommande.getButtonOuvrir()){
           interfaceSuiviCommande.effetBoutonOuvrir();
           System.out.println("Bouton ouvrir suiviCommande");		
