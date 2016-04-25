@@ -55,14 +55,14 @@ public class Article extends BDitem {
             return -1;
         }
         String requete = new String("INSERT INTO sontCommandes VALUES");
-        requete += "(" + nomArticle;
-        requete += ", " + quantite;
+        requete += "('" + nomArticle;
+        requete += "', " + quantite;
         requete += ", " + numeroReservation + ")";
 
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
-						getStmt().executeUpdate(requete);
+            getStmt().executeUpdate(requete);
             getStmt().close();
             return 0;
         }

@@ -51,7 +51,7 @@ public class Controleur{
 	 */
 	public int ajouterArticle(String nom, int quantite, int numResa){
 		// ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-        return 666;
+        return ReservationFactoryConcrete.get().getArticleBD().ajoutArticle(nom, quantite, numResa);
 	}
 
     public HashMap<String, Integer> getArticlesCommandes(int numResa) {
