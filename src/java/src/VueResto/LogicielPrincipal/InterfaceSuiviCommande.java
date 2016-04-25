@@ -185,7 +185,7 @@ public class InterfaceSuiviCommande extends Observateur{
     public void effetBoutonRechercheSuivi(){
       // Affiche dans le tableau uniquement les données correspondant au numéro de table ou numéro de réservation sélectionné
       System.out.println("Effet Bouton Recherche Suivi");
-      if(this.getTextFieldNTable().equals("") && this.getTextFieldNom().equals("")){
+      if(this.getTextFieldNTable().getText().equals("")){
         this.remiseAZeroTableau();
         return;
       }
@@ -196,11 +196,10 @@ public class InterfaceSuiviCommande extends Observateur{
       // TODO : définir le nombre de tables
       for(int table = 0; table < 1000; table++){
         int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
-        if ( table <= 0){
+        if ( numeroReservationCourant <= 0){
           continue;
         }
-        else if(Integer.parseInt(this.getTextFieldNTable().getText())==(table) ||
-            Integer.parseInt(this.getTextFieldNom().getText())==(numeroReservationCourant)){
+        else if(Integer.parseInt(this.getTextFieldNTable().getText())==(table)){
 
           System.out.println("Une ou  plusieurs réservations ont été trouvées ");
           // On affiche les reservations trouvées
@@ -224,7 +223,7 @@ public class InterfaceSuiviCommande extends Observateur{
       // TODO : définir le nombre de tables
       for(int table = 0; table < 1000; table++){
         int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
-        if ( table <= 0){
+        if ( numeroReservationCourant <= 0){
           continue;
         }
         else{
