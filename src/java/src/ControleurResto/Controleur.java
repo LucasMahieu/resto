@@ -35,9 +35,9 @@ public class Controleur{
         date = new Date();
         dateNow = sdfDate.format(date);
         heureNow = sdfHeure.format(date);
-        serviceNow = "midi";
+        serviceNow = "MIDI";
         if(Integer.parseInt(heureNow) >= DEBUT_SERVICE_SOIR){
-            serviceNow = "soir";
+            serviceNow = "SOIR";
         }
     }
 
