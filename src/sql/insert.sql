@@ -90,6 +90,18 @@ insert into Service
 	Values('MIDI', '21/07/2015', 'carte bar');
 insert into Service
 	Values('SOIR', '21/07/2015', 'carte repas');
+insert into Service
+	Values('SOIR', '26/07/2015', 'carte repas');
+insert into Service
+	Values('MIDI', '26/04/2016', 'carte bar');
+insert into Service
+	Values('SOIR', '27/07/2015', 'carte repas');
+insert into Service
+	Values('MIDI', '27/04/2016', 'carte bar');
+insert into Service
+	Values('SOIR', '28/07/2015', 'carte repas');
+insert into Service
+	Values('MIDI', '28/04/2016', 'carte bar');
 
 -- RESERVATION
 insert into Reservation
@@ -173,7 +185,13 @@ insert into Boisson
 insert into Menu
 	Values('menu enfant', 'steak frites');
 insert into Menu
-	Values('menu arabe', 'couscous');
+	Values('menu toqué', 'couscous');
+insert into Menu
+	Values('menu Goulu', 'couscous');
+insert into Menu
+	Values('menu pêcheur', 'couscous');
+insert into Menu
+	Values('menu chasseur', 'Tajin');
 
 
 -- ESTRESERVEE (NumeroTable, NumeroReservation)
@@ -238,9 +256,6 @@ insert into Disponibles
 	
 insert into Disponibles
 	Values('carpaccio', 'carte repas');
-	
-	
-
 	
 -- ESTCOMPOSE
 
