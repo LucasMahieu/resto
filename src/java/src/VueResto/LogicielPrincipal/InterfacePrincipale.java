@@ -122,7 +122,6 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				}
 			}
 			/* COMMANDE */
-
 		}else if(source == interfaceCommande.getButtonAjout()){
 			String message = "";
 			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
@@ -144,7 +143,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			}
 			if( interfaceCommande.getTabbedPaneArticle().getSelectedComponent() == interfaceCommande.getPanelMenu()){
 				System.out.println("Bouton d'Ajout d'un Menu");
-				interfaceCommande.ajouterArticlesSelectionnes(interfaceCommande.getButtonArticleMenu());
+				interfaceCommande.ajouterArticlesMenuSelectionnes(interfaceCommande.getButtonArticleMenu());
 			}
 			System.out.println(message);
 			interfaceCommande.setSelectedButtonArticle(false);
