@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.lang.*;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -59,22 +60,65 @@ public class InterfaceTextCommande extends Observateur{
 	}
 	
 	public void  ajouterPlat() {
-		System.out.println("Veuillez indiquer le plat commandé");
-		/*
-		System.out.println("(1) Entrée");
-		System.out.println("(2) Plat principal");
-		System.out.println("(3) Dessert");
-		System.out.println("(4) Boisson");
-		System.out.println("(5) Menu");
-		*/
-		String plat = sc.nextLine();
-		
-		System.out.println("Veuillez indiquer la quantité de ce plat commandé");
-		int quantite = Integer.parseInt(sc.nextLine());
-		
-		
-		Controleur.get().ajouterArticle(plat, quantite, 
-			Controleur.get().getNumeroReservation(table));
+
+			System.out.println("Veuillez indiquer le plat commandé");
+			System.out.println("(1) Entrée");
+			System.out.println("(2) Plat principal");
+			System.out.println("(3) Dessert");
+			System.out.println("(4) Boisson");
+			System.out.println("(5) Menu");
+			String choix = sc.nextLine();
+			LinkedList<String> Affichage= new LinkedList<String>();
+			if(choix.equals("1")){
+				Affichage=Controleur.get().getListeArticles("Entree");
+				System.out.println(Affichage.toString());
+				System.out.println("Selectionnez votre entree");
+				String plat = sc.nextLine();
+				System.out.println("Veuillez indiquer la quantité de cette entree commandée");
+				int quantite = Integer.parseInt(sc.nextLine());
+				Controleur.get().ajouterArticle(plat, quantite,
+						Controleur.get().getNumeroReservation(table));
+			}
+			if(choix.equals("2")){
+				Affichage=Controleur.get().getListeArticles("Plat");
+				System.out.println(Affichage.toString());
+				System.out.println("Selectionnez votre plat");
+				String plat = sc.nextLine();
+				System.out.println("Veuillez indiquer la quantité de ce plat commandé");
+				int quantite = Integer.parseInt(sc.nextLine());
+				Controleur.get().ajouterArticle(plat, quantite,
+						Controleur.get().getNumeroReservation(table));
+			}
+			if(choix.equals("3")){
+				Affichage=Controleur.get().getListeArticles("Dessert");
+				System.out.println(Affichage.toString());
+				System.out.println("Selectionnez votre Dessert");
+				String plat = sc.nextLine();
+				System.out.println("Veuillez indiquer la quantité de ce dessert commandé");
+				int quantite = Integer.parseInt(sc.nextLine());
+				Controleur.get().ajouterArticle(plat, quantite,
+						Controleur.get().getNumeroReservation(table));
+			}
+			if(choix.equals("4")){
+				Affichage=Controleur.get().getListeArticles("Boisson");
+				System.out.println(Affichage.toString());
+				System.out.println("Selectionnez votre Boisson");
+				String plat = sc.nextLine();
+				System.out.println("Veuillez indiquer la quantité de cette boisson commandée");
+				int quantite = Integer.parseInt(sc.nextLine());
+				Controleur.get().ajouterArticle(plat, quantite,
+						Controleur.get().getNumeroReservation(table));
+
+			}
+			if(choix.equals("5")){
+				Affichage=Controleur.get().getListeArticles("Menu");
+				System.out.println(Affichage.toString());
+				System.out.println("Selectionnez votre Menu");
+				String menu = sc.nextLine();
+				System.out.println("Veuillez indiquer la quantité de ce plat commandé");
+				int quantite = Integer.parseInt(sc.nextLine());
+			}
+
 	}
 	
 	public void supprimerPlat() {
