@@ -34,7 +34,7 @@ public class Controleur{
         numResaSuiviSelectionee = 0;
         date = new Date();
         dateNow = sdfDate.format(date);
-        heureNow = sdfHeureRformat(date);
+        heureNow = sdfHeure.format(date);
         serviceNow = "MIDI";
         if(Integer.parseInt(heureNow) >= DEBUT_SERVICE_SOIR){
             serviceNow = "SOIR";
