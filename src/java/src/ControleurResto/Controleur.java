@@ -354,6 +354,10 @@ public class Controleur{
     }
 
 
+    /* 
+     * TODO : ne selectionner que les articles disponibles sur la carte
+     * à la date actuelle !!
+     */
     public LinkedList<String> getListeArticles(String type)
     {
         LinkedList<String> resultat = new LinkedList<String>();
