@@ -45,6 +45,57 @@ public class Article extends BDitem {
 		}
 	}
 
+
+	/**
+	 * Ajoute un menu
+	 * -1 -> Erreur
+	 */
+	public int ajoutMenu(String nomMenu, int quantite, int numeroReservation, String  nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
+		if (nomMenu == null || quantite <= 0 || numeroReservation <= 0 || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
+			return -1;
+		}
+
+		ajoutArticle(nomMenu, quantite, numeroReservation);
+
+		int nombreDejaCommande;
+		String requete;
+		nombreDejaCommande = dejaCommandeMenu(numeroReservation, nomMenu, nomBoisson, nomEntree, nomPlat, nomDessert);
+		if (nombreDejaCommande > 0) {
+			requete = new String("UPDATE MenuCommandes ");
+			requete += "SET quantiteArticle = " + (nombreDejaCommande + quantite) + " ";
+			requete += "WHERE numeroReservation = " + numeroReservation;
+			requete += "AND nomMenu = '" + nomMenu +"' ";
+			requete += "AND nomBoisson = '" + nomBoisson +"' ";
+			requete += "AND nomEntree = '" + nomEntree +"' ";
+			requete += "AND nomPlat = '" + nomPlat +"' ";
+			requete += "AND nomDessert = '" + nomDessert +"' ";		 
+		}
+		else {
+			requete = new String("INSERT INTO sontCommandes VALUES");
+			requete += "('" + numeroReservation;
+			requete += "', " + nomMenu;
+			requete += ", " + nomBoisson + ")";
+			requete += ", " + nomEntree + ")";
+			requete += ", " + nomPlat + ")";
+			requete += ", " + nomDessert + ")";
+		}
+
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			getStmt().executeUpdate(requete);
+			getStmt().close();
+			return 0;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête d'ajout de menu."); 
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
+
+
+
 	/**
 	 * Supprime quantité nomArticle de la reservation n°numeroReservation
 	 */
@@ -84,7 +135,6 @@ public class Article extends BDitem {
 	 * Combien de ce "nomArticle" ont été commandés
 	 * -1 -> Erreur
 	 */
-
 	public int dejaCommande(String nomArticle, int numeroReservation) {
 		int ret = 0;
 		if (nomArticle == null || numeroReservation <= 0) {
@@ -111,6 +161,43 @@ public class Article extends BDitem {
 			return -1;
 		}
 	}
+
+	/**
+	 * Combien de ce menu ont été commandés
+	 * -1 -> Erreur
+	 */
+	public int dejaCommandeMenu(int numeroReservation, String nomMenu, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
+		if (numeroReservation <= 0 || nomMenu == null || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
+			return -1;
+		}
+		int ret = 0;
+		String requete = new String("SELECT quantiteArticle ");
+		requete += "FROM menuCommandes ";
+		requete += "WHERE numeroReservation = " + numeroReservation;
+		requete += "AND nomMenu = '" + nomMenu +"' ";
+		requete += "AND nomBoisson = '" + nomBoisson +"' ";
+		requete += "AND nomEntree = '" + nomEntree +"' ";
+		requete += "AND nomPlat = '" + nomPlat +"' ";
+		requete += "AND nomDessert = '" + nomDessert +"' ";		 
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			if (rset.next()) {
+				ret = rset.getInt(1);
+			}
+			rset.close();
+			getStmt().close();
+			return ret;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête d'article."); 
+			e.printStackTrace(System.err);
+			return -1;
+		}
+	}
+
+
 
 	/**
 	 * Retourne toutes les informations sur l'article en question
@@ -157,6 +244,7 @@ public class Article extends BDitem {
 			return null;
 		}
 	}
+
 	/**
 	 * Retourne les articles commandés pour une reservation
 	 */
@@ -184,6 +272,35 @@ public class Article extends BDitem {
 			return null;
 		}
 	}
+
+	/**
+	 * Retourne les articles commandés pour une reservation et un menu
+	 */
+	public LinkedList<String> getMenuCommandes(int numRes) {
+		LinkedList<String> res = new LinkedList<String>();
+		if (numRes <= 0) {
+			return res;
+		}
+		String requete = new String("SELECT nomBoisson, nomEntree, nomPlat, nomDessert FROM menuCommandes");
+		requete += "WHERE numeroReservation = " + numRes;
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			while (rset.next()) {
+				res.add(rset.getString(1));
+			}
+			return res;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête.");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
+
+
 	/**
 	 * Retourne le prix de l'aticle demandé
 	 */

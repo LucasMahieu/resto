@@ -57,6 +57,19 @@ public class Controleur{
     }
 
     /**
+     * Ajoute à la BD la quantité de menus 'nom' à la reservation numResa + VERIFIE qu'il existe pas déja
+     * -1 -> Erreur
+     *  0 -> Réussite
+     */
+    public int ajouterMenu(String nomMenu, int quantite, int numResa, String  boisson, String entree, String plat, String dessert){
+        // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
+			return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+    }
+
+
+
+
+    /**
      * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
      * -1 -> Erreur
      *  0 -> Réussite
@@ -468,13 +481,19 @@ public class Controleur{
     }
 
 
-    public HashMap<String, Integer> getChoixCommandes() {
-	HashMap<String, Integer> h = new HashMap<String, Integer>();
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
-	//TODO à vérifier si c 'est bien ca qu on doit retourner
-        return h;
+    public HashMap<String, Integer> getChoixCommandes(int numResa) {
+			HashMap<String, Integer> h = new HashMap<String, Integer>();
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
+			for (String choix : ReservationFactoryConcrete.get().getArticleBD().getMenuCommandes(numResa)) {
+					if (h.containsKey(choix)) {
+							h.put(choix, h.get(choix) + 1);
+					} else {
+							h.put(choix, 1);
+					}
+			}
+      return h;
     }
 }
