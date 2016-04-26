@@ -365,14 +365,28 @@ public class InterfaceCommande extends Observateur{
 	public void ajouterArticlesMenuSelectionnes(ArrayList<JToggleButton> l){
 		for(int j=0; j<l.size(); j++){
 			if(l.get(j).isSelected()){
-				Controleur.get().ajouterMenu(l.get(j).getText()
-						,(int)spinnerQuantite.getValue()
-						,Controleur.get().getNumResaCmdSelectionne()
-						,comboBoxBoisson.getSelectedItem().toString()
-						,comboBoxEntree.getSelectedItem().toString()
-						,comboBoxPlat.getSelectedItem().toString()
-						,comboBoxDessert.getSelectedItem().toString()
-				);
+				String nomMenu = l.get(j).getText();
+				int quantite = (int)spinnerQuantite.getValue();
+				int numResa = Controleur.get().getNumResaCmdSelectionne();
+				String boisson = "" ;
+				Object o = null;
+				if ( (o=comboBoxBoisson.getSelectedItem()) != null){
+					boisson = o.toString();
+				}
+				String entree = "";
+				if ( (o=comboBoxEntree.getSelectedItem()) != null){
+					entree = o.toString();
+				}
+				String plat = "";
+				if ( (o=comboBoxPlat.getSelectedItem()) != null){
+					plat = o.toString();
+				}
+				String dessert = "";
+				if ( (o=comboBoxDessert.getSelectedItem()) != null){
+					dessert = o.toString();
+				}
+				Controleur.get().ajouterMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+
 				// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
 				updateRecap(Controleur.get().getNumResaCmdSelectionne());
 				Controleur.get().validate();
