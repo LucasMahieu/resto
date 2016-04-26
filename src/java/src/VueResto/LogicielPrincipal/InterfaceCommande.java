@@ -418,10 +418,11 @@ public class InterfaceCommande extends Observateur{
 	 */
 	public void updateComboBoxMenu(String menuSelectionne){
 		System.out.println("COMBOBOX DU MENU  " + menuSelectionne);
-		String[] menuBoisson = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON").toArray();
-		String[] menuEntree = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "ENTREE").toArray();
-		String[] menuPlat = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "PLAT").toArray();
-		String[] menuDessert = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "DESSERT").toArray();
+		String[] menuBoisson = Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON").toArray(new String[0]);
+		String[] menuEntree = Controleur.get().getListeArticlesMenu(menuSelectionne, "ENTREE").toArray(new String[0]);
+		String[] menuPlat = Controleur.get().getListeArticlesMenu(menuSelectionne, "PLAT").toArray(new String[0]);
+		System.out.println("plat = " + menuPlat[0]);
+		String[] menuDessert = Controleur.get().getListeArticlesMenu(menuSelectionne, "DESSERT").toArray(new String[0]);
 		this.comboBoxBoisson = new JComboBox<String>(menuBoisson);
 		this.comboBoxEntree = new JComboBox<String>(menuEntree);
 		this.comboBoxPlat = new JComboBox<String>(menuPlat);

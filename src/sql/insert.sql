@@ -68,14 +68,33 @@ insert into Article
 	Values('fraise', 16, 'français');
 insert into Article
 	Values('perrier', 3, 'français');
+INSERT INTO  Article
+VALUES ('canard', 16, 'français');
+INSERT INTO Article
+VALUES ('pâté',12, 'français');
+Insert INTO Article
+VALUES ('saumon', 15, 'français');
+Insert INTO Article
+VALUES ('foie gras', 12, 'français');
+INSERT INTO Article
+VALUES ('saint jacques', 13, 'français');
+INSERT INTO Article
+VALUES ('burger',8,'americain');
+INSERT INTO Article
+VALUES ('pizza',9,'italien');
+INSERT INTO Article
+VALUES ('fondant chocolat',5,'français');
+INSERT INTO Article
+Values ('cognac',10,'français');
 
 insert into Article
 	Values('menu enfant', 12, NULL);
 insert into Article
 	Values('menu toqué', 18, NULL);
 insert into Article
-	Values('menu goulu', 100, NULL);
-
+	Values('menu goulu', 10, NULL);
+INSERT INTO Article
+		VALUES ('menu gourmet', 50,NULL);
 	
 -- SERVICE
 insert into Service
@@ -140,7 +159,24 @@ insert into choix
 	Values('poulet');
 insert into choix
 	Values('fraise');
-
+INSERT INTO  choix
+	VALUES ('canard');
+INSERT INTO choix
+	VALUES ('pâté');
+Insert INTO choix
+		VALUES ('saumon');
+Insert INTO choix
+		VALUES ('foie gras');
+INSERT INTO choix
+		VALUES ('saint jacques');
+INSERT INTO choix
+		VALUES ('burger');
+INSERT INTO choix
+		VALUES ('pizza');
+INSERT INTO choix
+VALUES ('fondant chocolat');
+INSERT INTO choix
+Values ('cognac');
 -- PLAT
 insert into Plat
 	Values('steak frites');
@@ -150,6 +186,16 @@ insert into Plat
 	Values('pates bolo');
 insert into Plat
 	Values('poulet');
+INSERT INTO  Plat
+VALUES ('canard');
+INSERT INTO Plat
+VALUES ('pâté');
+Insert INTO Plat
+VALUES ('saumon');
+INSERT INTO Plat
+		VALUES ('burger');
+INSERT INTO Plat
+VALUES ('pizza');
 
 -- ENTREE	
 insert into Entree
@@ -160,7 +206,10 @@ insert into Entree
 	Values('salade tunisienne');
 insert into Entree
 	Values('salade cesar');
-
+Insert INTO Entree
+VALUES ('foie gras');
+INSERT INTO Entree
+VALUES ('saint jacques');
 -- DESSERT 
 insert into Dessert
 	Values('glace');
@@ -170,6 +219,8 @@ insert into Dessert
 	Values('fraise');
 insert into Dessert
 	Values('gateaux maroc');
+INSERT INTO Dessert
+		VALUES ('fondant chocolat');
 
 -- BOISSON
 insert into Boisson
@@ -180,7 +231,8 @@ insert into Boisson
     Values('perrier');
 insert into Boisson
     Values('the');
-    
+INSERT INTO Boisson
+		Values ('cognac');
 
 -- MENU
 insert into Menu
@@ -189,6 +241,8 @@ insert into Menu
 	Values('menu toqué', 'couscous');
 insert into Menu
 	Values('menu goulu', 'pates bolo');
+INSERT INTO Menu
+		Values ('menu gourmet', 'canard');
 
 -- ESTRESERVEE (NumeroTable, NumeroReservation)
 
@@ -241,14 +295,34 @@ insert into EstCompose
 	Values('menu enfant', 'coca');
 insert into EstCompose
 	Values('menu enfant', 'glace');
-	
+INSERT INTO EstCompose
+		Values ('menu enfant', 'burger');
+INSERT INTO EstCompose
+Values ('menu enfant', 'pizza');
+
 insert into EstCompose
 	Values('menu toqué', 'salade tunisienne');
 insert into EstCompose
 	Values('menu toqué', 'the');
 insert into EstCompose
 	Values('menu toqué', 'glace');
-	
+INSERT INTO EstCompose
+	Values ('menu goulu', 'burger');
+
+INSERT INTO EstCompose
+Values ('menu gourmet', 'saumon');
+INSERT INTO EstCompose
+Values ('menu gourmet', 'saint jacques ');
+INSERT INTO EstCompose
+Values ('menu gourmet', 'cognac');
+INSERT INTO EstCompose
+Values ('menu gourmet', 'pâté');
+INSERT INTO EstCompose
+Values ('menu gourmet', 'foie gras');
+INSERT INTO EstCompose
+Values ('menu gourmet', 'pâté');
+INSERT INTO EstCompose
+Values ('menu gourmet', 'fondant chocolat');
 -- SONTVOISINES
 
 insert into SontVoisines

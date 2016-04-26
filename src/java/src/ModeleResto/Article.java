@@ -12,53 +12,84 @@ public class Article extends BDitem {
      * -1 -> Erreur
      */  
     public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
-	if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
-	    return -1;
-	}
-	int nombreDejaCommande;
-	String requete;
-	nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
-	if (nombreDejaCommande > 0) {
-	    requete = new String("UPDATE sontCommandes ");
-	    requete += "SET quantiteArticle = " + (nombreDejaCommande + quantite) + " ";
-	    requete += "WHERE nomArticle = '" + nomArticle +"' ";
-	    requete += "AND numeroReservation = " + numeroReservation;
-	}
-	else {
-	    requete = new String("INSERT INTO sontCommandes VALUES");
-	    requete += "('" + nomArticle;
-	    requete += "', " + numeroReservation;
-	    requete += ", " + quantite + ")";
-	}
+        if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+            return -1;
+        }
+        int nombreDejaCommande;
+        String requete;
+        nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
+        if (nombreDejaCommande > 0) {
+            requete = new String("UPDATE sontCommandes ");
+            requete += "SET quantiteArticle = " + (nombreDejaCommande + quantite) + " ";
+            requete += "WHERE nomArticle = '" + nomArticle +"' ";
+            requete += "AND numeroReservation = " + numeroReservation;
+        }
+        else {
+            requete = new String("INSERT INTO sontCommandes VALUES");
+            requete += "('" + nomArticle;
+            requete += "', " + numeroReservation;
+            requete += ", " + quantite + ")";
+        }
 
-	System.out.println(requete);
-	try {
-	    setStmt(getCon().createStatement());
-	    getStmt().executeUpdate(requete);
-	    getStmt().close();
-	    return 0;
-	}
-	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête d'ajout d'article."); 
-	    e.printStackTrace(System.err);
-	    return -1;
-	}
+        System.out.println(requete);
+        try {
+            setStmt(getCon().createStatement());
+            getStmt().executeUpdate(requete);
+            getStmt().close();
+            return 0;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête d'ajout d'article."); 
+            e.printStackTrace(System.err);
+            return -1;
+        }
     }
 
+    public String typeArticle(String nomArticle) {
+        String ret = new String();
+
+        try {
+            ResultSet rsetBoissons = getArticle(nomArticle, -1, null, "BOISSON");
+            ResultSet rsetEntrees = getArticle(nomArticle, -1, null, "ENTREE");
+            ResultSet rsetPlats = getArticle(nomArticle, -1, null, "PLAT");
+            ResultSet rsetDesserts = getArticle(nomArticle, -1, null, "DESSERT");
+
+            if (rsetBoissons.isBeforeFirst()) {
+                return "BOISSON";
+            }
+            if (rsetEntrees.isBeforeFirst()) {
+                return "ENTREE";
+            }
+            if (rsetPlats.isBeforeFirst()) {
+                return "PLAT";
+            }
+            if (rsetDesserts.isBeforeFirst()) {
+                return "DESSERT";
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête de type d'article."); 
+            e.printStackTrace(System.err);
+            return null;
+        }
+        return null;
+    }
 
     /**
      * Ajoute un menu dans menucommandes
      * -1 -> Erreur
      */
     public int ajoutMenu(String nomMenu, int quantite, int numeroReservation, String  nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
-	if (nomMenu == null || quantite <= 0 || numeroReservation <= 0 || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
-	    return -1;
-	}
 
-	ajoutArticle(nomMenu, quantite, numeroReservation);
+        if (nomMenu == null || quantite <= 0 || numeroReservation <= 0 || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
+            return -1;
+        }
 
-	int nombreDejaCommande;
-	String requete;
+        ajoutArticle(nomMenu, quantite, numeroReservation);
+
+        int nombreDejaCommande;
+        String requete;
+
 	nombreDejaCommande = dejaCommandeMenuCommandes(nomMenu, numeroReservation, nomBoisson, nomEntree, nomPlat, nomDessert);
 	if (nombreDejaCommande > 0) {
 	    requete = new String("UPDATE MenuCommandes ");
@@ -102,35 +133,35 @@ public class Article extends BDitem {
      * Supprime quantité nomArticle de la reservation n°numeroReservation
      */
     public int supprimerArticle(String nomArticle, int quantite, int numeroReservation) {
-	if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
-	    return -1;
-	}
-	int nombreDejaCommande;
-	String requete;
-	nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
-	if (nombreDejaCommande <= quantite) {
-	    requete = new String("DELETE FROM sontCommandes ");
-	    requete += "WHERE nomArticle = '" + nomArticle +"' ";
-	    requete += "AND numeroReservation = " + numeroReservation;
-	}
-	else {
-	    requete = new String("UPDATE sontCommandes ");
-	    requete += "SET quantiteArticle=" + (nombreDejaCommande-quantite) + " ";
-	    requete += "WHERE numeroReservation=" + numeroReservation + " ";
-	    requete += "AND nomArticle='" + nomArticle + "' ";
-	}
-	System.out.println(requete);
-	try {
-	    setStmt(getCon().createStatement());
-	    getStmt().executeUpdate(requete);
-	    getStmt().close();
-	    return 0;
-	}
-	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête de suppression d'article."); 
-	    e.printStackTrace(System.err);
-	    return -1;
-	}
+        if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+            return -1;
+        }
+        int nombreDejaCommande;
+        String requete;
+        nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
+        if (nombreDejaCommande <= quantite) {
+            requete = new String("DELETE FROM sontCommandes ");
+            requete += "WHERE nomArticle = '" + nomArticle +"' ";
+            requete += "AND numeroReservation = " + numeroReservation;
+        }
+        else {
+            requete = new String("UPDATE sontCommandes ");
+            requete += "SET quantiteArticle=" + (nombreDejaCommande-quantite) + " ";
+            requete += "WHERE numeroReservation=" + numeroReservation + " ";
+            requete += "AND nomArticle='" + nomArticle + "' ";
+        }
+        System.out.println(requete);
+        try {
+            setStmt(getCon().createStatement());
+            getStmt().executeUpdate(requete);
+            getStmt().close();
+            return 0;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête de suppression d'article."); 
+            e.printStackTrace(System.err);
+            return -1;
+        }
     }
 
     /**
@@ -138,30 +169,30 @@ public class Article extends BDitem {
      * -1 -> Erreur
      */
     public int dejaCommande(String nomArticle, int numeroReservation) {
-	int ret = 0;
-	if (nomArticle == null || numeroReservation <= 0) {
-	    return -1;
-	}
-	String requete = new String("SELECT quantiteArticle ");
-	requete += "FROM sontCommandes ";
-	requete += "WHERE nomArticle = '" + nomArticle +"' ";
-	requete += "AND numeroReservation = " + numeroReservation;
-	System.out.println(requete);
-	try {
-	    setStmt(getCon().createStatement());
-	    ResultSet rset = getStmt().executeQuery(requete);
-	    if (rset.next()) {
-		ret = rset.getInt(1);
-	    }
-	    rset.close();
-	    getStmt().close();
-	    return ret;
-	}
-	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête dejaCommande."); 
-	    e.printStackTrace(System.err);
-	    return -1;
-	}
+        int ret = 0;
+        if (nomArticle == null || numeroReservation <= 0) {
+            return -1;
+        }
+        String requete = new String("SELECT quantiteArticle ");
+        requete += "FROM sontCommandes ";
+        requete += "WHERE nomArticle = '" + nomArticle +"' ";
+        requete += "AND numeroReservation = " + numeroReservation;
+        System.out.println(requete);
+        try {
+            setStmt(getCon().createStatement());
+            ResultSet rset = getStmt().executeQuery(requete);
+            if (rset.next()) {
+                ret = rset.getInt(1);
+            }
+            rset.close();
+            getStmt().close();
+            return ret;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête dejaCommande."); 
+            e.printStackTrace(System.err);
+            return -1;
+        }
     }
 
     /**
@@ -273,12 +304,12 @@ public class Article extends BDitem {
 		return null;
 	    }
 	}
-	
+
 	//Puis on cherche dans la table estcompose, quel que soit le type
-	requete = new String("SELECT estCompose.nomArticle FROM estCompose " + type);
-	requete += " WHERE nomMenu = '" + nomMenu + "'";
-	requete += "AND "+type+".nomArticle = estCompose.nomArticle";
-	
+	requete = new String("SELECT e.nomMenu FROM estCompose e, " + type);
+	requete += " WHERE nomMenu='" + nomMenu + "' ";
+	requete += "AND "+type+".nom"+type + "= e.nomMenu";
+
 	System.out.println(requete);
 	try {
 	    setStmt(getCon().createStatement());
@@ -382,8 +413,6 @@ public class Article extends BDitem {
 	    return null;
 	}
     }
-
-	
     /**
      * Supprime quantité nomMenu de la reservation n°numeroReservation //TODO ici, a finir
      */
@@ -428,7 +457,6 @@ public class Article extends BDitem {
 	    return -1;
 	}
     }
-
 
     /**
      * Retourne le prix de l'aticle demandé
