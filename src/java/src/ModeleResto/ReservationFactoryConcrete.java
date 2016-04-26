@@ -68,102 +68,122 @@ public class ReservationFactoryConcrete extends ReservationFactory{
         }
     }
 
-    
+   public int getNombrePersonnes(int numResa) {
+       String requete = new String("SELECT nbPersonnes FROM Reservation ");
+       int ret = 0;
+       requete += "WHERE numeroReservation = " + numResa;
+       System.out.println(requete);
+       try {
+           setStmt(getCon().createStatement());
+           ResultSet rset = getStmt().executeQuery(requete);
+           if (rset.next()) {
+               ret = rset.getInt(1);
+           }
+           rset.close();
+           getStmt().close();
+           return ret;
+       }
+       catch (SQLException e) {
+           System.err.println("Erreur pour faire la requête initRes.");
+           e.printStackTrace(System.err);
+           return -1;
+       }
+   }
 
-    public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
-        String requete = new String("INSERT INTO Reservation VALUES (");
-        int lastRes = getNombreReservations();
-        requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
-        System.out.println(requete);
-        try {
-            setStmt(getCon().createStatement());
-            getStmt().executeUpdate(requete);
-            getStmt().close();
-            lastRes++;
-            reservations.put(lastRes, new ReservationConcrete(lastRes));
-            return lastRes;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête de création de resa");
-            e.printStackTrace(System.err);
-            return -1;
-        }
-    }
+   public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
+       String requete = new String("INSERT INTO Reservation VALUES (");
+       int lastRes = getNombreReservations();
+       requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
+       System.out.println(requete);
+       try {
+           setStmt(getCon().createStatement());
+           getStmt().executeUpdate(requete);
+           getStmt().close();
+           lastRes++;
+           reservations.put(lastRes, new ReservationConcrete(lastRes));
+           return lastRes;
+       }
+       catch (SQLException e) {
+           System.err.println("Erreur pour faire la requête de création de resa");
+           e.printStackTrace(System.err);
+           return -1;
+       }
+   }
 
-    public int getNombreReservations() {
-        String requete = "SELECT COUNT(*) FROM Reservation";
-        System.out.println(requete);
-        try {
-            setStmt(getCon().createStatement());
-            ResultSet rset = getStmt().executeQuery(requete);
-            while (rset.next()) {
-                int ret = rset.getInt(1);
-                rset.close();
-                getStmt().close();
-                return ret;
-            }
-            return -1;
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête getNbClient");
-            e.printStackTrace(System.err);
-            return -1;
-        }
-    }
+   public int getNombreReservations() {
+       String requete = "SELECT COUNT(*) FROM Reservation";
+       System.out.println(requete);
+       try {
+           setStmt(getCon().createStatement());
+           ResultSet rset = getStmt().executeQuery(requete);
+           while (rset.next()) {
+               int ret = rset.getInt(1);
+               rset.close();
+               getStmt().close();
+               return ret;
+           }
+           return -1;
+       }
+       catch (SQLException e) {
+           System.err.println("Erreur pour faire la requête getNbClient");
+           e.printStackTrace(System.err);
+           return -1;
+       }
+   }
 
-    public HashMap<Integer,ReservationConcrete> getReservations(){
-        return reservations;
-    }
+   public HashMap<Integer,ReservationConcrete> getReservations(){
+       return reservations;
+   }
 
-    public static ReservationFactoryConcrete get() {
-        return instanceUnique;
-    }
+   public static ReservationFactoryConcrete get() {
+       return instanceUnique;
+   }
 
-    public void close() {
-        try {
-            getCon().close();
-        }
-        catch (SQLException e) {
-            System.err.println("ECHEC de la fermeture de la connection.");
-            e.printStackTrace(System.err);
-        }
-    }
+   public void close() {
+       try {
+           getCon().close();
+       }
+       catch (SQLException e) {
+           System.err.println("ECHEC de la fermeture de la connection.");
+           e.printStackTrace(System.err);
+       }
+   }
 
-    public void validate() {
-        try {
-            getCon().commit();
-        }
-        catch (SQLException e) {
-            System.err.println("ECHEC de la validation de la transaction.");
-            e.printStackTrace(System.err);
-        }
-    }
+   public void validate() {
+       try {
+           getCon().commit();
+       }
+       catch (SQLException e) {
+           System.err.println("ECHEC de la validation de la transaction.");
+           e.printStackTrace(System.err);
+       }
+   }
 
-    public void cancel() {
-        try {
-            getCon().rollback();
-        }
-        catch (SQLException e) {
-            System.err.println("ECHEC de la validation de la transaction.");
-            e.printStackTrace(System.err);
-        }
-    }
+   public void cancel() {
+       try {
+           getCon().rollback();
+       }
+       catch (SQLException e) {
+           System.err.println("ECHEC de la validation de la transaction.");
+           e.printStackTrace(System.err);
+       }
+   }
 
-    public Article getArticleBD() {
-        return this.article_BD;
-    }
+   public Article getArticleBD() {
+       return this.article_BD;
+   }
 
-    public Table getTableBD() {
-        return this.table_BD;
-    }
+   public Table getTableBD() {
+       return this.table_BD;
+   }
 
-    public Client getClientBD() {
-        return this.client_BD;
-    }
+   public Client getClientBD() {
+       return this.client_BD;
+   }
 
-    public Service getServiceBD() {
-        return this.service_BD;
-    }
+   public Service getServiceBD() {
+       return this.service_BD;
+   }
 }
 
 /*
