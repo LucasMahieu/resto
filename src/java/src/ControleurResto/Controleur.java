@@ -66,14 +66,19 @@ public class Controleur{
 	return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
     }
 
-	/**
+    /**
      * Supprime à la BD le menu 'nomMenu' à la reservation numResa
      * -1 -> Erreur
      *  0 -> Réussite
      */
-    public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){
-        // supprimer à la resa l'article donner avec les bonnes quantités dans la BD
-	return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+    public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){/*
+        // supprimer à la resa l'article donné avec les bonnes quantités dans la BD
+	if (ReservationFactoryConcrete.get().getArticleBD().dejaCommandeMenuCommandes(nomMenu, quantite, numResa, boisson, entree, plat, dessert == 0) {
+		
+	    }
+	    return -1;
+	    return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);*/
+	return 0;
     }
 
     /**
