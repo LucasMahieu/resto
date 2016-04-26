@@ -30,7 +30,7 @@ public class InterfaceReservation extends Observateur{
   private static final int TAILLE_Y_BOUTON = 20;
   private static final int TAILLE_X_BOUTON = 200;
   private RModel rModel;
-  private String titre[] = {"Nom","n° Réservation","n° Table","Date", "Nbr Personne"};
+  private String titre[] = {"Nom","n° Réservation","n° Table","Nombre de personnes","Date","Service"};
   private JTable tableau;
   private static final int POS_X_TABLE = 10;
   private static final int POS_Y_TABLE = 30;
@@ -145,6 +145,7 @@ public class InterfaceReservation extends Observateur{
 
   public void effetBoutonSupprimer(){
     System.out.println("effetBoutonSupprimer");
+    this.miseAjourTableauReservation();
     //TODO : implémenter le bouton Supprimer Reservation
   }
 
@@ -153,9 +154,12 @@ public class InterfaceReservation extends Observateur{
     ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
     ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
     
-    // listeReservations = Controleur.get().getListeReservations();
+    listeReservations = Controleur.get().getListeReservations();
     if(!listeReservations.isEmpty()){
         System.out.println("Une ou  plusieurs réservations ont été trouvées ");
+    }
+    else{
+      System.out.println("liste vide");
     }
 
     for(int numeroReservationCourant : listeReservations){
@@ -166,8 +170,10 @@ public class InterfaceReservation extends Observateur{
         String tempsEtat = Controleur.get().getDateNow();
         System.out.println(etatCommande);
         String table = Controleur.get().getNumeroTables(numeroReservationCourant).toString();
-        //String titre[] = {"Nom","n° Réservation","n° Table",date, "Nbr Personne"};
-        Object[] o = {nomCommande,numeroReservationCourant,table,date,"?-?" }; //TODO nbPersonnesReservations
+        String serviceCourant = Controleur.get().getService(numeroReservationCourant);
+        String nbPersonnes = Controleur.get().getNombrePersonnes(numeroReservationCourant).toString();
+
+        Object[] o = {nomCommande,numeroReservationCourant,table,nbPersonnes,date,serviceCourant}; //TODO nbPersonnesReservations
         ((DefaultTableModel)this.tableau.getModel()).addRow(o);
         ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
     }
