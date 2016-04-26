@@ -120,8 +120,39 @@ public class InterfaceTextCommande extends Observateur{
 				System.out.println(Affichage.toString());
 				System.out.println("Selectionnez votre Menu");
 				String menu = sc.nextLine();
-				System.out.println("Veuillez indiquer la quantité de ce plat commandé");
+				String plat =new String();
+				String entree = new String();
+				String boisson = new String();
+				String dessert = new String();
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Entree");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Entree");
+					entree= sc.nextLine();
+				}
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Plat");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Plat");
+					plat= sc.nextLine();
+				}
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Dessert");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Dessert");
+					dessert= sc.nextLine();
+				}
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Boisson");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Boisson");
+					boisson= sc.nextLine();
+				}
+
+				System.out.println("Veuillez indiquer la quantité de ce menu commandé");
 				int quantite = Integer.parseInt(sc.nextLine());
+				Controleur.get().ajouterMenu(menu,quantite,Controleur.get().getNumeroReservation(table),boisson,
+						entree, plat,dessert);
 			}
 
 	}
