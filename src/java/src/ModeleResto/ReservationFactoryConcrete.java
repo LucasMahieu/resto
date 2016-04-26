@@ -22,9 +22,6 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     private String USR;
     private String PSWD;
 
-    // On a déjà 4 réservations dans la BD
-    private int lastRes = 4;
-
     private ReservationFactoryConcrete() {
         System.out.print("Entrez votre nom d'utilisateur pour vous connecter à votre BD : ");
         Scanner sc = new Scanner(System.in);
@@ -55,8 +52,6 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		reservations = new HashMap<Integer, ReservationConcrete>();
         // Ajoute dans reservations toutes les réservations futures.
         initRes(reservations);
-        lastRes = getNombreReservations();
-        client_BD.setLastClient(client_BD.getNombreClient());
     }
 
     /*
@@ -75,9 +70,9 @@ public class ReservationFactoryConcrete extends ReservationFactory{
                 if (turfu(date)) {
                     reservations.put(numRes, new ReservationConcrete(numRes));
                 }
-				rset.close();
-				getStmt().close();
 			}
+            rset.close();
+            getStmt().close();
             return 0;
 		}
 		catch (SQLException e) {
@@ -107,6 +102,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
     public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
 		String requete = new String("INSERT INTO Reservation VALUES (");
+        int lastRes = getNombreReservations();
 		requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
         System.out.println(requete);
 		try {
