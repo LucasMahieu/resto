@@ -308,8 +308,8 @@ public class Article extends BDitem {
 	}
 	String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes");
 	requete += ", " + etape;
-	requete += "WHERE numeroReservation = " + numRes;
-	requete += "AND sontcommandes.nomarticle = " + etape + ".nomarticle";		    
+	requete += " WHERE numeroReservation = " + numRes;
+	requete += " AND sontcommandes.nomarticle = " + etape + ".nomarticle";		    
 	System.out.println(requete);
 	try {
 	    setStmt(getCon().createStatement());
@@ -350,15 +350,64 @@ public class Article extends BDitem {
 	    return res;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête.");
+	    System.err.println("Erreur pour faire la requête getArticlesMenuCommandes.");
 	    e.printStackTrace(System.err);
 	    return null;
 	}
     }
-
+    //ici
     public int supprimerMenu(String nomMenu, int quantite, int numResa, String boisson, String entree, String plat, String dessert) {
+	
+    /**
+     * Supprime quantité nomArticle de la reservation n°numeroReservation
+     */
+	/*
+    public int supprimerArticle(String nomArticle, int quantite, int numeroReservation) {
+	if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+	    return -1;
+	}
+	int nombreDejaCommande;
+	String requete;
+	nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
+	if (nombreDejaCommande <= quantite) {
+	    requete = new String("DELETE FROM sontCommandes ");
+	    requete += "WHERE nomArticle = '" + nomArticle +"' ";
+	    requete += "AND numeroReservation = " + numeroReservation;
+	}
+	else {
+	    requete = new String("UPDATE sontCommandes ");
+	    requete += "SET quantiteArticle=" + (nombreDejaCommande-quantite) + " ";
+	    requete += "WHERE numeroReservation=" + numeroReservation + " ";
+	    requete += "AND nomArticle='" + nomArticle + "' ";
+	}
+	System.out.println(requete);
+	try {
+	    setStmt(getCon().createStatement());
+	    getStmt().executeUpdate(requete);
+	    getStmt().close();
 	    return 0;
 	}
+	catch (SQLException e) {
+	    System.err.println("Erreur pour faire la requête de suppression d'article."); 
+	    e.printStackTrace(System.err);
+	    return -1;
+	}
+
+*/
+
+
+
+
+
+	    return 0;
+	}
+
+
+
+
+
+
+
 
 
     /**
