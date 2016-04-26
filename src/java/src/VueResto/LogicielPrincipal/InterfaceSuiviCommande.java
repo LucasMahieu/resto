@@ -245,7 +245,7 @@ public class InterfaceSuiviCommande extends Observateur{
 
         System.out.println("Une ou  plusieurs réservations ont été trouvées ");
         // On affiche les reservations trouvées
-        String etatCommande = Controleur.get().getEtatCommande(table);
+        String etatCommande = Controleur.get().getEtatCommande(numeroReservationCourant);
         String nomCommande = Controleur.get().getNom(numeroReservationCourant);
         String date = Controleur.get().getDateNow();
         String tempsEtat = Controleur.get().getDateNow();
@@ -272,7 +272,7 @@ public class InterfaceSuiviCommande extends Observateur{
         else{
           System.out.println("Une ou  plusieurs réservations ont été trouvées ");
           // On affiche les reservations trouvées
-          String etatCommande = Controleur.get().getEtatCommande(table);
+          String etatCommande = Controleur.get().getEtatCommande(numeroReservationCourant);
           String nomCommande = Controleur.get().getNom(numeroReservationCourant);
           String date = Controleur.get().getDateNow();
           String tempsEtat = Controleur.get().getDateNow();
