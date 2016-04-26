@@ -62,7 +62,6 @@ public class InterfaceReservation extends Observateur{
 
   /** constructeur du panel de l'interface de reservation
    * 
-   * @returns interface de reservation
    */
   public InterfaceReservation(){
     int nbBoutons = 0;
@@ -149,6 +148,10 @@ public class InterfaceReservation extends Observateur{
     //TODO : implémenter le bouton Supprimer Reservation
   }
 
+  public void miseAjourTableauReservation(){
+    
+  }
+
   public void activeListener(ActionListener aL){
     boutonReservation.addActionListener(aL);
     boutonSupprimer.addActionListener(aL);
@@ -156,7 +159,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au bouton de reservation de l'interface de reservation
    * 
-   * @returns bouton de reservation
+   * @return bouton de reservation
    */
   public JButton getBoutonReservation(){
     return this.boutonReservation;
@@ -168,7 +171,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder à l'étiquette du nom de l'interface de reservation
    * 
-   * @returns etiquette du nom de reservation
+   * @return etiquette du nom de reservation
    */
   public JLabel getLabelNomReservation(){
     return this.labelNomReservation;
@@ -176,7 +179,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au contenu du champ textuel du nom de l'interface de reservation
    * 
-   * @returns champ de texte du nom de reservation
+   * @return champ de texte du nom de reservation
    */
   public JTextField getTexteNomReservation(){
     return this.texteNomReservation;
@@ -184,7 +187,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder a l'etiquette du telephone  de l'interface de reservation
    * 
-   * @returns etiquette du prenom de reservation
+   * @return etiquette du prenom de reservation
    */
   public JLabel getLabelTelephoneReservation(){
     return this.labelTelephoneReservation;
@@ -192,7 +195,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au contenu du champ textuel du telephone de l'interface de reservation
    * 
-   * @returns champ du texte du prenom de reservation
+   * @return champ du texte du prenom de reservation
    */
   public JTextField getTexteTelephoneReservation(){
     return this.texteTelephoneReservation;
@@ -200,7 +203,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder a l'etiquette du nombre de personnes de l'interface de reservation
    * 
-   * @returns etiquette du nombre de personnes
+   * @return etiquette du nombre de personnes
    */
   public JLabel getLabelNombrePersonnes(){
     return this.labelNombrePersonnes;
@@ -208,7 +211,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au modele du spinner du nombre de personnes de l'interface de reservation
    * 
-   * @returns modele du spinner du nombre de personnes
+   * @return modele du spinner du nombre de personnes
    */
   public SpinnerModel getModelNombrePersonnes(){
     return this.modelNombrePersonnes;
@@ -216,7 +219,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au spinner du nombre de personnes de l'interface de reservation
    * 
-   * @returns spinner du nombre de personnes
+   * @return spinner du nombre de personnes
    */
   public JSpinner getSpinnerNombrePersonnes(){
     return this.spinnerNombrePersonnes;
@@ -224,7 +227,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder a l'etiquette de la date de l'interface de reservation
    * 
-   * @returns etiquette de la date
+   * @return etiquette de la date
    */
   public JLabel getLabelDate(){
     return this.labelDate;
@@ -232,7 +235,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au modele de la date de l'interface de reservation
    * 
-   * @returns modele du spinner de la date
+   * @return modele du spinner de la date
    */
   public SpinnerModel getModelDate(){
     return this.modelDate;
@@ -241,7 +244,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au spinner de la date
    * 
-   * @returns spinner de la date
+   * @return spinner de la date
    */
   public JSpinner getSpinnerDate(){
     return this.spinnerDate;
@@ -249,7 +252,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder a l'editeur du spinner de la date
    * 
-   * @returns editeur du spinner de la date
+   * @return editeur du spinner de la date
    */
   public JSpinner.DateEditor editorDate(){
     return this.editorDate;
@@ -257,7 +260,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder a l'etiquette du service de l'interface de reservation
    * 
-   * @returns etiquette du service
+   * @return etiquette du service
    */
   public JLabel getLabelService(){
     return this.labelService;
@@ -266,7 +269,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au differents services
    * 
-   * @returns tableau de chaines des services
+   * @return tableau de chaines des services
    */
   public String[] getService(){
     return this.service;
@@ -274,7 +277,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder a la combobox du service de l'interface de reservation
    * 
-   * @returns combobox du service
+   * @return combobox du service
    */
   public JComboBox<String> getComboBoxService(){
     return this.comboBoxService;
@@ -282,7 +285,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder a l'etiquette de la localisation de l'interface de reservation
    * 
-   * @returns etiquette de localisation
+   * @return etiquette de localisation
    */
   public JLabel getLabelLocalisation(){
     return this.labelLocalisation;
@@ -290,7 +293,7 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au champ de texte de la localisation de l'interface de reservation
    * 
-   * @returns champ textuel de la localisation 
+   * @return champ textuel de la localisation 
    */
   public JTextField getTexteLocalisation(){
     return this.texteLocalisation;
@@ -298,13 +301,15 @@ public class InterfaceReservation extends Observateur{
 
   /** permet d'acceder au panel de l'interface de reservation
    * 
-   * @returns panel de l'interface de reservation
+   * @return panel de l'interface de reservation
    */
   public JPanel getPanel(){
     return this.panelReservation;
   }
 
   /** permet de modifier les dimensions du panel de l'interface de reservation
+   * @param x abscisse
+   * @param y ordonnee
    * 
    */
   public void setDimension(int x, int y){
@@ -312,12 +317,15 @@ public class InterfaceReservation extends Observateur{
   }
 
   /** !!!NON IMPLEMENTEE!! permet de mettre a jour les donnees de l'interface de reservation
+   * @param o observable
+   * @param arg argument
    * 
    */
   public void update(Observable o, Object arg){
   }
   /**
    * Cette classe est un TableModel Pour le tableau de suivi des commande
+   *
    */
   public class RModel extends AbstractTableModel {
     private Object[][] data;
@@ -329,7 +337,7 @@ public class InterfaceReservation extends Observateur{
 
     /** accesseur du tableau
      *
-     * @returns tableau de RModel
+     * @return tableau de RModel
      */
     public Object[][] getData(){
       return this.data;
@@ -363,6 +371,8 @@ public class InterfaceReservation extends Observateur{
 
     /**
      * * Retourne le titre de la colonne à l'indice spécifié
+     * @param col numero de colonne
+     * @return chaine de caractere dans la colonne demandee
      * */
     public String getColumnName(int col) {
       return this.titre[col];

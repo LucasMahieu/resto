@@ -13,7 +13,7 @@ import java.text.*;
  * et les informations, états, variables du controleur sera cohérent 
  * entre toutes les autres classes
  *
- * -> Ce n'est plus utile avec le patron Singleton car instance unique de cette classe
+ *  Ce n'est plus utile avec le patron Singleton car instance unique de cette classe
  *
  */
 public class Controleur{
@@ -132,7 +132,7 @@ public class Controleur{
 
     /** 
      * Ajoute à la BD la quantité de menus 'nom' à la reservation numResa + VERIFIE qu'il existe pas déja
-     *	@param numMenu nom du menu
+     *	@param nomMenu nom du menu
      *	@param quantite quantite
      *	@param numResa numero de reservation
      *	@param boisson nom de la boisson
@@ -148,7 +148,7 @@ public class Controleur{
 
     /** 
      * Supprime à la BD le menu 'nomMenu' à la reservation numResa, DANS MENU ET DANS MENUCOMMANDES
-     *	@param numMenu nom du menu
+     *	@param nomMenu nom du menu
      *	@param quantite quantite
      *	@param numResa numero de reservation
      *	@param boisson nom de la boisson
@@ -168,7 +168,9 @@ public class Controleur{
 
     /** 
      *  Supprime à la BD la quantité d'article 'nom' à la reservation numResa
-     *	@param numResa numero de la reservation
+     *	@param nom nom de l'article
+     *	@param quantite quantite 
+     *	@param numResa numero de reservation
      *	@return 0 si réussi, -1 sinon
      */
     public int supprimerArticle(String nom, int quantite, int numResa){
@@ -202,6 +204,7 @@ public class Controleur{
     }
 
     /** Cette fonction permet de creer une reservation
+     * @param client nom du client
      *
      *	@return ?
      */
@@ -612,7 +615,7 @@ public class Controleur{
 
     /** 
      *  Retourne le numero de reservation correspondant aux paramètres
-     *	@param nTable numero de la table
+     *	@param numTable numero de la table
      *	@return numéro de la reservation du service courant
      */
     public int getNumeroReservation(int numTable){
@@ -713,7 +716,7 @@ public class Controleur{
 
     /** 
      *  Renvoie les articles a envoyer correspondant a la reservation
-     *	@param numResa numero de la reservation
+     *	@param numeroReservation numero de la reservation
      *	@return HashMap des articles a envoyer
      */
     public HashMap<String, Integer> aEnvoyer(int numeroReservation) {

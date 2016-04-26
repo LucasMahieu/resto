@@ -131,7 +131,7 @@ public class InterfaceSuiviCommande extends Observateur{
 
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
-	 *
+     * @param aL ActionListener de la fenetre
 	 */
 	public void activeListener(ActionListener aL){
 		buttonRechercheSuivi.addActionListener(aL);
@@ -208,11 +208,12 @@ public class InterfaceSuiviCommande extends Observateur{
       int selectedRow = this.tableauArticles.getSelectedRow();
       if(selectedRow >= 0){
         System.out.println("Selected row : " + selectedRow );
-        String numArticleSelected = (String) (this.tableau.getModel()).getValueAt(selectedRow,0);
+        String numArticleSelected = (String) (this.tableauArticles.getModel()).getValueAt(selectedRow,0);
         int quantiteEnvoyee = (int) (this.tableauArticles.getModel()).getValueAt(selectedRow,1);
         System.out.println("Article: " + numArticleSelected);
         System.out.println("quantite: " + quantiteEnvoyee);
         if (numeroReservationArticle > 0){
+          System.out.println("envoi article");
           Controleur.get().estEnvoye(numArticleSelected,numeroReservationArticle,quantiteEnvoyee);
         }
         this.miseAJourTableauArticles();
@@ -313,12 +314,19 @@ public class InterfaceSuiviCommande extends Observateur{
         return;
       }
       System.out.println("Une liste d'article a été trouvée");
+      System.out.println("liste vide: " + articlesReservation.isEmpty());
       // On affiche les articles de la réservation trouvée
       for( Map.Entry<String,Integer> articleSuivi : articlesReservation.entrySet() ){
-        
+        System.out.println("Boucle");
+        System.out.println(articleSuivi.getKey() + " " + articleSuivi.getValue());
         Object[] o = {articleSuivi.getKey(),articleSuivi.getValue()};
         ((DefaultTableModel)this.tableauArticles.getModel()).addRow(o);
         ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
+      }
+      
+      for( int articleSuivi : articlesReservation.values() ){
+        System.out.println("Boucle");
+        System.out.println(articleSuivi);
       }
     }
 
@@ -335,7 +343,7 @@ public class InterfaceSuiviCommande extends Observateur{
 
         /** accesseur du tableau
          *
-         * @returns tableau de SModel
+         * @return tableau de SModel
          */
         public Object[][] getData(){
           return this.data;
