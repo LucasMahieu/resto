@@ -65,6 +65,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
      */
     public int initRes(HashMap<Integer, ReservationConcrete> reservations) {
 		String requete = new String("SELECT numeroReservation, dateService FROM Reservation");
+        System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
 			ResultSet rset = getStmt().executeQuery(requete);
@@ -125,6 +126,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
 	public int getNombreReservations() {
 		String requete = "SELECT COUNT(*) FROM Reservation";
+        System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
 			ResultSet rset = getStmt().executeQuery(requete);
