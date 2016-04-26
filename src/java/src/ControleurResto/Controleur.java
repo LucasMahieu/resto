@@ -403,6 +403,29 @@ public class Controleur{
         return resultat;
     }
 
+		public LinkedList<String> getListeArticlesMenu(String nomMenu, String type)
+    {/*
+        LinkedList<String> resultat = new LinkedList<String>();
+        try {
+            ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(null, -1, null, type);
+            if (rset == null) {
+                return resultat;
+            }
+            while(rset.next()){
+                resultat.add(rset.getString(1));
+            }
+            rset.close();
+            ReservationFactoryConcrete.get().getArticleBD().getStmt().close();
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête.");
+            e.printStackTrace(System.err);
+        }
+        return resultat;*/
+			return null;
+    }
+
+
     public float getPrixArticle(String nomArticle)
     {
         float resultat = -1;
@@ -487,7 +510,7 @@ public class Controleur{
 			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
 			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
 			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
-			for (String choix : ReservationFactoryConcrete.get().getArticleBD().getMenuCommandes(numResa)) {
+			for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandes(numResa)) {
 					if (h.containsKey(choix)) {
 							h.put(choix, h.get(choix) + 1);
 					} else {

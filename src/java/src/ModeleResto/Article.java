@@ -276,7 +276,7 @@ public class Article extends BDitem {
 	/**
 	 * Retourne les articles commandés pour une reservation et un menu
 	 */
-	public LinkedList<String> getMenuCommandes(int numRes) {
+	public LinkedList<String> getArticlesMenuCommandes(int numRes) {
 		LinkedList<String> res = new LinkedList<String>();
 		if (numRes <= 0) {
 			return res;
