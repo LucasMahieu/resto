@@ -89,7 +89,7 @@ CREATE TABLE sontCommandes (
 
 CREATE TABLE menuCommandes (
 	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
-	nomMenu VARCHAR(20) REFERENCES nomMenu(nomMenu),
+	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
 	nomBoisson VARCHAR(20) REFERENCES Boisson(nomBoisson),
 	nomEntree VARCHAR(20) REFERENCES Entree(nomEntree),
 	nomPlat VARCHAR(20) REFERENCES Plat(nomPlat),
