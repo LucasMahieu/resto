@@ -143,7 +143,15 @@ public class Controleur{
      */
     public int ajouterMenu(String nomMenu, int quantite, int numResa, String  boisson, String entree, String plat, String dessert){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-        return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+	int ret = ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+	ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numResa);
+	if (thisRes == null) {
+            return -1;
+        }
+	if (thisRes.getSuivi().ajouterMenu(boisson, entree, plat, dessert, quantite) == -1) {
+            return -1;
+        }
+	return ret;
     }
 
     /** 
