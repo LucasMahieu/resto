@@ -5,7 +5,7 @@ import ModeleResto.*;
 import java.util.*;
 import java.util.Date;
 import java.sql.*;
-import java.text.SimpleDateFormat;
+import java.text.*;
 
 /**
  * Tous les attribue de cette classe doivent etre static !!!!!!!!
@@ -32,7 +32,7 @@ public class Controleur{
     /** 
      * Constructeur du controleur 
      */
-    private Controleur(){
+    private Controleur() {
         numResaCmdSelectionee = 0;
         numResaSuiviSelectionee = 0;
         date = new Date();
@@ -42,7 +42,63 @@ public class Controleur{
         if(Integer.parseInt(heureNow) >= DEBUT_SERVICE_SOIR){
             serviceNow = "SOIR";
         }
+
+        initRes(ReservationFactoryConcrete.get().getReservations());
     }
+
+    /*
+     * Ajoute dans l'état initial, au lancement de l'application
+     * les réservations d'aujourd'hui et futures.
+     */
+    public int initRes(HashMap<Integer, ReservationConcrete> reservations) {
+		try {
+			ResultSet rset = ReservationFactoryConcrete.get().initRes(reservations);
+            if (rset == null) {
+                return -1;
+            }
+			while (rset.next()) {
+				int numRes = rset.getInt(1);
+                String date = rset.getString(2);
+                if (turfu(date)) {
+                    ReservationConcrete newRes = new ReservationConcrete(numRes);
+                    HashMap<String, Integer> choix = getChoixCommandes(numRes);
+                    // On affiche les articles de la réservation trouvée
+                    for (Map.Entry<String,Integer> articleSuivi : choix.entrySet()) {
+
+                        Object[] o = {articleSuivi.getKey(),articleSuivi.getValue()};
+                        newRes.getSuivi().ajouterArticle(ReservationFactoryConcrete.get().getArticleBD().typeArticle(articleSuivi.getKey()), articleSuivi.getKey(), articleSuivi.getValue());
+                    }
+                    reservations.put(numRes, newRes);
+                }
+			}
+            rset.close();
+            ReservationFactoryConcrete.get().getStmt().close();
+            return 0;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête initRes.");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+    }
+
+    public boolean turfu(String date) {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy"); 
+        Date nowDate;
+        Date thisDate;
+        try {
+            nowDate = df.parse(dateNow);
+            thisDate = df.parse(date);
+            if (nowDate.compareTo(thisDate) <= 0) {
+                return true;
+            }
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
 
     /** 
      * Accesseur du controleur 
@@ -467,7 +523,10 @@ public class Controleur{
     }
 
     public LinkedList<Integer> getListeReservations() {
-        return null;
+        LinkedList<Integer> ret = new LinkedList<Integer>();
+        Set<Integer> setN = ReservationFactoryConcrete.get().getReservations().keySet();
+        ret.addAll(setN);
+        return ret;
     }
 
     /** 
@@ -628,10 +687,25 @@ public class Controleur{
      */
     public HashMap<String, Integer> getChoixCommandes(int numResa) {
         HashMap<String, Integer> h = new HashMap<String, Integer>();
-        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
-        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
-        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
-        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
+        if (ReservationFactoryConcrete.get() == null) {
+            System.out.println("TEST");
+        }
+        HashMap<String, Integer> boissons = ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson");
+        if (boissons != null) {
+            h.putAll(boissons);
+        }
+        HashMap<String, Integer> entrees = ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree");
+        if (entrees != null) {
+            h.putAll(entrees);
+        }
+        HashMap<String, Integer> plats = ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat");
+        if (plats != null) {
+            h.putAll(plats);
+        }
+        HashMap<String, Integer> desserts = ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert");
+        if (desserts != null) {
+            h.putAll(desserts);
+        }
         for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandes(numResa)) {
             if (h.containsKey(choix)) {
                 h.put(choix, h.get(choix) + 1);

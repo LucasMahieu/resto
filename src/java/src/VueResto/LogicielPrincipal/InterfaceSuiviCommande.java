@@ -214,7 +214,8 @@ public class InterfaceSuiviCommande extends Observateur{
         System.out.println("quantite: " + quantiteEnvoyee);
         if (numeroReservationArticle > 0){
           System.out.println("envoi article");
-          Controleur.get().estEnvoye(numArticleSelected,numeroReservationArticle,quantiteEnvoyee);
+          if (Controleur.get().estEnvoye(numArticleSelected,numeroReservationArticle,quantiteEnvoyee) == -1) {
+          }
         }
         this.miseAJourTableauArticles();
       }

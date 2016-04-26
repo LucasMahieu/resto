@@ -24,7 +24,7 @@ public class SuiviCommande {
 
     public int estEnvoye(String type, String nomArticle, int quantite) {
         Integer previous = 0;
-        if (type == "BOISSON") {
+        if (type.equals("BOISSON")) {
             previous = boissons.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -35,14 +35,12 @@ public class SuiviCommande {
             else if (previous - quantite < 0) {
                 return -1;
             }
-            else if (previous == quantite) {
-                if (!next()) {
-                    return -1;
-                }
+            if (boissons.isEmpty()) {
+                next();
             }
             return 0;
         }
-        else if (type == "ENTREE") {
+        else if (type.equals("ENTREE")) {
             previous = entrees.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -53,14 +51,12 @@ public class SuiviCommande {
             else if (previous - quantite < 0) {
                 return -1;
             }
-            else if (previous == quantite) {
-                if (!next()) {
-                    return -1;
-                }
+            if (entrees.isEmpty()) {
+                next();
             }
             return 0;
         }
-        else if (type == "PLAT") {
+        else if (type.equals("PLAT")) {
             previous = plats.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -71,14 +67,12 @@ public class SuiviCommande {
             else if (previous - quantite < 0) {
                 return -1;
             }
-            else if (previous == quantite) {
-                if (!next()) {
-                    return -1;
-                }
+            if (plats.isEmpty()) {
+                next();
             }
             return 0;
         }
-        else if (type == "DESSERT") {
+        else if (type.equals("DESSERT")) {
             previous = desserts.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -98,7 +92,7 @@ public class SuiviCommande {
 
     public int supprimer(String type, String nomArticle, int quantite) {
         Integer previous = 0;
-        if (type == "BOISSON") {
+        if (type.equals("BOISSON")) {
             previous = boissons.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -111,7 +105,7 @@ public class SuiviCommande {
             }
             return 0;
         }
-        else if (type == "ENTREE") {
+        else if (type.equals("ENTREE")) {
             previous = entrees.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -124,7 +118,7 @@ public class SuiviCommande {
             }
             return 0;
         }
-        else if (type == "PLAT") {
+        else if (type.equals("PLAT")) {
             previous = plats.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -137,7 +131,7 @@ public class SuiviCommande {
             }
             return 0;
         }
-        else if (type == "DESSERT") {
+        else if (type.equals("DESSERT")) {
             previous = desserts.remove(nomArticle);
             if (previous == null) {
                 return -1;
@@ -157,7 +151,7 @@ public class SuiviCommande {
 
     public int ajouterArticle(String type, String nomArticle, int quantite) {
         Integer previous = 0;
-        if (type == "BOISSON") {
+        if (type.equals("BOISSON")) {
             previous = boissons.remove(nomArticle);
             if (previous == null) {
                 boissons.put(nomArticle, quantite);
@@ -167,7 +161,7 @@ public class SuiviCommande {
             }
             return 0;
         }
-        else if (type == "ENTREE") {
+        else if (type.equals("ENTREE")) {
             previous = entrees.remove(nomArticle);
             if (previous == null) {
                 entrees.put(nomArticle, quantite);
@@ -177,7 +171,7 @@ public class SuiviCommande {
             }
             return 0;
         }
-        else if (type == "PLAT") {
+        else if (type.equals("PLAT")) {
             previous = plats.remove(nomArticle);
             if (previous == null) {
                 plats.put(nomArticle, quantite);
@@ -187,7 +181,7 @@ public class SuiviCommande {
             }
             return 0;
         }
-        else if (type == "DESSERT") {
+        else if (type.equals("DESSERT")) {
             previous = desserts.remove(nomArticle);
             if (previous == null) {
                 desserts.put(nomArticle, quantite);
@@ -203,19 +197,19 @@ public class SuiviCommande {
     }
 
     public boolean next() {
-        if (etatCommande == "BOISSON") {
+        if (etatCommande.equals("BOISSON")) {
             etatCommande = "ENTREE";
             return true;
         }
-        else if (etatCommande == "ENTREE") {
+        else if (etatCommande.equals("ENTREE")) {
             etatCommande = "PLAT";
             return true;
         }
-        else if (etatCommande == "PLAT") {
+        else if (etatCommande.equals("PLAT")) {
             etatCommande = "DESSERT";
             return true;
         }
-        else if (etatCommande == "DESSERT") {
+        else if (etatCommande.equals("DESSERT")) {
             return false;
         }
         else {
