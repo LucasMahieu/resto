@@ -563,7 +563,9 @@ public class Controleur{
     
     public HashMap<String, Integer> aEnvoyer(int numeroReservation) {
         ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numeroReservation);
+        System.out.println(ReservationFactoryConcrete.get().getReservations());
         if (thisRes == null) {
+            System.out.println("nullThisRes");
             return null;
         }
         return thisRes.getSuivi().aEnvoyer();
