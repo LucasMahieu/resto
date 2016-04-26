@@ -65,14 +65,20 @@ public class Controleur{
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
 	return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
     }
-	/**
-     * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
+
+    /**
+     * Supprime à la BD le menu 'nomMenu' à la reservation numResa
      * -1 -> Erreur
      *  0 -> Réussite
      */
-    public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){
-        // supprimer à la resa l'article donner avec les bonnes quantités dans la BD
-	return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+    public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){/*
+        // supprimer à la resa l'article donné avec les bonnes quantités dans la BD
+	if (ReservationFactoryConcrete.get().getArticleBD().dejaCommandeMenuCommandes(nomMenu, quantite, numResa, boisson, entree, plat, dessert == 0) {
+		
+	    }
+	    return -1;
+	    return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);*/
+	return 0;
     }
 
     /**
@@ -499,6 +505,9 @@ public class Controleur{
         numResaSuiviSelectionee = n;
     }
 
+    /**
+     * Retourne tous les articles commandes par numres, les menus ne sont pas comptés, mais ce qu'ils contiennent si
+     */
 
     public HashMap<String, Integer> getChoixCommandes(int numResa) {
 	HashMap<String, Integer> h = new HashMap<String, Integer>();
@@ -515,4 +524,20 @@ public class Controleur{
 	}
 	return h;
     }
+    /**
+     * Retourne, pour un type, (boisson, entree ..), les articles comandés pour un numresa
+     */
+    
+    public HashMap<String, Integer> getChoixCommandes(int numResa, String type) {
+	HashMap<String, Integer> h = new HashMap<String, Integer>();
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, type));
+	for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandesType(numResa, type)) {
+	    if (h.containsKey(choix)) {
+		h.put(choix, h.get(choix) + 1);
+	    } else {
+		h.put(choix, 1);
+	    }
+	}
+	return h;
+    }	
 }
