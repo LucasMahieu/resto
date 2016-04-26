@@ -76,7 +76,22 @@ public class Controleur{
      */
     public int ajouterMenu(String nomMenu, int quantite, int numResa, String  boisson, String entree, String plat, String dessert){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-			return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+	return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+    }
+
+    /**
+     * Supprime à la BD le menu 'nomMenu' à la reservation numResa
+     * -1 -> Erreur
+     *  0 -> Réussite
+     */
+    public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){/*
+        // supprimer à la resa l'article donné avec les bonnes quantités dans la BD
+	if (ReservationFactoryConcrete.get().getArticleBD().dejaCommandeMenuCommandes(nomMenu, quantite, numResa, boisson, entree, plat, dessert == 0) {
+		
+	    }
+	    return -1;
+	    return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);*/
+	return 0;
     }
 
     /**
@@ -436,26 +451,16 @@ public class Controleur{
         return resultat;
     }
 
-		public LinkedList<String> getListeArticlesMenu(String nomMenu, String type)
-    {/*
-        LinkedList<String> resultat = new LinkedList<String>();
-        try {
-            ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(null, -1, null, type);
-            if (rset == null) {
-                return resultat;
-            }
-            while(rset.next()){
-                resultat.add(rset.getString(1));
-            }
-            rset.close();
-            ReservationFactoryConcrete.get().getArticleBD().getStmt().close();
-        }
-        catch (SQLException e) {
-            System.err.println("Erreur pour faire la requête.");
-            e.printStackTrace(System.err);
-        }
-        return resultat;*/
-			return null;
+    /**
+     * Retourne les articles d'un certain type qui sont disponibles pour un menu donné
+     */
+    public LinkedList<String> getListeArticlesMenu(String nomMenu, String type)
+    {
+	if (type == "Menu") {
+	    return null;
+	}
+	LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
+	return resultat;
     }
 
 
@@ -536,21 +541,24 @@ public class Controleur{
         numResaSuiviSelectionee = n;
     }
 
+    /**
+     * Retourne tous les articles commandes par numres, les menus ne sont pas comptés, mais ce qu'ils contiennent si
+     */
 
     public HashMap<String, Integer> getChoixCommandes(int numResa) {
-			HashMap<String, Integer> h = new HashMap<String, Integer>();
-			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
-			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
-			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
-			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
-			for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandes(numResa)) {
-					if (h.containsKey(choix)) {
-							h.put(choix, h.get(choix) + 1);
-					} else {
-							h.put(choix, 1);
-					}
-			}
-      return h;
+	HashMap<String, Integer> h = new HashMap<String, Integer>();
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
+	for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandes(numResa)) {
+	    if (h.containsKey(choix)) {
+		h.put(choix, h.get(choix) + 1);
+	    } else {
+		h.put(choix, 1);
+	    }
+	}
+	return h;
     }
     
     public HashMap<String, Integer> aEnvoyer(int numeroReservation) {
@@ -572,4 +580,20 @@ public class Controleur{
         }
         return thisRes.getSuivi().estEnvoye(typeArticle, nomArticle, quantite);
     }
+    /**
+     * Retourne, pour un type, (boisson, entree ..), les articles comandés pour un numresa
+     */
+    
+    public HashMap<String, Integer> getChoixCommandes(int numResa, String type) {
+        HashMap<String, Integer> h = new HashMap<String, Integer>();
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, type));
+        for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandesType(numResa, type)) {
+            if (h.containsKey(choix)) {
+                h.put(choix, h.get(choix) + 1);
+            } else {
+                h.put(choix, 1);
+            }
+        }
+        return h;
+    }	
 }
