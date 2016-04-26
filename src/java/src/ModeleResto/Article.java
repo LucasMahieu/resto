@@ -13,7 +13,7 @@ public class Article extends BDitem {
 	 * @param quantite quantite
 	 * @param numeroReservation numero de la reservation
 	 * @return -1 si erreur, 0 sinon
-	 */  
+	 */
 	public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
 		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
 			return -1;
@@ -42,7 +42,7 @@ public class Article extends BDitem {
 			return 0;
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête d'ajout d'article."); 
+			System.err.println("Erreur pour faire la requête d'ajout d'article.");
 			e.printStackTrace(System.err);
 			return -1;
 		}
@@ -71,7 +71,7 @@ public class Article extends BDitem {
 			}
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête de type d'article."); 
+			System.err.println("Erreur pour faire la requête de type d'article.");
 			e.printStackTrace(System.err);
 			return null;
 		}
@@ -131,7 +131,7 @@ public class Article extends BDitem {
 			return 0;
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête d'ajout de menu."); 
+			System.err.println("Erreur pour faire la requête d'ajout de menu.");
 			e.printStackTrace(System.err);
 			return -1;
 		}
@@ -170,7 +170,7 @@ public class Article extends BDitem {
 			return 0;
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête de suppression d'article."); 
+			System.err.println("Erreur pour faire la requête de suppression d'article.");
 			e.printStackTrace(System.err);
 			return -1;
 		}
@@ -203,7 +203,7 @@ public class Article extends BDitem {
 			return ret;
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête dejaCommande."); 
+			System.err.println("Erreur pour faire la requête dejaCommande.");
 			e.printStackTrace(System.err);
 			return -1;
 		}
@@ -244,7 +244,7 @@ public class Article extends BDitem {
 			return ret;
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête dejaCommandeMenu."); 
+			System.err.println("Erreur pour faire la requête dejaCommandeMenu.");
 			e.printStackTrace(System.err);
 			return -1;
 		}
@@ -264,30 +264,30 @@ public class Article extends BDitem {
 			requete += ", Disponibles ";
 		}
 		if (nomArticle != null || prixArticle != -1 || specialite != null) {
-			requete += "WHERE ";
+			requete += " WHERE ";
 		}
 		if (nomArticle != null) {
 			requete += ("Article.nomArticle = '" + nomArticle + "'");
 		}
 		if (prixArticle != -1) {
-			if (nomArticle != null) {	
+			if (nomArticle != null) {
 				requete += " AND ";
 			}
 			requete += ("Article.prixArticle = " + prixArticle);
 		}
 		if (specialite != null) {
-			if (nomArticle != null || prixArticle != -1) {	
+			if (nomArticle != null || prixArticle != -1) {
 				requete += " AND ";
 			}
 			requete += ("AND Article.specialite = '" + specialite + "' ");
 		}
 
 		if (date != null && service != null) {
-			requete += "AND Article.nomArticle = Disponibles.nomArticle AND (";
+			requete += " AND Article.nomArticle = Disponibles.nomArticle AND (";
 			LinkedList<String> cartes = getCarte(date, service);
 			if (cartes == null) {
 				return null;
-			} 
+			}
 			for (String carte : cartes) {
 				requete += "Disponibles.nomCarte = '" + carte + "' or ";
 			}
@@ -295,11 +295,11 @@ public class Article extends BDitem {
 			requete += ") ";
 		}
 		if (type != null) {
-			requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
+			requete += (" GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
 			if (type == "menu") {
-				requete += "(SELECT Menu.nomMenu FROM " + type + ")";
+				requete += " (SELECT Menu.nomMenu FROM " + type + ")";
 			} else {
-				requete += "(SELECT * FROM " + type + ")";
+				requete += " (SELECT * FROM " + type + ")";
 			}
 		}
 		System.out.println(requete);
@@ -319,7 +319,7 @@ public class Article extends BDitem {
 	 * Retourne la liste des cartes disponibles pour le jour et le service choisis
 	 */
 	public LinkedList<String> getCarte(String date, String service) {
-		LinkedList<String> res = new LinkedList<String>(); 
+		LinkedList<String> res = new LinkedList<String>();
 		String requete;
 		if (date == null || service == null) {
 			return null;
@@ -355,7 +355,7 @@ public class Article extends BDitem {
 	 * @return liste d article du type demande
 	 */
 	public LinkedList<String> getArticleMenu(String nomMenu, String type, String date, String service) {
-		LinkedList<String> res = new LinkedList<String>(); 
+		LinkedList<String> res = new LinkedList<String>();
 		String requete;
 		if (nomMenu == null || type == null) {
 			return null;
@@ -394,7 +394,7 @@ public class Article extends BDitem {
 	 * @param nomMenu nom du menu
 	 * @param type type d article
 	 * @return nom d article
-	 * 
+	 *
 	 */
 	public String getArticleMenuBis(String nomMenu, String type) {
 		String  res = null;
@@ -438,7 +438,7 @@ public class Article extends BDitem {
 		String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes");
 		requete += ", " + etape;
 		requete += " WHERE numeroReservation = " + numRes;
-		requete += " AND sontcommandes.nomArticle = " + etape + ".nom"+etape;		    
+		requete += " AND sontcommandes.nomArticle = " + etape + ".nom"+etape;
 		System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
@@ -545,7 +545,7 @@ public class Article extends BDitem {
 			requete += "AND nomBoisson = '" + nomBoisson +"' ";
 			requete += "AND nomEntree = '" + nomEntree +"' ";
 			requete += "AND nomPlat = '" + nomPlat +"' ";
-			requete += "AND nomDessert = '" + nomDessert +"' ";	
+			requete += "AND nomDessert = '" + nomDessert +"' ";
 		}
 		else {
 			requete = new String("UPDATE MenuCommandes ");
@@ -555,7 +555,7 @@ public class Article extends BDitem {
 			requete += "AND nomBoisson = '" + nomBoisson +"' ";
 			requete += "AND nomEntree = '" + nomEntree +"' ";
 			requete += "AND nomPlat = '" + nomPlat +"' ";
-			requete += "AND nomDessert = '" + nomDessert +"' ";	
+			requete += "AND nomDessert = '" + nomDessert +"' ";
 		}
 		System.out.println(requete);
 		try {
@@ -565,7 +565,7 @@ public class Article extends BDitem {
 			return 0;
 		}
 		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête de suppression d'article."); 
+			System.err.println("Erreur pour faire la requête de suppression d'article.");
 			e.printStackTrace(System.err);
 			return -1;
 		}
@@ -576,7 +576,7 @@ public class Article extends BDitem {
 	 * @param nomArticle nom de l article
 	 * @return prix de l article en euros
 	 */
-	public float getPrix(String nomArticle) {	   	       
+	public float getPrix(String nomArticle) {
 		float res = -1;
 		if (nomArticle == null) {
 			return -1;

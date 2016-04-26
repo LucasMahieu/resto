@@ -9,8 +9,8 @@ import java.text.*;
 
 /**
  * Tous les attribue de cette classe doivent etre static !!!!!!!!
- * De la sorte, chaque inteface pourra avoir un attribut controleur 
- * et les informations, états, variables du controleur sera cohérent 
+ * De la sorte, chaque inteface pourra avoir un attribut controleur
+ * et les informations, états, variables du controleur sera cohérent
  * entre toutes les autres classes
  *
  *  Ce n'est plus utile avec le patron Singleton car instance unique de cette classe
@@ -29,8 +29,8 @@ public class Controleur{
 
 	final private static Controleur instanceUnique = new Controleur();
 
-	/** 
-	 * Constructeur du controleur 
+	/**
+	 * Constructeur du controleur
 	 */
 	private Controleur() {
 		numResaCmdSelectionee = 0;
@@ -83,7 +83,7 @@ public class Controleur{
 	}
 
 	public boolean turfu(String date) {
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy"); 
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date nowDate;
 		Date thisDate;
 		try {
@@ -100,8 +100,8 @@ public class Controleur{
 	}
 
 
-	/** 
-	 * Accesseur du controleur 
+	/**
+	 * Accesseur du controleur
 	 *	@return controleur
 	 */
 	public static Controleur get()
@@ -109,7 +109,7 @@ public class Controleur{
 		return instanceUnique;
 	}
 
-	/** 
+	/**
 	 * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
 	 *	@param nom nom de l'article
 	 *	@param quantite quantite
@@ -130,7 +130,7 @@ public class Controleur{
 		return ret;
 	}
 
-	/** 
+	/**
 	 * Ajoute à la BD la quantité de menus 'nom' à la reservation numResa + VERIFIE qu'il existe pas déja
 	 *	@param nomMenu nom du menu
 	 *	@param quantite quantite
@@ -154,7 +154,7 @@ public class Controleur{
 		return ret;
 	}
 
-	/** 
+	/**
 	 * Supprime à la BD le menu 'nomMenu' à la reservation numResa, DANS MENU ET DANS MENUCOMMANDES
 	 *	@param nomMenu nom du menu
 	 *	@param quantite quantite
@@ -168,16 +168,16 @@ public class Controleur{
 	public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){
 		// supprimer à la resa l'article donné avec les bonnes quantités dans la BD
 		if (ReservationFactoryConcrete.get().getArticleBD().dejaCommandeMenuCommandes(nomMenu, numResa, boisson, entree, plat, dessert) > 0) {
-			return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, numResa, quantite, boisson, entree, plat, dessert);	
+			return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, numResa, quantite, boisson, entree, plat, dessert);
 		}
 		return -1;
 	}
 
 
-	/** 
+	/**
 	 *  Supprime à la BD la quantité d'article 'nom' à la reservation numResa
 	 *	@param nom nom de l'article
-	 *	@param quantite quantite 
+	 *	@param quantite quantite
 	 *	@param numResa numero de reservation
 	 *	@return 0 si réussi, -1 sinon
 	 */
@@ -243,7 +243,7 @@ public class Controleur{
 	/** Cette fonction permet de trouver l'etat de la commande de la reservation selectionnee
 	 *
 	 *	@param numReservation numero de reservation
-	 *	@return numero du client 
+	 *	@return numero du client
 	 */
 	public String getEtatCommande(int numReservation){
 		ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numReservation);
@@ -255,7 +255,7 @@ public class Controleur{
 
 	/** Cette fonction permet de trouver le service actuel
 	 *
-	 *	@return numero du client 
+	 *	@return numero du client
 	 */
 	public String getServiceNow() {
 		serviceNow = "MIDI";
@@ -273,7 +273,7 @@ public class Controleur{
 	 *		- Créer la réservation
 	 *		- Associer la table à la résa
 	 *		- Retourner le numero de résa
-	 *	@param nom nom du client qui réserve 
+	 *	@param nom nom du client qui réserve
 	 *	@param date date de la reservation
 	 *	@param service pour lequel le client réserve
 	 *	@param nbPersonnes nombre de personnes qui souhaitent réserver
@@ -320,7 +320,7 @@ public class Controleur{
 			return numResa;
 		}
 		numResaSuiviSelectionee = numResa;
-		numResaCmdSelectionee = numResa; 
+		numResaCmdSelectionee = numResa;
 		// ici la resa est crée et son num se trouve dans tmp
 		// On associe donc la(les) table(s) trouvée(s) à ce num de resa
 		for (int i = 0; i < tablesArray.size(); i++) {
@@ -337,11 +337,11 @@ public class Controleur{
 		ReservationFactoryConcrete.get().validate();
 	}
 
-	/** Cette fonction permet de trouver le numero du client 
+	/** Cette fonction permet de trouver le numero du client
 	 *
 	 *	@param nomC nom du client
 	 *	@param telC numero de telephone du client
-	 *	@return numero du client 
+	 *	@return numero du client
 	 */
 	public int trouverClient(String nomC, String telC){
 		int numClient = ReservationFactoryConcrete.get().getClientBD().existsClient(nomC, telC);
@@ -442,7 +442,7 @@ public class Controleur{
 				// Ce nombre peut être 0 ou -1 si la table voisine n'a pas de place ou s'il n'y en a qu'une seule.
 				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0], 1);
 				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1], 1);
-				// on a donc le nombre de place accolée1 des deux voisines 
+				// on a donc le nombre de place accolée1 des deux voisines
 				// On regarde si un tel nombre de place est suffisant
 				// et on garde les tables qui permettent d'obtenir un reste minimum.
 				if(nbPlace+nbPlaceVoisine[0]>=nbPersonnes){
@@ -501,7 +501,7 @@ public class Controleur{
 				//seul i est en accolement double -> on utilise config-1 pour les voisines
 				nbPlaceVoisine[0] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[0], 1);
 				nbPlaceVoisine[1] = ReservationFactoryConcrete.get().getTableBD().nbPlaceTable(tableVoisine[1], 1);
-				// on a donc le nombre de place accolée1 des deux voisines 
+				// on a donc le nombre de place accolée1 des deux voisines
 				if (nbPlace + nbPlaceVoisine[0] + nbPlaceVoisine[1] >= nbPersonnes) {
 					if(nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1]-nbPersonnes<resteMin){
 						resteMin = nbPlace+nbPlaceVoisine[0]+nbPlaceVoisine[1] - nbPersonnes;
@@ -545,10 +545,10 @@ public class Controleur{
 		return ReservationFactoryConcrete.get().getNombrePersonnes(numResa);
 	}
 
-	/** 
+	/**
 	 *  Vérifie que la réservation existe, puis la supprime
 	 *	@param numeroTable numéro de table
-	 *	@param date date de la suppression 
+	 *	@param date date de la suppression
 	 *	@param service service correspondant à la suppression
 	 *	@return 0 si réussite, -1 sinon
 	 */
@@ -556,16 +556,16 @@ public class Controleur{
 		if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) == 0) {
 			ReservationFactoryConcrete.get().supprimerReservation(numeroTable, date, service);
 			return 0;
-		} 
+		}
 		return -1;
 	}
 
-	/* 
+	/*
 	 * TODO : ne selectionner que les articles disponibles sur la carte, fonction qui ne marche pas pour le moment
 	 * à la date actuelle !!
 	 */
 
-	/** 
+	/**
 	 *  Renvoie la liste des articles pour un service donné
 	 *	@param type nom du service
 	 *	@return Liste d'articles correspondant au service demandé
@@ -592,7 +592,7 @@ public class Controleur{
 		return resultat;
 	}
 
-	/** 
+	/**
 	 *  Retourne les articles d'un certain type qui sont disponibles pour un menu donné
 	 *	@param nomMenu nom du menu
 	 *	@param type nom du service
@@ -609,7 +609,7 @@ public class Controleur{
 	}
 
 
-	/** 
+	/**
 	 *  Retourne le prix d'un article
 	 *	@param nomArticle nom de l'article
 	 *	@return prix de l'article en euros
@@ -621,7 +621,7 @@ public class Controleur{
 		return resultat;
 	}
 
-	/** 
+	/**
 	 *  Retourne le numero de reservation correspondant aux paramètres
 	 *	@param date date de la reservation
 	 *	@param nTable numero de la table
@@ -633,7 +633,7 @@ public class Controleur{
 	}
 
 
-	/** 
+	/**
 	 *  Retourne le numero de reservation correspondant aux paramètres
 	 *	@param numTable numero de la table
 	 *	@return numéro de la reservation du service courant
@@ -642,7 +642,7 @@ public class Controleur{
 		return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable, dateNow, serviceNow);
 	}
 
-	/** 
+	/**
 	 *  Donne une string comportant toutes les tables associée à une réservation
 	 *  Convention : séparer les numeros par des '-'.
 	 *	@param numResa numero de la reservation
@@ -656,7 +656,7 @@ public class Controleur{
 		return tables;
 	}
 
-	/** 
+	/**
 	 *  Renvoie le nom du client pour la reservation demandee
 	 *	@param numResa numero de la reservation
 	 *	@return nom du client
@@ -666,7 +666,7 @@ public class Controleur{
 		return resultat;
 	}
 
-	/** 
+	/**
 	 *  Renvoie le numero de la reservation selectionnee dans l'onglet commande
 	 *	@return numero de la reservation selectionnee dans l'onglet commande
 	 */
@@ -674,7 +674,7 @@ public class Controleur{
 		return numResaCmdSelectionee;
 	}
 
-	/** 
+	/**
 	 *  Renvoie le numero de la reservation selectionnee dans l'onglet suivi
 	 *	@return numero de la reservation selectionnee dans l'onglet suivi
 	 */
@@ -682,7 +682,7 @@ public class Controleur{
 		return numResaSuiviSelectionee;
 	}
 
-	/** 
+	/**
 	 *  paramètre le numero de la reservation selectionnee dans l'onglet commande
 	 *	@param n numero de la reservation
 	 */
@@ -690,7 +690,7 @@ public class Controleur{
 		numResaCmdSelectionee = n;
 	}
 
-	/** 
+	/**
 	 *  paramètre le numero de la reservation dans l'onglet suivi
 	 *	@param n numero de la reservation
 	 */
@@ -698,7 +698,7 @@ public class Controleur{
 		numResaSuiviSelectionee = n;
 	}
 
-	/** 
+	/**
 	 *  Renvoie les articles selectionnes correspondant a la reservation
 	 *	@param numResa numero de la reservation
 	 *	@return HashMap du choix d'articles
@@ -734,7 +734,7 @@ public class Controleur{
 		return h;
 	}
 
-	/** 
+	/**
 	 *  Renvoie les articles a envoyer correspondant a la reservation
 	 *	@param numeroReservation numero de la reservation
 	 *	@return HashMap des articles a envoyer
@@ -749,7 +749,7 @@ public class Controleur{
 		return thisRes.getSuivi().aEnvoyer();
 	}
 
-	/** 
+	/**
 	 *  paramètre l' article qui ont ete envoyes correspondant a la reservation
 	 *	@param nomArticle nom de l'article envoye
 	 *	@param numeroReservation numero de la reservation
@@ -771,7 +771,7 @@ public class Controleur{
 	 * Retourne, pour un type, (boisson, entree ..), les articles comandés pour un numresa
 	 */
 
-	/** 
+	/**
 	 *  Renvoie les articles correspondant a la reservation demandee et a l'etat du repas
 	 *	@param numResa numero de la reservation
 	 *	@param type etat du repas
@@ -788,5 +788,5 @@ public class Controleur{
 			}
 		}
 		return h;
-	}	
+	}
 }
