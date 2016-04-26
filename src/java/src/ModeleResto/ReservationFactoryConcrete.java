@@ -2,6 +2,9 @@ package ModeleResto;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
+import java.text.*;
+import ControleurResto.*;
 //import oracle.jdbc.driver.OracleDriver;
 
 public class ReservationFactoryConcrete extends ReservationFactory{
@@ -50,8 +53,55 @@ public class ReservationFactoryConcrete extends ReservationFactory{
         }
 
 		reservations = new HashMap<Integer, ReservationConcrete>();
+        // Ajoute dans reservations toutes les réservations futures.
+        initRes(reservations);
         lastRes = getNombreReservations();
         client_BD.setLastClient(client_BD.getNombreClient());
+    }
+
+    /*
+     * Ajoute dans l'état initial, au lancement de l'application
+     * les réservations d'aujourd'hui et futures.
+     */
+    public int initRes(HashMap<Integer, ReservationConcrete> reservations) {
+		String requete = new String("SELECT numeroReservation, dateService FROM Reservation");
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			while (rset.next()) {
+				int numRes = rset.getInt(1);
+                String date = rset.getString(2);
+                if (turfu(date)) {
+                    reservations.put(numRes, new ReservationConcrete(numRes));
+                }
+				rset.close();
+				getStmt().close();
+			}
+            return 0;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête initRes.");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+    }
+
+    public boolean turfu(String date) {
+        String dateNow = Controleur.get().getDateNow();
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy"); 
+        Date nowDate;
+        Date thisDate;
+        try {
+            nowDate = df.parse(dateNow);
+            thisDate = df.parse(date);
+            if (nowDate.compareTo(thisDate) <= 0) {
+                return true;
+            }
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public int creerReservation(int numClient, String date, String service, int nbPersonnes) {

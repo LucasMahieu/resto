@@ -420,10 +420,9 @@ public class Controleur{
 	return -1;
     }
 
-    /*
-     * Ajouter méthode qui renvoit les réservations !
-     * Tableau de Object
-     */
+    public LinkedList<Integer> getListeReservations() {
+        return null;
+    }
 
 
     /* 

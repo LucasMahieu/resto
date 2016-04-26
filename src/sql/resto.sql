@@ -96,6 +96,7 @@ CREATE TABLE menuCommandes (
 	nomDessert VARCHAR(20) REFERENCES Dessert(nomDessert),
 	CONSTRAINT KmenuCommandes PRIMARY KEY (numeroReservation, nomMenu,nomBoisson, nomEntree, nomPlat, nomDessert)
 );
+
 CREATE TABLE Disponibles (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
     nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),

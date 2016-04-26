@@ -242,7 +242,7 @@ insert into Menu
 insert into Menu
 	Values('menu goulu', 'pates bolo');
 INSERT INTO Menu
-		Values ('menu gourmet', 'canard');
+    Values ('menu gourmet', 'canard');
 
 -- ESTRESERVEE (NumeroTable, NumeroReservation)
 
@@ -296,9 +296,9 @@ insert into EstCompose
 insert into EstCompose
 	Values('menu enfant', 'glace');
 INSERT INTO EstCompose
-		Values ('menu enfant', 'burger');
+	Values ('menu enfant', 'burger');
 INSERT INTO EstCompose
-Values ('menu enfant', 'pizza');
+    Values ('menu enfant', 'pizza');
 
 insert into EstCompose
 	Values('menu toqué', 'salade tunisienne');
@@ -312,11 +312,9 @@ INSERT INTO EstCompose
 INSERT INTO EstCompose
 Values ('menu gourmet', 'saumon');
 INSERT INTO EstCompose
-Values ('menu gourmet', 'saint jacques ');
+Values ('menu gourmet', 'saint jacques');
 INSERT INTO EstCompose
 Values ('menu gourmet', 'cognac');
-INSERT INTO EstCompose
-Values ('menu gourmet', 'pâté');
 INSERT INTO EstCompose
 Values ('menu gourmet', 'foie gras');
 INSERT INTO EstCompose
