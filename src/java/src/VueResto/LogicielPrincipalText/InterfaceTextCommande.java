@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.lang.*;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -29,18 +30,22 @@ public class InterfaceTextCommande extends Observateur{
 			table = Integer.parseInt(sc.nextLine());
 			String choix2 = "1";
 			while(true) {
-				ajouterPlat();
-				System.out.println("(1) Continuer la commande");
-				System.out.println("(2) Terminer la commande");
+				System.out.println("(1) Ajouter un article");
+				System.out.println("(2) Supprimer un article");
+				System.out.println("(3) Terminer la commande");
 				choix2 = sc.nextLine();
-				if(choix2.equals("2"))  
+				if(choix2.equals("3"))  
 					break;
+				
 				else if (choix2.equals("1")) 
-					continue;
+					ajouterPlat();
+				else if (choix2.equals("2"))
+					supprimerPlat();
 				else {
 					System.out.println("Veuillez entrer 1 ou 2 au clavier");
-					System.out.println("(1) Continuer la commande");
-					System.out.println("(2) Terminer la commande");
+					System.out.println("(1) Ajouter un article");
+					System.out.println("(2) Supprimer un article");
+					System.out.println("(3) Terminer la commande");
 					choix2 = sc.nextLine();
 				}
 				
@@ -68,7 +73,7 @@ public class InterfaceTextCommande extends Observateur{
 			System.out.println("(4) Boisson");
 			System.out.println("(5) Menu");
 			String choix = sc.nextLine();
-			LinkedList<String> Affichage= new LinkedList<String>();
+			LinkedList<String> Affichage = new LinkedList<String>();
 			if(choix.equals("1")){
 				Affichage=Controleur.get().getListeArticles("Entree");
 				System.out.println(Affichage.toString());
@@ -115,16 +120,48 @@ public class InterfaceTextCommande extends Observateur{
 				System.out.println(Affichage.toString());
 				System.out.println("Selectionnez votre Menu");
 				String menu = sc.nextLine();
-				System.out.println("Veuillez indiquer la quantité de ce plat commandé");
+				String plat =new String();
+				String entree = new String();
+				String boisson = new String();
+				String dessert = new String();
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Entree");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Entree");
+					entree= sc.nextLine();
+				}
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Plat");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Plat");
+					plat= sc.nextLine();
+				}
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Dessert");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Dessert");
+					dessert= sc.nextLine();
+				}
+				Affichage=Controleur.get().getListeArticlesMenu(menu,"Boisson");
+				if(!Affichage.isEmpty()){
+					System.out.println(Affichage.toString());
+					System.out.println("Choississez votre Boisson");
+					boisson= sc.nextLine();
+				}
+
+				System.out.println("Veuillez indiquer la quantité de ce menu commandé");
 				int quantite = Integer.parseInt(sc.nextLine());
+				Controleur.get().ajouterMenu(menu,quantite,Controleur.get().getNumeroReservation(table),boisson,
+						entree, plat,dessert);
 			}
 
 	}
 	
 	public void supprimerPlat() {
-		HashMap<String, Integer> listeArticle = Controleur.get().getArticlesCommandes(Controleur.get().getNumeroReservation(table));
+		HashMap<String, Integer> listeArticles = Controleur.get().getArticlesCommandes(Controleur.get().getNumeroReservation(table));
 		int i = 0;
-		for (Map.Entry<String, Integer> entry : listeArticle.entrySet()) {
+		Set<Map.Entry<String, Integer>> set = listeArticles.entrySet();
+		for (Map.Entry<String, Integer> entry : set) {
 			String key = entry.getKey();
    	 		int value = entry.getValue();
 			i++;
