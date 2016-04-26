@@ -47,7 +47,7 @@ public class Article extends BDitem {
 
 
     /**
-     * Ajoute un menu
+     * Ajoute un menu dans menucommandes
      * -1 -> Erreur
      */
     public int ajoutMenu(String nomMenu, int quantite, int numeroReservation, String  nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
@@ -59,7 +59,7 @@ public class Article extends BDitem {
 
 	int nombreDejaCommande;
 	String requete;
-	nombreDejaCommande = dejaCommandeMenu(numeroReservation, nomMenu, nomBoisson, nomEntree, nomPlat, nomDessert);
+	nombreDejaCommande = dejaCommandeMenuCommandes(nomMenu, numeroReservation, nomBoisson, nomEntree, nomPlat, nomDessert);
 	if (nombreDejaCommande > 0) {
 	    requete = new String("UPDATE MenuCommandes ");
 	    requete += "SET quantiteArticle = " + (nombreDejaCommande + quantite) + " ";
@@ -68,16 +68,18 @@ public class Article extends BDitem {
 	    requete += "AND nomBoisson = '" + nomBoisson +"' ";
 	    requete += "AND nomEntree = '" + nomEntree +"' ";
 	    requete += "AND nomPlat = '" + nomPlat +"' ";
-	    requete += "AND nomDessert = '" + nomDessert +"' ";		 
+	    requete += "AND nomDessert = '" + nomDessert +"' ";	
+	    requete += "AND quantite = " + nombreDejaCommande + 1;
 	}
 	else {
-	    requete = new String("INSERT INTO sontCommandes VALUES");
-	    requete += "('" + numeroReservation;
-	    requete += "', " + nomMenu;
-	    requete += ", " + nomBoisson + ")";
-	    requete += ", " + nomEntree + ")";
-	    requete += ", " + nomPlat + ")";
-	    requete += ", " + nomDessert + ")";
+	    requete = new String("INSERT INTO MenuCommandes VALUES");
+	    requete += "(" + numeroReservation;
+	    requete += ", '" + nomMenu +"'";
+	    requete += ", '" + nomBoisson + "'";
+	    requete += ", '" + nomEntree + "'";
+	    requete += ", '" + nomPlat + "'";
+	    requete += ", '" + nomDessert + "'";
+	    requete += ", 1)";
 	}
 
 	System.out.println(requete);
@@ -132,7 +134,7 @@ public class Article extends BDitem {
     }
 
     /**
-     * Combien de ce "nomArticle" ont été commandés
+     * Combien de ce "nomArticle" ont été commandés dans la table sontcommandes
      * -1 -> Erreur
      */
     public int dejaCommande(String nomArticle, int numeroReservation) {
@@ -163,50 +165,15 @@ public class Article extends BDitem {
     }
 
     /**
-     * Combien de ce menu ont été commandés (dans Table Menu)
-     * -1 -> Erreur
-     */
-    public int dejaCommandeMenu(int numeroReservation, String nomMenu, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
-	if (numeroReservation <= 0 || nomMenu == null || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
-	    return -1;
-	}
-	int ret = 0;
-	String requete = new String("SELECT quantiteArticle ");
-	requete += "FROM menuCommandes ";
-	requete += "WHERE numeroReservation = " + numeroReservation;
-	requete += "AND nomMenu = '" + nomMenu +"' ";
-	requete += "AND nomBoisson = '" + nomBoisson +"' ";
-	requete += "AND nomEntree = '" + nomEntree +"' ";
-	requete += "AND nomPlat = '" + nomPlat +"' ";
-	requete += "AND nomDessert = '" + nomDessert +"' ";		 
-	System.out.println(requete);
-	try {
-	    setStmt(getCon().createStatement());
-	    ResultSet rset = getStmt().executeQuery(requete);
-	    if (rset.next()) {
-		ret = rset.getInt(1);
-	    }
-	    rset.close();
-	    getStmt().close();
-	    return ret;
-	}
-	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête dejaCommandeMenu."); 
-	    e.printStackTrace(System.err);
-	    return -1;
-	}
-    }
-
-   /**
      * Combien de ce menu ont été commandés (dans Table MenuCommandes)
      * -1 -> Erreur
      */
-    public int dejaCommandeMenuCommandes(int numeroReservation, String nomMenu, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
-	if (numeroReservation <= 0 || nomMenu == null || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
+    public int dejaCommandeMenuCommandes(String nomMenu, int numeroReservation, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
+	if (nomMenu == null || numeroReservation <= 0 ||  nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
 	    return -1;
 	}
 	int ret = 0;
-	String requete = new String("SELECT quantiteArticle ");
+	String requete = new String("SELECT quantite ");
 	requete += "FROM menuCommandes ";
 	requete += "WHERE numeroReservation = " + numeroReservation;
 	requete += "AND nomMenu = '" + nomMenu +"' ";
@@ -235,7 +202,6 @@ public class Article extends BDitem {
     /**
      * Retourne toutes les informations sur l'article en question
      */
-
     public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
 	String requete = new String("SELECT * FROM Article ");
 	if (nomArticle != null || prixArticle != -1 || specialite != null) {
@@ -279,7 +245,7 @@ public class Article extends BDitem {
     }
 
     /**
-     * Retourne les articles d'un certain type qui sont disponibles pour un menu donné
+     * Retourne les articles d'un certain type qui sont disponibles pour un menu donné //TODO, marche pas ici
      */
     public LinkedList<String> getArticleMenu(String nomMenu, String type) {
 	LinkedList<String> res = new LinkedList<String>(); 
@@ -331,8 +297,8 @@ public class Article extends BDitem {
 	}
     }
 
-/**
- * Retourne les articles commandés pour une reservation
+    /**
+     * Retourne les articles commandés pour une reservation pour une etape donnée (on ne renvoie pas le contenu des menus)
      */
     public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
 	HashMap<String, Integer> res = new HashMap<String, Integer>();
@@ -362,7 +328,7 @@ public class Article extends BDitem {
     }
 
     /**
-     * Retourne les articles commandés pour une reservation et un menu
+     * Retourne les articles commandés pour une reservation dans tous les menus (dans menuCommandes)
      */
     public LinkedList<String> getArticlesMenuCommandes(int numRes) {
 	LinkedList<String> res = new LinkedList<String>();
@@ -390,7 +356,7 @@ public class Article extends BDitem {
     }
 
     /**
-     * Retourne les articles commandés pour une reservation et un menu ET UNE ETAPE
+     * Retourne les articles commandés pour une reservation dans tous les menus (dans menuCommandes) DANS UNE ETAPE
      */
     public LinkedList<String> getArticlesMenuCommandesType(int numRes, String type) {
 	LinkedList<String> res = new LinkedList<String>();
@@ -417,33 +383,37 @@ public class Article extends BDitem {
 	}
     }
 
-
-
-
 	
     /**
-     * Supprime quantité nomMenu de la reservation n°numeroReservation
+     * Supprime quantité nomMenu de la reservation n°numeroReservation //TODO ici, a finir
      */
-    public int supprimerMenu(String nomMenu, int quantite, int numResa, String boisson, String entree, String plat, String dessert) {
-
-	/*
-    public int supprimerArticle(String nomArticle, int quantite, int numeroReservation) {
-	if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+    public int supprimerMenu(String nomMenu, int quantite, int numeroReservation, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
+	if (numeroReservation <= 0 || nomMenu == null || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
 	    return -1;
 	}
-	int nombreDejaCommande;
+	supprimerArticle(nomMenu, quantite, numeroReservation);
+		
+	int ret = -1;
+	int nombreDejaCommandeMenu = dejaCommandeMenuCommandes(nomMenu, numeroReservation, nomBoisson, nomEntree, nomPlat, nomDessert);
 	String requete;
-	nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
-	if (nombreDejaCommande <= quantite) {
-	    requete = new String("DELETE FROM sontCommandes ");
-	    requete += "WHERE nomArticle = '" + nomArticle +"' ";
-	    requete += "AND numeroReservation = " + numeroReservation;
+	if (nombreDejaCommandeMenu <= quantite) {
+	    requete = new String("DELETE FROM MenuCommandes ");
+	    requete += "WHERE nomMenu =  '" + nomMenu +"' ";
+	    requete += "AND nomMenu = '" + nomMenu +"' ";
+	    requete += "AND nomBoisson = '" + nomBoisson +"' ";
+	    requete += "AND nomEntree = '" + nomEntree +"' ";
+	    requete += "AND nomPlat = '" + nomPlat +"' ";
+	    requete += "AND nomDessert = '" + nomDessert +"' ";	
 	}
 	else {
-	    requete = new String("UPDATE sontCommandes ");
-	    requete += "SET quantiteArticle=" + (nombreDejaCommande-quantite) + " ";
-	    requete += "WHERE numeroReservation=" + numeroReservation + " ";
-	    requete += "AND nomArticle='" + nomArticle + "' ";
+	    requete = new String("UPDATE MenuCommandes ");
+	    requete += "SET quantite = " + (nombreDejaCommandeMenu - quantite) + " ";
+	    requete += "WHERE nomMenu =  '" + nomMenu +"' ";
+	    requete += "AND nomMenu = '" + nomMenu +"' ";
+	    requete += "AND nomBoisson = '" + nomBoisson +"' ";
+	    requete += "AND nomEntree = '" + nomEntree +"' ";
+	    requete += "AND nomPlat = '" + nomPlat +"' ";
+	    requete += "AND nomDessert = '" + nomDessert +"' ";	
 	}
 	System.out.println(requete);
 	try {
@@ -457,22 +427,7 @@ public class Article extends BDitem {
 	    e.printStackTrace(System.err);
 	    return -1;
 	}
-
-*/
-
-
-
-
-
-	    return 0;
-	}
-
-
-
-
-
-
-
+    }
 
 
     /**

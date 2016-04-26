@@ -94,6 +94,7 @@ CREATE TABLE menuCommandes (
 	nomEntree VARCHAR(20) REFERENCES Entree(nomEntree),
 	nomPlat VARCHAR(20) REFERENCES Plat(nomPlat),
 	nomDessert VARCHAR(20) REFERENCES Dessert(nomDessert),
+	quantite INTEGER check (quantite > 0),
 	CONSTRAINT KmenuCommandes PRIMARY KEY (numeroReservation, nomMenu,nomBoisson, nomEntree, nomPlat, nomDessert)
 );
 CREATE TABLE Disponibles (
