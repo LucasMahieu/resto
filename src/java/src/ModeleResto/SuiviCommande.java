@@ -196,6 +196,43 @@ public class SuiviCommande {
         }
     }
 
+	/**
+	* ajouter l'article au suivi de commande
+	*/
+    public int ajouterMenu(String  nomBoisson, String nomEntree, String nomPlat, String nomDessert, int quantite) {
+        Integer previous = 0;
+	previous = boissons.remove(nomBoisson);
+        if (previous == null) {
+            boissons.put(nomBoisson, quantite);
+        }
+        else {
+            boissons.put(nomBoisson, previous + quantite);
+        }
+        previous = entrees.remove(nomEntree);
+        if (previous == null) {
+            entrees.put(nomEntree, quantite);
+        }
+        else {
+            entrees.put(nomEntree, previous + quantite);
+        }
+        previous = plats.remove(nomPlat);
+        if (previous == null) {
+            plats.put(nomPlat, quantite);
+        }
+        else {
+            plats.put(nomPlat, previous + quantite);
+        }
+        previous = desserts.remove(nomDessert);
+        if (previous == null) {
+            desserts.put(nomDessert, quantite);
+        }
+        else {
+            desserts.put(nomDessert, previous + quantite);
+        }
+	return 0;
+    }
+
+
     public boolean next() {
         if (etatCommande.equals("BOISSON")) {
             etatCommande = "ENTREE";
