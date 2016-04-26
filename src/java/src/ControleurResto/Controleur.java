@@ -554,7 +554,7 @@ public class Controleur{
 	 */
 	public int supprimerReservation(int numeroTable, String date, String service){
 		if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) == 0) {
-			ReservationFactoryConcrete.get().getTableBD().supprimerReservation(numeroTable, date, service);
+			ReservationFactoryConcrete.get().supprimerReservation(numeroTable, date, service);
 			return 0;
 		} 
 		return -1;
@@ -574,7 +574,8 @@ public class Controleur{
 	{
 		LinkedList<String> resultat = new LinkedList<String>();
 		try {
-			ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
+			//ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
+			ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type, dateNow, serviceNow);
 			if (rset == null) {
 				return resultat;
 			}
@@ -602,7 +603,8 @@ public class Controleur{
 		if (type == "Menu") {
 			return null;
 		}
-		LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
+		//LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
+		LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type, dateNow, serviceNow);
 		return resultat;
 	}
 
@@ -660,7 +662,7 @@ public class Controleur{
 	 *	@return nom du client
 	 */
 	public String getNom(int numResa) {
-		String resultat = ReservationFactoryConcrete.get().getTableBD().getNomRes(numResa);
+		String resultat = ReservationFactoryConcrete.get().getNomRes(numResa);
 		return resultat;
 	}
 
