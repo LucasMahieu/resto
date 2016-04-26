@@ -73,11 +73,11 @@ public class Controleur{
      * -1 -> Erreur
      *  0 -> Réussite
      *
-     *  !!! à compléter !!!
+     *  !!! à compléter pour suivi!!!
      */
     public int ajouterMenu(String nomMenu, int quantite, int numResa, String  boisson, String entree, String plat, String dessert){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-	return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+		return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
     }
 
     /**

@@ -355,6 +355,7 @@ public class InterfaceCommande extends Observateur{
 			}
 		}
 		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 	/**
 	 * Demande au controleur d'ajouter les articles de type Menu  selectionnés
@@ -370,12 +371,15 @@ public class InterfaceCommande extends Observateur{
 						,comboBoxPlat.getSelectedItem().toString()
 						,comboBoxDessert.getSelectedItem().toString()
 				);
+				// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
+				updateRecap(Controleur.get().getNumResaCmdSelectionne());
+				Controleur.get().validate();
+				return;
 			}
-			// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
-			return;
 		}
 		// A supprimer grace à l'observateur
 		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 	/**
 	 * Demande au controleur de supprimer les articles de type menu selectionnés
@@ -391,8 +395,13 @@ public class InterfaceCommande extends Observateur{
 						,comboBoxPlat.getSelectedItem().toString()
 						,comboBoxDessert.getSelectedItem().toString()
 				);
+				updateRecap(Controleur.get().getNumResaCmdSelectionne());
+				Controleur.get().validate();
+				return;
 			}
 		}
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 
 	/**
@@ -404,6 +413,8 @@ public class InterfaceCommande extends Observateur{
 				Controleur.get().supprimerArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
 			}
 		}
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 
 	public void update(Observable o, Object arg){
