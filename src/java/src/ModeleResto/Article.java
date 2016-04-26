@@ -356,6 +356,9 @@ public class Article extends BDitem {
 	}
     }
 
+    public int supprimerMenu(String nomMenu, int quantite, int numResa, String boisson, String entree, String plat, String dessert) {
+	    return 0;
+	}
 
 
     /**
