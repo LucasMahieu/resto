@@ -354,6 +354,7 @@ public class InterfaceCommande extends Observateur{
 			}
 		}
 		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 	/**
 	 * Demande au controleur d'ajouter les articles de type Menu  selectionnés
@@ -369,12 +370,15 @@ public class InterfaceCommande extends Observateur{
 						,comboBoxPlat.getSelectedItem().toString()
 						,comboBoxDessert.getSelectedItem().toString()
 				);
+				// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
+				updateRecap(Controleur.get().getNumResaCmdSelectionne());
+				Controleur.get().validate();
+				return;
 			}
-			// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
-			return;
 		}
 		// A supprimer grace à l'observateur
 		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 	/**
 	 * Demande au controleur de supprimer les articles de type menu selectionnés
@@ -390,8 +394,13 @@ public class InterfaceCommande extends Observateur{
 						,comboBoxPlat.getSelectedItem().toString()
 						,comboBoxDessert.getSelectedItem().toString()
 				);
+				updateRecap(Controleur.get().getNumResaCmdSelectionne());
+				Controleur.get().validate();
+				return;
 			}
 		}
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 
 	/**
@@ -403,6 +412,8 @@ public class InterfaceCommande extends Observateur{
 				Controleur.get().supprimerArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
 			}
 		}
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		Controleur.get().validate();
 	}
 
 	public void update(Observable o, Object arg){
@@ -417,15 +428,31 @@ public class InterfaceCommande extends Observateur{
 	 */
 	public void updateComboBoxMenu(String menuSelectionne){
 		System.out.println("COMBOBOX DU MENU  " + menuSelectionne);
-		String[] menuBoisson = Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON").toArray(new String[0]);
-		String[] menuEntree = Controleur.get().getListeArticlesMenu(menuSelectionne, "ENTREE").toArray(new String[0]);
-		String[] menuPlat = Controleur.get().getListeArticlesMenu(menuSelectionne, "PLAT").toArray(new String[0]);
-		System.out.println("plat = " + menuPlat[0]);
-		String[] menuDessert = Controleur.get().getListeArticlesMenu(menuSelectionne, "DESSERT").toArray(new String[0]);
-		this.comboBoxBoisson = new JComboBox<String>(menuBoisson);
-		this.comboBoxEntree = new JComboBox<String>(menuEntree);
-		this.comboBoxPlat = new JComboBox<String>(menuPlat);
-		this.comboBoxDessert = new JComboBox<String>(menuDessert);
+
+		LinkedList<String> list = Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON");
+		this.comboBoxBoisson.removeAllItems();
+		for (String s : list){
+			this.comboBoxBoisson.addItem(s);
+		}
+
+		list = Controleur.get().getListeArticlesMenu(menuSelectionne, "ENTREE");
+		this.comboBoxEntree.removeAllItems();
+		for (String s : list){
+			this.comboBoxEntree.addItem(s);
+		}
+
+		list = Controleur.get().getListeArticlesMenu(menuSelectionne, "PLAT");
+		this.comboBoxPlat.removeAllItems();
+		for (String s : list){
+			this.comboBoxPlat.addItem(s);
+		}
+		list = Controleur.get().getListeArticlesMenu(menuSelectionne, "DESSERT");
+		this.comboBoxDessert.removeAllItems();
+		for (String s : list){
+			this.comboBoxDessert.addItem(s);
+		}
+
+		//this.panelMenu.updateUI();
 	}
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
