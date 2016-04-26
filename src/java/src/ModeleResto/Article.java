@@ -45,6 +45,35 @@ public class Article extends BDitem {
 		}
 	}
 
+    public String typeArticle(String nomArticle) {
+        String ret = new String();
+
+        try {
+            ResultSet rsetBoissons = getArticle(nomArticle, -1, null, "BOISSON");
+            ResultSet rsetEntrees = getArticle(nomArticle, -1, null, "ENTREE");
+            ResultSet rsetPlats = getArticle(nomArticle, -1, null, "PLAT");
+            ResultSet rsetDesserts = getArticle(nomArticle, -1, null, "DESSERT");
+
+            if (rsetBoissons.isBeforeFirst()) {
+                return "BOISSON";
+            }
+            if (rsetEntrees.isBeforeFirst()) {
+                return "ENTREE";
+            }
+            if (rsetPlats.isBeforeFirst()) {
+                return "PLAT";
+            }
+            if (rsetDesserts.isBeforeFirst()) {
+                return "DESSERT";
+            }
+        }
+        catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête de type d'article."); 
+			e.printStackTrace(System.err);
+			return null;
+        }
+        return null;
+    }
 
 	/**
 	 * Ajoute un menu

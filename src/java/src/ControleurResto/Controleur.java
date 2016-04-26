@@ -50,33 +50,54 @@ public class Controleur{
      * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
      * -1 -> Erreur
      *  0 -> Réussite
+     *
+     *  !!! Autre chose pour l'ajout des menus !!!
      */
     public int ajouterArticle(String nom, int quantite, int numResa){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-        return ReservationFactoryConcrete.get().getArticleBD().ajoutArticle(nom, quantite, numResa);
+        int ret = ReservationFactoryConcrete.get().getArticleBD().ajoutArticle(nom, quantite, numResa);
+        ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numResa);
+        String typeArticle = ReservationFactoryConcrete.get().getArticleBD().typeArticle(nom);
+        if (thisRes == null) {
+            return -1;
+        }
+        if (thisRes.getSuivi().ajouterArticle(typeArticle, nom, quantite) == -1) {
+            return -1;
+        }
+        return ret;
     }
 
     /**
      * Ajoute à la BD la quantité de menus 'nom' à la reservation numResa + VERIFIE qu'il existe pas déja
      * -1 -> Erreur
      *  0 -> Réussite
+     *
+     *  !!! à compléter !!!
      */
     public int ajouterMenu(String nomMenu, int quantite, int numResa, String  boisson, String entree, String plat, String dessert){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
 			return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
     }
 
-
-
-
     /**
      * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
      * -1 -> Erreur
      *  0 -> Réussite
+     *
+     *  !!! à faire aussi pour les menus ! !!!
      */
     public int supprimerArticle(String nom, int quantite, int numResa){
         // supprimer à la resa l'article donner avec les bonnes quantités dans la BD
-        return ReservationFactoryConcrete.get().getArticleBD().supprimerArticle(nom, quantite, numResa);
+        int ret = ReservationFactoryConcrete.get().getArticleBD().supprimerArticle(nom, quantite, numResa);
+        ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numResa);
+        String typeArticle = ReservationFactoryConcrete.get().getArticleBD().typeArticle(nom);
+        if (thisRes == null) {
+            return -1;
+        }
+        if (thisRes.getSuivi().supprimer(typeArticle, nom, quantite) == -1) {
+            return -1;
+        }
+        return ret;
     }
 
     public HashMap<String, Integer> getArticlesCommandes(int numResa) {
@@ -107,9 +128,12 @@ public class Controleur{
         return this.heureNow;
     }
 
-    // TODO implémenter cette méthode
     public String getEtatCommande(int numReservation){
-        return "BOISSON";
+        ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numReservation);
+        if (thisRes == null) {
+            return null;
+        }
+        return thisRes.getSuivi().getEtatCommande();
     }
 
     public String getServiceNow() {
@@ -381,6 +405,11 @@ public class Controleur{
 	return -1;
     }
 
+    /*
+     * Ajouter méthode qui renvoit les réservations !
+     * Tableau de Object
+     */
+
 
     /* 
      * TODO : ne selectionner que les articles disponibles sur la carte
@@ -522,5 +551,25 @@ public class Controleur{
 					}
 			}
       return h;
+    }
+    
+    public HashMap<String, Integer> aEnvoyer(int numeroReservation) {
+        ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numeroReservation);
+        if (thisRes == null) {
+            return null;
+        }
+        return thisRes.getSuivi().aEnvoyer();
+    }
+
+    public int estEnvoye(String nomArticle, int numeroReservation, int quantite) {
+        ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numeroReservation);
+        if (thisRes == null) {
+            return -1;
+        }
+        String typeArticle = ReservationFactoryConcrete.get().getArticleBD().typeArticle(nomArticle);
+        if (typeArticle == null) {
+            return -1;
+        }
+        return thisRes.getSuivi().estEnvoye(typeArticle, nomArticle, quantite);
     }
 }
