@@ -41,9 +41,11 @@ insert into Article
 insert into Article
 	Values('pates bolo', 10, 'italien');
 insert into Article
-	Values('tiramissu', 7, 'italien');
+	Values('tiramisu', 7, 'italien');
 insert into Article
 	Values('salade de tomates', 8, 'italien');
+insert into Article
+	Values('glace', 5, 'italien');
 insert into Article
 	Values('jus orange', 8, 'italien');
 
@@ -64,6 +66,8 @@ insert into Article
 	Values('poulet', 16, 'français');
 insert into Article
 	Values('fraise', 16, 'français');
+insert into Article
+	Values('perrier', 3, 'français');
 
 insert into Article
 	Values('menu enfant', 12, NULL);
@@ -106,17 +110,18 @@ insert into choix
 	Values('salade tunisienne');
 insert into choix
 	Values('the');
-
-insert choix Article
+insert into choix
+	Values('perrier');
+insert into choix
 	Values('pates bolo');
 insert into choix
-	Values('tiramissu');
+	Values('tiramisu');
 insert into choix
 	Values('salade de tomates');
 insert into choix
 	Values('jus orange');
 
-insert choix Article
+insert into choix 
 	Values('salade cesar');
 insert into choix
 	Values('steak frites');
@@ -124,8 +129,10 @@ insert into choix
 	Values('coca');
 insert into choix
 	Values('sunday');
+insert into choix
+	Values('glace');
 	
-insert choix Article
+insert into choix
 	Values('carpaccio');
 insert into choix
 	Values('champagne');
@@ -181,7 +188,7 @@ insert into Menu
 insert into Menu
 	Values('menu toqué', 'couscous');
 insert into Menu
-	Values('menu goulu', 'pate bolo');
+	Values('menu goulu', 'pates bolo');
 
 -- ESTRESERVEE (NumeroTable, NumeroReservation)
 
@@ -246,18 +253,18 @@ insert into EstCompose
 
 insert into SontVoisines
 	Values(1,3);
-	
+
 insert into SontVoisines
 	Values(3,1);
-	
+
 insert into SontVoisines
 	Values(3,4);
 
 insert into SontVoisines
 	Values(4,3);
-	
+
 insert into SontVoisines
 	Values(2,5);
-	
+
 insert into SontVoisines
 	Values(5,2);

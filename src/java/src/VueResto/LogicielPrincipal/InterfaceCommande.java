@@ -38,6 +38,14 @@ public class InterfaceCommande extends Observateur{
 	private ArrayList<JToggleButton> buttonArticleDessert;
 	private ArrayList<JToggleButton> buttonArticleMenu;
 	private LinkedList<JLabel> labelRecapCommande;
+	//private String[] menuBoisson = {"BIERE"};
+	//private String[] menuEntree = {"SALADE"};
+	//private String[] menuPlat = {"MOULE FRITE"};
+	//private String[] menuDessert = {"ILE FLOTTANTE"};
+	private JComboBox<String> comboBoxBoisson;
+	private JComboBox<String> comboBoxEntree;
+	private JComboBox<String> comboBoxPlat;
+	private JComboBox<String> comboBoxDessert;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -68,6 +76,13 @@ public class InterfaceCommande extends Observateur{
 	private static final int POS_Y_RECAP = 10;
 	private static final int TAILLE_X_RECAP = TAILLE_X_PANEL - TAILLE_X_PANEL_ARTICLE;
 	private static final int TAILLE_Y_RECAP = 20;
+	private static final int TAILLE_X_BOX = 100;
+	private static final int TAILLE_Y_BOX = 20;
+	private static final int POS_X_BOX_B = 10;
+	private static final int POS_X_BOX_E = POS_X_BOX_B + TAILLE_X_BOX + 10;
+	private static final int POS_X_BOX_P = POS_X_BOX_E + TAILLE_X_BOX + 10;
+	private static final int POS_X_BOX_D = POS_X_BOX_P + TAILLE_X_BOX + 10;
+	private static final int POS_Y_BOX = TAILLE_Y_PANEL_ARTICLE - TAILLE_Y_BOX - 30;
 
 	
 	public InterfaceCommande(){
@@ -207,6 +222,22 @@ public class InterfaceCommande extends Observateur{
 		this.labelRecapCommande = new LinkedList<JLabel>();
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
+		String[] tmp = {"Boisson"};
+		comboBoxBoisson = new JComboBox<String>(tmp);
+		comboBoxBoisson.setBounds(POS_X_BOX_B,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxBoisson);
+		tmp[0] = "Entree";
+		comboBoxEntree = new JComboBox<String>(tmp);
+		comboBoxEntree.setBounds(POS_X_BOX_E,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxEntree);
+		tmp[0] = "Plat";
+		comboBoxPlat = new JComboBox<String>(tmp);
+		comboBoxPlat.setBounds(POS_X_BOX_P,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxPlat);
+		tmp[0] = "Dessert";
+		comboBoxDessert = new JComboBox<String>(tmp);
+		comboBoxDessert.setBounds(POS_X_BOX_D,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxDessert);
 	}
 	
 	/**
@@ -342,6 +373,17 @@ public class InterfaceCommande extends Observateur{
 		}
 	}
 
+	public void updateComboBoxMenu(String menuSelectionne){
+		System.out.println("COMBOBOX DU MENU  " + menuSelectionne);
+		String[] menuBoisson = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON").toArray();
+		String[] menuEntree = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "ENTREE").toArray();
+		String[] menuPlat = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "PLAT").toArray();
+		String[] menuDessert = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "DESSERT").toArray();
+		this.comboBoxBoisson = new JComboBox<String>(menuBoisson);
+		this.comboBoxEntree = new JComboBox<String>(menuEntree);
+		this.comboBoxPlat = new JComboBox<String>(menuPlat);
+		this.comboBoxDessert = new JComboBox<String>(menuDessert);
+	}
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
 	 *
@@ -350,6 +392,9 @@ public class InterfaceCommande extends Observateur{
 		buttonRecherche.addActionListener(aL);
 		buttonAjout.addActionListener(aL);
 		buttonSuppression.addActionListener(aL);
+		for(JToggleButton jt : buttonArticleMenu){
+			jt.addActionListener(aL);
+		}
 	}
 
 	public JPanel getPanel(){

@@ -87,6 +87,15 @@ CREATE TABLE sontCommandes (
 	CONSTRAINT KsontCommandes PRIMARY KEY (nomArticle, numeroReservation)
 );
 
+CREATE TABLE menuCommandes (
+	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
+	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
+	nomBoisson VARCHAR(20) REFERENCES Boisson(nomBoisson),
+	nomEntree VARCHAR(20) REFERENCES Entree(nomEntree),
+	nomPlat VARCHAR(20) REFERENCES Plat(nomPlat),
+	nomDessert VARCHAR(20) REFERENCES Dessert(nomDessert),
+	CONSTRAINT KmenuCommandes PRIMARY KEY (numeroReservation, nomMenu,nomBoisson, nomEntree, nomPlat, nomDessert)
+);
 CREATE TABLE Disponibles (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
     nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
