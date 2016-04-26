@@ -1,4 +1,3 @@
-
 package ControleurResto;
 
 import VueResto.*;
@@ -30,6 +29,9 @@ public class Controleur{
 
     final private static Controleur instanceUnique = new Controleur();
 
+    /** 
+     * Constructeur du controleur 
+     */
     private Controleur(){
         numResaCmdSelectionee = 0;
         numResaSuiviSelectionee = 0;
@@ -42,17 +44,21 @@ public class Controleur{
         }
     }
 
+    /** 
+     * Accesseur du controleur 
+     *	@return controleur
+     */
     public static Controleur get()
     {
         return instanceUnique;
     }
 
-    /**
+    /** 
      * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
-     * -1 -> Erreur
-     *  0 -> Réussite
-     *
-     *  !!! Autre chose pour l'ajout des menus !!!
+     *	@param nom nom de l'article
+     *	@param quantite quantite
+     *	@param numResa numero de reservation
+     *	@return 0 si réussi, -1 sinon
      */
     public int ajouterArticle(String nom, int quantite, int numResa){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
@@ -68,38 +74,46 @@ public class Controleur{
         return ret;
     }
 
-    /**
+    /** 
      * Ajoute à la BD la quantité de menus 'nom' à la reservation numResa + VERIFIE qu'il existe pas déja
-     * -1 -> Erreur
-     *  0 -> Réussite
-     *
-     *  !!! à compléter !!!
+     *	@param numMenu nom du menu
+     *	@param quantite quantite
+     *	@param numResa numero de reservation
+     *	@param boisson nom de la boisson
+     *	@param entree nom de l entree
+     *	@param plat nom du plat
+     *	@param dessert nom du dessert
+     *	@return 0 si réussi, -1 sinon
      */
     public int ajouterMenu(String nomMenu, int quantite, int numResa, String  boisson, String entree, String plat, String dessert){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-	return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+        return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
     }
 
-    /**
+    /** 
      * Supprime à la BD le menu 'nomMenu' à la reservation numResa, DANS MENU ET DANS MENUCOMMANDES
-     * -1 -> Erreur
-     *  0 -> Réussite
+     *	@param numMenu nom du menu
+     *	@param quantite quantite
+     *	@param numResa numero de reservation
+     *	@param boisson nom de la boisson
+     *	@param entree nom de l entree
+     *	@param plat nom du plat
+     *	@param dessert nom du dessert
+     *	@return 0 si réussi, -1 sinon
      */
     public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){
         // supprimer à la resa l'article donné avec les bonnes quantités dans la BD
-	if (ReservationFactoryConcrete.get().getArticleBD().dejaCommandeMenuCommandes(nomMenu, numResa, boisson, entree, plat, dessert) > 0) {
-	    return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, numResa, quantite, boisson, entree, plat, dessert);	
-	}
-	return -1;
+        if (ReservationFactoryConcrete.get().getArticleBD().dejaCommandeMenuCommandes(nomMenu, numResa, boisson, entree, plat, dessert) > 0) {
+            return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, numResa, quantite, boisson, entree, plat, dessert);	
+        }
+        return -1;
     }
-    
-    
-    /**
-     * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
-     * -1 -> Erreur
-     *  0 -> Réussite
-     *
-     *  !!! à faire aussi pour les menus ! !!!
+
+
+    /** 
+     *  Supprime à la BD la quantité d'article 'nom' à la reservation numResa
+     *	@param numResa numero de la reservation
+     *	@return 0 si réussi, -1 sinon
      */
     public int supprimerArticle(String nom, int quantite, int numResa){
         // supprimer à la resa l'article donner avec les bonnes quantités dans la BD
@@ -115,34 +129,56 @@ public class Controleur{
         return ret;
     }
 
+    /** Cette fonction permet de trouver les articles correspondant a la reservation
+     *
+     *	@param numResa numero de la reservation
+     *	@return HashMap des articles commandes
+     */
     public HashMap<String, Integer> getArticlesCommandes(int numResa) {
-	HashMap<String, Integer> h = new HashMap<String, Integer>();
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Menu"));
-	//TODO à vérifier si c 'est bien ca qu on doit retourner
+        HashMap<String, Integer> h = new HashMap<String, Integer>();
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Menu"));
+        //TODO à vérifier si c 'est bien ca qu on doit retourner
         return h;
     }
 
+    /** Cette fonction permet de creer une reservation
+     *
+     *	@return ?
+     */
     public int creerFacture(String client){
         // Facture factureFinale = new Facture();
         return 999;
     }
 
+    /** Cette fonction permet de trouver la date actuelle
+     *
+     *	@return date actuelle
+     */
     public String getDateNow(){
         date = new Date();
         dateNow = sdfDate.format(date);
         return this.dateNow;
     }
 
+    /** Cette fonction permet de trouver l'heure actuelle
+     *
+     *	@return heure actuelle
+     */
     public String getHeureNow(){
         date = new Date();
         heureNow = sdfHeure.format(date);
         return this.heureNow;
     }
 
+    /** Cette fonction permet de trouver l'etat de la commande de la reservation selectionnee
+     *
+     *	@param numReservation numero de reservation
+     *	@return numero du client 
+     */
     public String getEtatCommande(int numReservation){
         ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numReservation);
         if (thisRes == null) {
@@ -151,6 +187,10 @@ public class Controleur{
         return thisRes.getSuivi().getEtatCommande();
     }
 
+    /** Cette fonction permet de trouver le service actuel
+     *
+     *	@return numero du client 
+     */
     public String getServiceNow() {
         serviceNow = "MIDI";
         if(Integer.parseInt(getHeureNow()) >= DEBUT_SERVICE_SOIR){
@@ -227,6 +267,12 @@ public class Controleur{
         return numResa;
     }
 
+    /** Cette fonction permet de trouver le numero du client 
+     *
+     *	@param nomC nom du client
+     *	@param telC numero de telephone du client
+     *	@return numero du client 
+     */
     public int trouverClient(String nomC, String telC){
         int numClient = ReservationFactoryConcrete.get().getClientBD().existsClient(nomC, telC);
         if(numClient == -1){
@@ -241,6 +287,14 @@ public class Controleur{
         return numClient;
     }
 
+    /** Cette fonction permet de trouver une table pour la reservation demandée
+     *
+     *	@param localisation localisation demandée par le client
+     *	@param date date demandée par le client
+     *	@param service service demandé par le client
+     *	@param nbPersonnes nombre de personnes
+     *	@return liste de tables correspondantes
+     */
     public ArrayList<Integer> trouverTable(String localisation, String date, String service, int nbPersonnes){
         //ArrayList<Integer> res = new ArrayList<Integer>();
         LinkedList<Integer> res;
@@ -405,29 +459,35 @@ public class Controleur{
         }
         return table;
     }
-	
-
-    /**
-     * Vérifie que la réservation existe, puis la supprime
-     * -1 -> Action non effectuée
-     *  0 -> Réussite
-     */
-    public int supprimerReservation(int numeroTable, String date, String service){
-        if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) == 0) {
-            ReservationFactoryConcrete.get().getTableBD().supprimerReservation(numeroTable, date, service);
-	    return 0;
-        } 
-	return -1;
-    }
 
     public LinkedList<Integer> getListeReservations() {
         return null;
     }
 
+    /** 
+     *  Vérifie que la réservation existe, puis la supprime
+     *	@param numeroTable numéro de table
+     *	@param date date de la suppression 
+     *	@param service service correspondant à la suppression
+     *	@return 0 si réussite, -1 sinon
+     */
+    public int supprimerReservation(int numeroTable, String date, String service){
+        if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) == 0) {
+            ReservationFactoryConcrete.get().getTableBD().supprimerReservation(numeroTable, date, service);
+            return 0;
+        } 
+        return -1;
+    }
 
     /* 
      * TODO : ne selectionner que les articles disponibles sur la carte
      * à la date actuelle !!
+     */
+
+    /** 
+     *  Renvoie la liste des articles pour un service donné
+     *	@param type nom du service
+     *	@return Liste d'articles correspondant au service demandé
      */
     public LinkedList<String> getListeArticles(String type)
     {
@@ -450,19 +510,27 @@ public class Controleur{
         return resultat;
     }
 
-    /**
-     * Retourne les articles d'un certain type qui sont disponibles pour un menu donné
+    /** 
+     *  Retourne les articles d'un certain type qui sont disponibles pour un menu donné
+     *	@param nomMenu nom du menu
+     *	@param type nom du service
+     *	@return Liste d'articles correspondant au menu
      */
     public LinkedList<String> getListeArticlesMenu(String nomMenu, String type)
     {
-	if (type == "Menu") {
-	    return null;
-	}
-	LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
-	return resultat;
+        if (type == "Menu") {
+            return null;
+        }
+        LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
+        return resultat;
     }
 
 
+    /** 
+     *  Retourne le prix d'un article
+     *	@param nomArticle nom de l'article
+     *	@return prix de l'article en euros
+     */
     public float getPrixArticle(String nomArticle)
     {
         float resultat = -1;
@@ -470,18 +538,32 @@ public class Controleur{
         return resultat;
     }
 
+    /** 
+     *  Retourne le numero de reservation correspondant aux paramètres
+     *	@param date date de la reservation
+     *	@param nTable numero de la table
+     *	@param service type de service
+     *	@return numéro de la reservation
+     */
     public int getNumeroReservation(String date, int nTable, String service){
         return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(nTable, date, service);
     }
 
 
+    /** 
+     *  Retourne le numero de reservation correspondant aux paramètres
+     *	@param nTable numero de la table
+     *	@return numéro de la reservation du service courant
+     */
     public int getNumeroReservation(int numTable){
         return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable, dateNow, serviceNow);
     }
 
-    /**
-     * Donne une string comportant toutes les tables associée à une réservation
-     * Convention : séparer les numeros par des '-'.
+    /** 
+     *  Donne une string comportant toutes les tables associée à une réservation
+     *  Convention : séparer les numeros par des '-'.
+     *	@param numResa numero de la reservation
+     *	@return liste de tables correspondant a la reservation
      */
     public LinkedList<Integer> getNumeroTables(int numResa) {
         if (numResa <= 0) {
@@ -489,77 +571,76 @@ public class Controleur{
         }
         LinkedList<Integer> tables = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
         return tables;
-        /*
-	  String resultat = "";
-	  try {
-	  if (tables == null) {
-	  return resultat;
-	  }
-	  // Pas de tuples renvoyé
-	  if (tables.isEmpty()) {
-	  return resultat;
-	  }
-	  else {
-	  boolean isFirst=true;
-	  //while(rset.next()){
-	  for (Integer t : tables) {
-	  if(!isFirst){
-	  resultat += "-";
-	  isFirst = false;
-	  }
-	  resultat += t;
-	  }
-	  }
-	  }
-	  catch (SQLException e) {
-	  System.err.println("Erreur pour faire la requête getNumeroTable.");
-	  e.printStackTrace(System.err);
-	  return null;
-	  }
-        */
     }
 
+    /** 
+     *  Renvoie le nom du client pour la reservation demandee
+     *	@param numResa numero de la reservation
+     *	@return nom du client
+     */
     public String getNom(int numResa) {
         String resultat = ReservationFactoryConcrete.get().getTableBD().getNomRes(numResa);
         return resultat;
     }
 
+    /** 
+     *  Renvoie le numero de la reservation selectionnee dans l'onglet commande
+     *	@return numero de la reservation selectionnee dans l'onglet commande
+     */
     public int getNumResaCmdSelectionne(){
         return numResaCmdSelectionee;
     }
 
+    /** 
+     *  Renvoie le numero de la reservation selectionnee dans l'onglet suivi
+     *	@return numero de la reservation selectionnee dans l'onglet suivi
+     */
     public int getNumResaSuiviSelectionne(){
         return numResaSuiviSelectionee;
     }
 
+    /** 
+     *  paramètre le numero de la reservation selectionnee dans l'onglet commande
+     *	@param n numero de la reservation
+     */
     public void setNumResaCmdSelectionne(int n){
         numResaCmdSelectionee = n;
     }
 
+    /** 
+     *  paramètre le numero de la reservation dans l'onglet suivi
+     *	@param n numero de la reservation
+     */
     public void setNumResaSuiviSelectionne(int n){
         numResaSuiviSelectionee = n;
     }
 
-    /**
-     * Retourne tous les articles commandes par numres, les menus ne sont pas comptés, mais ce qu'ils contiennent si
+    /** 
+     *  Renvoie les articles selectionnes correspondant a la reservation
+     *	@param numResa numero de la reservation
+     *	@return HashMap du choix d'articles
      */
-
     public HashMap<String, Integer> getChoixCommandes(int numResa) {
-	HashMap<String, Integer> h = new HashMap<String, Integer>();
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
-	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
-	for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandes(numResa)) {
-	    if (h.containsKey(choix)) {
-		h.put(choix, h.get(choix) + 1);
-	    } else {
-		h.put(choix, 1);
-	    }
-	}
-	return h;
+        HashMap<String, Integer> h = new HashMap<String, Integer>();
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
+        h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
+        for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandes(numResa)) {
+            if (h.containsKey(choix)) {
+                h.put(choix, h.get(choix) + 1);
+            } else {
+                h.put(choix, 1);
+            }
+        }
+        return h;
     }
-    
+
+    /** 
+     *  Renvoie les articles a envoyer correspondant a la reservation
+     *	@param numResa numero de la reservation
+     *	@return HashMap des articles a envoyer
+     */
     public HashMap<String, Integer> aEnvoyer(int numeroReservation) {
         ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numeroReservation);
         System.out.println(ReservationFactoryConcrete.get().getReservations());
@@ -570,6 +651,13 @@ public class Controleur{
         return thisRes.getSuivi().aEnvoyer();
     }
 
+    /** 
+     *  paramètre l' article qui ont ete envoyes correspondant a la reservation
+     *	@param nomArticle nom de l'article envoye
+     *	@param numeroReservation numero de la reservation
+     *	@param quantite quantite
+     *	@return 0 si réussi, -1 sinon
+     */
     public int estEnvoye(String nomArticle, int numeroReservation, int quantite) {
         ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numeroReservation);
         if (thisRes == null) {
@@ -584,7 +672,13 @@ public class Controleur{
     /**
      * Retourne, pour un type, (boisson, entree ..), les articles comandés pour un numresa
      */
-    
+
+    /** 
+     *  Renvoie les articles correspondant a la reservation demandee et a l'etat du repas
+     *	@param numResa numero de la reservation
+     *	@param type etat du repas
+     *	@return HashMap du choix d'articles correspondant à la reservation et au etat du repas
+     */
     public HashMap<String, Integer> getChoixCommandes(int numResa, String type) {
         HashMap<String, Integer> h = new HashMap<String, Integer>();
         h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, type));
