@@ -148,6 +148,7 @@ public class InterfaceReservation extends Observateur{
     System.out.println("effetBoutonSupprimer");
     //TODO : implémenter le bouton Supprimer Reservation
   }
+
   public void activeListener(ActionListener aL){
     boutonReservation.addActionListener(aL);
     boutonSupprimer.addActionListener(aL);

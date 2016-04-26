@@ -2,6 +2,9 @@ package ModeleResto;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
+import java.text.*;
+import ControleurResto.*;
 //import oracle.jdbc.driver.OracleDriver;
 
 public class ReservationFactoryConcrete extends ReservationFactory{
@@ -18,9 +21,6 @@ public class ReservationFactoryConcrete extends ReservationFactory{
     private final String URL = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
     private String USR;
     private String PSWD;
-
-    // On a déjà 4 réservations dans la BD
-    private int lastRes = 4;
 
     private ReservationFactoryConcrete() {
         System.out.print("Entrez votre nom d'utilisateur pour vous connecter à votre BD : ");
@@ -50,12 +50,59 @@ public class ReservationFactoryConcrete extends ReservationFactory{
         }
 
 		reservations = new HashMap<Integer, ReservationConcrete>();
-        lastRes = getNombreReservations();
-        client_BD.setLastClient(client_BD.getNombreClient());
+        // Ajoute dans reservations toutes les réservations futures.
+        initRes(reservations);
+    }
+
+    /*
+     * Ajoute dans l'état initial, au lancement de l'application
+     * les réservations d'aujourd'hui et futures.
+     */
+    public int initRes(HashMap<Integer, ReservationConcrete> reservations) {
+		String requete = new String("SELECT numeroReservation, dateService FROM Reservation");
+        System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			while (rset.next()) {
+				int numRes = rset.getInt(1);
+                String date = rset.getString(2);
+                if (turfu(date)) {
+                    reservations.put(numRes, new ReservationConcrete(numRes));
+                }
+			}
+            rset.close();
+            getStmt().close();
+            return 0;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la requête initRes.");
+			e.printStackTrace(System.err);
+			return -1;
+		}
+    }
+
+    public boolean turfu(String date) {
+        String dateNow = Controleur.get().getDateNow();
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy"); 
+        Date nowDate;
+        Date thisDate;
+        try {
+            nowDate = df.parse(dateNow);
+            thisDate = df.parse(date);
+            if (nowDate.compareTo(thisDate) <= 0) {
+                return true;
+            }
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
 		String requete = new String("INSERT INTO Reservation VALUES (");
+        int lastRes = getNombreReservations();
 		requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
         System.out.println(requete);
 		try {
@@ -75,6 +122,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
 	public int getNombreReservations() {
 		String requete = "SELECT COUNT(*) FROM Reservation";
+        System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
 			ResultSet rset = getStmt().executeQuery(requete);

@@ -224,13 +224,14 @@ public class SuiviCommande {
     }
 
     public HashMap<String, Integer> aEnvoyer() {
-        if (etatCommande == "BOISSON")
+        if (etatCommande.equals("BOISSON")) {
             return boissons;
-        else if (etatCommande == "ENTREE")
+        }
+        else if (etatCommande.equals("ENTREE"))
             return entrees;
-        else if (etatCommande == "PLAT")
+        else if (etatCommande.equals("PLAT"))
             return plats;
-        else if (etatCommande == "DESSERT")
+        else if (etatCommande.equals("DESSERT"))
             return desserts;
         else
             return null;

@@ -2,6 +2,7 @@ DROP TABLE sontVoisines;
 DROP TABLE estCompose;
 DROP TABLE estBase;
 DROP TABLE Disponibles;
+DROP TABLE menuCommandes;
 DROP TABLE sontCommandes;
 DROP TABLE menuCommandes;
 DROP TABLE estReservee;
