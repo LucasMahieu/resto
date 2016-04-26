@@ -143,7 +143,6 @@ public class Controleur{
         h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
         h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
         h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Menu"));
-        //TODO à vérifier si c 'est bien ca qu on doit retourner
         return h;
     }
 
@@ -487,7 +486,7 @@ public class Controleur{
     }
 
     /* 
-     * TODO : ne selectionner que les articles disponibles sur la carte
+     * TODO : ne selectionner que les articles disponibles sur la carte, fonction qui ne marche pas pour le moment
      * à la date actuelle !!
      */
 
