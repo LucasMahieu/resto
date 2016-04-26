@@ -110,6 +110,8 @@ insert into Service
 insert into Service
 	Values('MIDI', '26/04/2016', 'carte bar');
 insert into Service
+	Values('SOIR', '26/04/2016', 'carte bar');
+insert into Service
 	Values('SOIR', '27/07/2015', 'carte repas');
 insert into Service
 	Values('MIDI', '27/04/2016', 'carte bar');

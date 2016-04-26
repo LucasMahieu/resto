@@ -147,25 +147,24 @@ public class InterfaceReservation extends Observateur{
 
   public void effetBoutonSupprimer(){
     System.out.println("effetBoutonSupprimer");
-    //TODO : implémenter le bouton Supprimer Reservation
     int selectedRow = this.tableau.getSelectedRow();
     if(selectedRow >= 0){
       System.out.println("Selected row : " + selectedRow );
-      int numeroReservation = Integer.parseInt((String) (this.tableau.getModel()).getValueAt(selectedRow,1));
+      int numeroReservation = 1;
+      //int numeroReservation = (int) (this.tableau.getModel()).getValueAt(selectedRow,1);
       String date = (String) (this.tableau.getModel()).getValueAt(selectedRow,4);
-      int table= (int) (this.tableau.getModel()).getValueAt(selectedRow,2);
-      String service= (String) (this.tableau.getModel()).getValueAt(selectedRow,5);
-      System.out.println("Reservation: " + numeroReservation);
+      int table= Controleur.get().getNumeroTables(numeroReservation).get(0);
+      String service = (String) (this.tableau.getModel()).getValueAt(selectedRow,5);
+      System.out.println("Numero Reservation: " + numeroReservation);
       System.out.println("Date : " + date);
       System.out.println("table: " + table);
       System.out.println("service: " + service);
-      if (numeroReservation> 0){
+      if (numeroReservation > 0){
         System.out.println("suppression reservation");
         Controleur.get().supprimerReservation(table,date,service);
       }
       this.miseAjourTableauReservation();
     }
-    
   }
 
   public void effetBoutonActualiser(){

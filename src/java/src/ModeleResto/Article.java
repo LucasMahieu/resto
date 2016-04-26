@@ -9,10 +9,10 @@ public class Article extends BDitem {
 
 	/**
 	 * Ajoute un article
-     * @param nomArticle nom de d'article
-     * @param quantite quantite
-     * @param numeroReservation numero de la reservation
-     * @return -1 si erreur, 0 sinon
+	 * @param nomArticle nom de d'article
+	 * @param quantite quantite
+	 * @param numeroReservation numero de la reservation
+	 * @return -1 si erreur, 0 sinon
 	 */  
 	public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
 		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
@@ -52,10 +52,10 @@ public class Article extends BDitem {
 		String ret = new String();
 
 		try {
-			ResultSet rsetBoissons = getArticle(nomArticle, -1, null, "BOISSON");
-			ResultSet rsetEntrees = getArticle(nomArticle, -1, null, "ENTREE");
-			ResultSet rsetPlats = getArticle(nomArticle, -1, null, "PLAT");
-			ResultSet rsetDesserts = getArticle(nomArticle, -1, null, "DESSERT");
+			ResultSet rsetBoissons = getArticle(nomArticle, -1, null, "BOISSON", null, null);
+			ResultSet rsetEntrees = getArticle(nomArticle, -1, null, "ENTREE", null, null);
+			ResultSet rsetPlats = getArticle(nomArticle, -1, null, "PLAT", null, null);
+			ResultSet rsetDesserts = getArticle(nomArticle, -1, null, "DESSERT", null, null);
 
 			if (rsetBoissons.isBeforeFirst()) {
 				return "BOISSON";
@@ -80,14 +80,14 @@ public class Article extends BDitem {
 
 	/**
 	 * Ajoute un menu dans menucommandes
-     *  @param nomMenu nom du menu
-     *  @param quantite quantite
-     *  @param numeroReservation numero de reservation
-     *  @param nomBoisson nom de la boisson
-     *  @param nomEntree nom de l entree
-     *  @param nomPlat nom du plat
-     *  @param nomDessert nom du dessert
-     *  @return -1 si erreur, 0 sinon
+	 *  @param nomMenu nom du menu
+	 *  @param quantite quantite
+	 *  @param numeroReservation numero de reservation
+	 *  @param nomBoisson nom de la boisson
+	 *  @param nomEntree nom de l entree
+	 *  @param nomPlat nom du plat
+	 *  @param nomDessert nom du dessert
+	 *  @return -1 si erreur, 0 sinon
 	 */
 	public int ajoutMenu(String nomMenu, int quantite, int numeroReservation, String  nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
 
@@ -106,10 +106,10 @@ public class Article extends BDitem {
 			requete += "SET quantite = " + (nombreDejaCommande + quantite) + " ";
 			requete += "WHERE numeroReservation = " + numeroReservation;
 			requete += "AND nomMenu = '" + nomMenu +"' ";
-				requete += "AND nomBoisson = '" + nomBoisson +"' ";
-				requete += "AND nomEntree = '" + nomEntree +"' ";
+			requete += "AND nomBoisson = '" + nomBoisson +"' ";
+			requete += "AND nomEntree = '" + nomEntree +"' ";
 			requete += "AND nomPlat = '" + nomPlat +"' ";
-				requete += "AND nomDessert = '" + nomDessert +"' ";
+			requete += "AND nomDessert = '" + nomDessert +"' ";
 			requete += "AND quantite = " + nombreDejaCommande;
 		}
 		else {
@@ -137,14 +137,12 @@ public class Article extends BDitem {
 		}
 	}
 
-
-
 	/**
 	 * Supprime quantité nomArticle de la reservation n°numeroReservation
-     * @param nomArticle nom de l article
-     * @param quantite quantite
-     * @param numeroReservation numero de la reservation
-     * @return -1 si erreur, 0 sinon
+	 * @param nomArticle nom de l article
+	 * @param quantite quantite
+	 * @param numeroReservation numero de la reservation
+	 * @return -1 si erreur, 0 sinon
 	 */
 	public int supprimerArticle(String nomArticle, int quantite, int numeroReservation) {
 		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
@@ -180,9 +178,9 @@ public class Article extends BDitem {
 
 	/**
 	 * Combien de ce "nomArticle" ont été commandés dans la table sontcommandes
-     * @param nomArticle nom de l article
-     * @param numeroReservation numero de reservation
-     *  @return -1 si erreur, 0 sinon
+	 * @param nomArticle nom de l article
+	 * @param numeroReservation numero de reservation
+	 *  @return -1 si erreur, 0 sinon
 	 */
 	public int dejaCommande(String nomArticle, int numeroReservation) {
 		int ret = 0;
@@ -213,13 +211,13 @@ public class Article extends BDitem {
 
 	/**
 	 * Combien de ce menu ont été commandés (dans Table MenuCommandes)
-     * @param nomMenu nom du menu
-     * @param numeroReservation numero de reservation
-     * @param nomBoisson nom de la boisson
-     * @param nomEntree nom de l entree
-     * @param nomPlat nom du plat
-     * @param nomDessert nom du dessert
-     *  @return -1 si erreur , 0 sinon
+	 * @param nomMenu nom du menu
+	 * @param numeroReservation numero de reservation
+	 * @param nomBoisson nom de la boisson
+	 * @param nomEntree nom de l entree
+	 * @param nomPlat nom du plat
+	 * @param nomDessert nom du dessert
+	 *  @return -1 si erreur , 0 sinon
 	 */
 	public int dejaCommandeMenuCommandes(String nomMenu, int numeroReservation, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
 		if (nomMenu == null || numeroReservation <= 0 ||  nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
@@ -254,14 +252,17 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne toutes les informations sur l'article en question
-     * @param nomArticle nom de l article
-     * @param prixArticle prix de l article
-     * @param specialite specialite
-     * @param type type d article
-     * @return resultat de la requete
+	 * @param nomArticle nom de l article
+	 * @param prixArticle prix de l article
+	 * @param specialite specialite
+	 * @param type type d article
+	 * @return resultat de la requete
 	 */
-	public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
-		String requete = new String("SELECT * FROM Article ");
+	public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type, String date, String service) {
+		String requete = new String("SELECT * FROM Article");
+		if (date != null && service == null) {
+			requete += ", Disponibles ";
+		}
 		if (nomArticle != null || prixArticle != -1 || specialite != null) {
 			requete += "WHERE ";
 		}
@@ -278,14 +279,26 @@ public class Article extends BDitem {
 			if (nomArticle != null || prixArticle != -1) {	
 				requete += " AND ";
 			}
-			requete += ("AND Article.specialite = '" + specialite + "'");
+			requete += ("AND Article.specialite = '" + specialite + "' ");
+		}
+
+		if (date != null && service != null) {
+			requete += "AND Article.nomArticle = Disponibles.nomArticle AND (";
+			LinkedList<String> cartes = getCarte(date, service);
+			if (cartes == null) {
+				return null;
+			} 
+			for (String carte : cartes) {
+				requete += "Disponibles.nomCarte = '" + carte + "' or ";
+			}
+			requete = requete.substring(0, requete.length()-3);
+			requete += ") ";
 		}
 		if (type != null) {
 			requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
 			if (type == "menu") {
 				requete += "(SELECT Menu.nomMenu FROM " + type + ")";
-			}
-			else {
+			} else {
 				requete += "(SELECT * FROM " + type + ")";
 			}
 		}
@@ -303,15 +316,51 @@ public class Article extends BDitem {
 	}
 
 	/**
-	 * Retourne les articles d'un certain type qui sont disponibles pour un menu donné //TODO, marche pas ici
-     * @param nomMenu nom du menu
-     * @param type type d article
-     * @return liste d article du type demande
+	 * Retourne la liste des cartes disponibles pour le jour et le service choisis
 	 */
-	public LinkedList<String> getArticleMenu(String nomMenu, String type) {
+	public LinkedList<String> getCarte(String date, String service) {
+		LinkedList<String> res = new LinkedList<String>(); 
+		String requete;
+		if (date == null || service == null) {
+			return null;
+		}
+		requete = new String("SELECT nomCarte FROM Service");
+		requete += " WHERE Service.dateService ='" + date + "' ";
+		requete += "AND Service.typeService = '"+ service + "'";
+
+		System.out.println(requete);
+		try {
+			setStmt(getCon().createStatement());
+			ResultSet rset = getStmt().executeQuery(requete);
+			while (rset.next()) {
+				res.add(rset.getString(1));
+			}
+			rset.close();
+			getStmt().close();
+			return res;
+		}
+		catch (SQLException e) {
+			System.err.println("Erreur pour faire la getArticleMenu");
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
+
+
+	/**
+	 * Retourne les articles d'un certain type qui sont disponibles pour un menu donné //TODO, marche pas ici
+	 * @param nomMenu nom du menu
+	 * @param type type d article
+	 * @return liste d article du type demande
+	 */
+	public LinkedList<String> getArticleMenu(String nomMenu, String type, String date, String service) {
 		LinkedList<String> res = new LinkedList<String>(); 
 		String requete;
 		if (nomMenu == null || type == null) {
+			return null;
+		}
+		if (!getCarte(date, service).contains(nomMenu)) {
 			return null;
 		}
 		if (type == "Plat") {
@@ -342,10 +391,10 @@ public class Article extends BDitem {
 
 	/**
 	 * Est utilisé dans la fonction principale
-     * @param nomMenu nom du menu
-     * @param type type d article
-     * @return nom d article
-     * 
+	 * @param nomMenu nom du menu
+	 * @param type type d article
+	 * @return nom d article
+	 * 
 	 */
 	public String getArticleMenuBis(String nomMenu, String type) {
 		String  res = null;
@@ -377,9 +426,9 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne les articles commandés pour une reservation pour une etape donnée (on ne renvoie pas le contenu des menus)
-     * @param numRes numero de la reservation
-     * @param etape etape du repas
-     * @return HashMap des articles commandes
+	 * @param numRes numero de la reservation
+	 * @param etape etape du repas
+	 * @return HashMap des articles commandes
 	 */
 	public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
 		HashMap<String, Integer> res = new HashMap<String, Integer>();
@@ -411,8 +460,8 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne les articles commandés pour une reservation dans tous les menus (dans menuCommandes)
-     * @param numRes numero de reservation
-     * @return liste des articles commandes dans les menus
+	 * @param numRes numero de reservation
+	 * @return liste des articles commandes dans les menus
 	 */
 	public LinkedList<String> getArticlesMenuCommandes(int numRes) {
 		LinkedList<String> res = new LinkedList<String>();
@@ -441,9 +490,9 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne les articles commandés pour une reservation dans tous les menus (dans menuCommandes) DANS UNE ETAPE
-     * @param numRes numero de reservation
-     * @param type etape du repas
-     * @return liste des articles d'une etape du menu
+	 * @param numRes numero de reservation
+	 * @param type etape du repas
+	 * @return liste des articles d'une etape du menu
 	 */
 	public LinkedList<String> getArticlesMenuCommandesType(int numRes, String type) {
 		LinkedList<String> res = new LinkedList<String>();
@@ -471,14 +520,14 @@ public class Article extends BDitem {
 	}
 	/**
 	 * Supprime quantité nomMenu de la reservation n°numeroReservation
-     * @param nomMenu nom du menu
-     * @param quantite quantite
-     * @param numeroReservation numero de reservation
-     * @param nomBoisson nom de la boisson
-     * @param nomEntree nom de l entree
-     * @param nomPlat nom du plat
-     * @param nomDessert nom du dessert
-     * @return -1 si erreur, 0 sinon
+	 * @param nomMenu nom du menu
+	 * @param quantite quantite
+	 * @param numeroReservation numero de reservation
+	 * @param nomBoisson nom de la boisson
+	 * @param nomEntree nom de l entree
+	 * @param nomPlat nom du plat
+	 * @param nomDessert nom du dessert
+	 * @return -1 si erreur, 0 sinon
 	 */
 	public int supprimerMenu(String nomMenu, int quantite, int numeroReservation, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
 		if (numeroReservation <= 0 || nomMenu == null || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
@@ -524,8 +573,8 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne le prix de l'aticle demandé
-     * @param nomArticle nom de l article
-     * @return prix de l article en euros
+	 * @param nomArticle nom de l article
+	 * @return prix de l article en euros
 	 */
 	public float getPrix(String nomArticle) {	   	       
 		float res = -1;
