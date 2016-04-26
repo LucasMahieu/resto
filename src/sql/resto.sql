@@ -90,12 +90,12 @@ CREATE TABLE sontCommandes (
 CREATE TABLE menuCommandes (
 	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
 	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
-	nomBoisson VARCHAR(20) REFERENCES Boisson(nomBoisson),
-	nomEntree VARCHAR(20) REFERENCES Entree(nomEntree),
+	nomBoisson VARCHAR(20),
+	nomEntree VARCHAR(20),
 	nomPlat VARCHAR(20) REFERENCES Plat(nomPlat),
-	nomDessert VARCHAR(20) REFERENCES Dessert(nomDessert),
-	quantite INTEGER check (quantite > 0),
-	CONSTRAINT KmenuCommandes PRIMARY KEY (numeroReservation, nomMenu, nomBoisson, nomEntree, nomPlat, nomDessert)
+	nomDessert VARCHAR(20),
+	quantite INTEGER check (quantite > 0)
+	--CONSTRAINT KmenuCommandes PRIMARY KEY (numeroReservation, nomMenu, nomBoisson, nomEntree, nomPlat, nomDessert)
 );
 
 CREATE TABLE Disponibles (
