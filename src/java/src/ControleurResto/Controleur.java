@@ -48,6 +48,8 @@ public class Controleur{
 
     /**
      * Ajoute à la BD la quantité d'article 'nom' à la reservation numResa
+     * -1 -> Erreur
+     *  0 -> Réussite
      */
     public int ajouterArticle(String nom, int quantite, int numResa){
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
@@ -55,14 +57,37 @@ public class Controleur{
     }
 
     /**
+     * Ajoute à la BD la quantité de menus 'nom' à la reservation numResa + VERIFIE qu'il existe pas déja
+     * -1 -> Erreur
+     *  0 -> Réussite
+     */
+    public int ajouterMenu(String nomMenu, int quantite, int numResa, String  boisson, String entree, String plat, String dessert){
+        // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
+			return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+    }
+
+
+
+
+    /**
      * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
+     * -1 -> Erreur
+     *  0 -> Réussite
      */
     public int supprimerArticle(String nom, int quantite, int numResa){
         // supprimer à la resa l'article donner avec les bonnes quantités dans la BD
         return ReservationFactoryConcrete.get().getArticleBD().supprimerArticle(nom, quantite, numResa);
     }
+
     public HashMap<String, Integer> getArticlesCommandes(int numResa) {
-        return ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa);
+	HashMap<String, Integer> h = new HashMap<String, Integer>();
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Menu"));
+	//TODO à vérifier si c 'est bien ca qu on doit retourner
+        return h;
     }
 
     public int creerFacture(String client){
@@ -342,15 +367,18 @@ public class Controleur{
         return table;
     }
 	
-	//TODO mettre un int pour le retour
-    public void supprimerReservation(int numeroTable, String date, String service){
+
+    /**
+     * Vérifie que la réservation existe, puis la supprime
+     * -1 -> Action non effectuée
+     *  0 -> Réussite
+     */
+    public int supprimerReservation(int numeroTable, String date, String service){
         if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) == 0) {
             ReservationFactoryConcrete.get().getTableBD().supprimerReservation(numeroTable, date, service);
-        }
-
-        //Vérification de l'existence de la réservation
-        //si ok:
-        //Appel à la suppression de réservation dans la BD
+	    return 0;
+        } 
+	return -1;
     }
 
 
@@ -375,6 +403,29 @@ public class Controleur{
         return resultat;
     }
 
+		public LinkedList<String> getListeArticlesMenu(String nomMenu, String type)
+    {/*
+        LinkedList<String> resultat = new LinkedList<String>();
+        try {
+            ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(null, -1, null, type);
+            if (rset == null) {
+                return resultat;
+            }
+            while(rset.next()){
+                resultat.add(rset.getString(1));
+            }
+            rset.close();
+            ReservationFactoryConcrete.get().getArticleBD().getStmt().close();
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête.");
+            e.printStackTrace(System.err);
+        }
+        return resultat;*/
+			return null;
+    }
+
+
     public float getPrixArticle(String nomArticle)
     {
         float resultat = -1;
@@ -386,13 +437,6 @@ public class Controleur{
         return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(nTable, date, service);
     }
 
-    public int getNumeroReservation(String date, String nom, String service){
-        return 0;
-    }
-
-    public int getNumeroReservation(String nom){
-        return 0;
-    }
 
     public int getNumeroReservation(int numTable){
         return ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numTable, dateNow, serviceNow);
@@ -409,34 +453,34 @@ public class Controleur{
         LinkedList<Integer> tables = ReservationFactoryConcrete.get().getTableBD().getNumeroTable(numResa);
         return tables;
         /*
-           String resultat = "";
-           try {
-           if (tables == null) {
-           return resultat;
-           }
-        // Pas de tuples renvoyé
-        if (tables.isEmpty()) {
-        return resultat;
-        }
-        else {
-        boolean isFirst=true;
-        //while(rset.next()){
-        for (Integer t : tables) {
-        if(!isFirst){
-        resultat += "-";
-        isFirst = false;
-        }
-        resultat += t;
-        }
-        }
-        }
-        catch (SQLException e) {
-        System.err.println("Erreur pour faire la requête getNumeroTable.");
-        e.printStackTrace(System.err);
-        return null;
-        }
+	  String resultat = "";
+	  try {
+	  if (tables == null) {
+	  return resultat;
+	  }
+	  // Pas de tuples renvoyé
+	  if (tables.isEmpty()) {
+	  return resultat;
+	  }
+	  else {
+	  boolean isFirst=true;
+	  //while(rset.next()){
+	  for (Integer t : tables) {
+	  if(!isFirst){
+	  resultat += "-";
+	  isFirst = false;
+	  }
+	  resultat += t;
+	  }
+	  }
+	  }
+	  catch (SQLException e) {
+	  System.err.println("Erreur pour faire la requête getNumeroTable.");
+	  e.printStackTrace(System.err);
+	  return null;
+	  }
         */
-           }
+    }
 
     public String getNom(int numResa) {
         String resultat = ReservationFactoryConcrete.get().getTableBD().getNomRes(numResa);
@@ -457,5 +501,22 @@ public class Controleur{
 
     public void setNumResaSuiviSelectionne(int n){
         numResaSuiviSelectionee = n;
+    }
+
+
+    public HashMap<String, Integer> getChoixCommandes(int numResa) {
+			HashMap<String, Integer> h = new HashMap<String, Integer>();
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Boisson"));
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Entree"));
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Plat"));
+			h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, "Dessert"));
+			for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandes(numResa)) {
+					if (h.containsKey(choix)) {
+							h.put(choix, h.get(choix) + 1);
+					} else {
+							h.put(choix, 1);
+					}
+			}
+      return h;
     }
 }
