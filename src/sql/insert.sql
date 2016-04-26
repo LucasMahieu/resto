@@ -107,7 +107,7 @@ insert into choix
 insert into choix
 	Values('the');
 
-insert choix Article
+insert into choix Article
 	Values('pates bolo');
 insert into choix
 	Values('tiramissu');
@@ -116,7 +116,7 @@ insert into choix
 insert into choix
 	Values('jus orange');
 
-insert choix Article
+insert into choix Article
 	Values('salade cesar');
 insert into choix
 	Values('steak frites');
@@ -125,7 +125,7 @@ insert into choix
 insert into choix
 	Values('sunday');
 	
-insert choix Article
+insert into choix Article
 	Values('carpaccio');
 insert into choix
 	Values('champagne');
