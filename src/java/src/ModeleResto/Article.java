@@ -160,14 +160,15 @@ public class Article extends BDitem {
 	/**
 	 * Retourne les articles commandés pour une reservation
 	 */
-	public HashMap<String, Integer> getArticlesCommandes(int numRes) {
+	public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
 		HashMap<String, Integer> res = new HashMap<String, Integer>();
 		if (numRes <= 0) {
 			return res;
 		}
-		String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes ");
+		String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes");
+		requete += ", " + etape;
 		requete += "WHERE numeroReservation = " + numRes;
-
+		requete += "AND sontcommandes.nomarticle = " + etape + ".nomarticle";		    
 		System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
