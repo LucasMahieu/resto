@@ -204,6 +204,7 @@ public class InterfaceSuiviCommande extends Observateur{
      */
     public void effetBoutonEnvoyer(){
       System.out.println("Effet Bouton Envoyer");
+      //TODO : vérifier le fonctionnement de la fonction
       int selectedRow = this.tableauArticles.getSelectedRow();
       if(selectedRow >= 0){
         System.out.println("Selected row : " + selectedRow );
