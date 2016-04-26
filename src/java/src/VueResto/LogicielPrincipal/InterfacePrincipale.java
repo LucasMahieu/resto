@@ -122,6 +122,7 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 				}
 			}
 			/* COMMANDE */
+
 		}else if(source == interfaceCommande.getButtonAjout()){
 			String message = "";
 			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";
@@ -214,6 +215,13 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 		}else if (source == interfaceSuiviCommande.getButtonFermer()){
 			System.out.println("Bouton fermer suiviCommande");		
 			interfaceSuiviCommande.effetBoutonFermer();
+		}
+		else{
+			for(JToggleButton jt : interfaceCommande.getButtonArticleMenu()){
+				if(source == jt){
+					interfaceCommande.updateComboBoxMenu(jt.getText());
+				}
+			}
 		}
 	}
 }

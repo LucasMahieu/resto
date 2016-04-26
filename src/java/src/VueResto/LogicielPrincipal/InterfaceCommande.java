@@ -38,6 +38,14 @@ public class InterfaceCommande extends Observateur{
 	private ArrayList<JToggleButton> buttonArticleDessert;
 	private ArrayList<JToggleButton> buttonArticleMenu;
 	private LinkedList<JLabel> labelRecapCommande;
+	private String[] menuBoisson;
+	private String[] menuEntree;
+	private String[] menuPlat;
+	private String[] menuDessert;
+	private JComboBox<String> comboBoxBoisson;
+	private JComboBox<String> comboBoxEntree;
+	private JComboBox<String> comboBoxPlat;
+	private JComboBox<String> comboBoxDessert;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -342,6 +350,9 @@ public class InterfaceCommande extends Observateur{
 		}
 	}
 
+	public void updateComboBoxMenu(String menuSelectionne){
+		System.out.println("COMBOBOX DU MENU  " + menuSelectionne );
+	}
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
 	 *
@@ -350,6 +361,9 @@ public class InterfaceCommande extends Observateur{
 		buttonRecherche.addActionListener(aL);
 		buttonAjout.addActionListener(aL);
 		buttonSuppression.addActionListener(aL);
+		for(JToggleButton jt : buttonArticleMenu){
+			jt.addActionListener(aL);
+		}
 	}
 
 	public JPanel getPanel(){
