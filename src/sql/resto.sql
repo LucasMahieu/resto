@@ -37,7 +37,7 @@ CREATE TABLE Reservation (
 	numeroReservation INTEGER check (numeroReservation > 0),
 	nbPersonnes INTEGER check (nbPersonnes > 0),
     -- Attributs liés aux cardinalités 1..1
-  numeroClient INTEGER REFERENCES Client(numeroClient),
+    numeroClient INTEGER REFERENCES Client(numeroClient),
 	typeService VARCHAR(20),
 	dateService VARCHAR(20),
   CONSTRAINT FKReservation FOREIGN KEY (typeService, dateService) REFERENCES Service,

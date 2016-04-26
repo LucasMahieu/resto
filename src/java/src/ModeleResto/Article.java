@@ -266,10 +266,10 @@ public class Article extends BDitem {
 	    requete += ", Disponibles ";
 	}
 	if (nomArticle != null || prixArticle != -1 || specialite != null) {
-	    requete += "WHERE ";
+	    requete += " WHERE ";
 	}
 	if (nomArticle != null) {
-	    requete += ("Article.nomArticle = '" + nomArticle + "'");
+	    requete += (" Article.nomArticle = '" + nomArticle + "' ");
 	}
 	if (prixArticle != -1) {
 	    if (nomArticle != null) {	
@@ -281,11 +281,11 @@ public class Article extends BDitem {
 	    if (nomArticle != null || prixArticle != -1) {	
 		requete += " AND ";
 	    }
-	    requete += ("AND Article.specialite = '" + specialite + "' ");
+	    requete += (" AND Article.specialite = '" + specialite + "' ");
 	}
 	
 	if (date != null && service != null) {
-	    requete += "AND Article.nomArticle = Disponibles.nomArticle AND (";
+	    requete += " AND Article.nomArticle = Disponibles.nomArticle AND (";
 	    LinkedList<String> cartes = getCarte(date, service);
 	    if (cartes == null) {
 	    	return null;
@@ -297,11 +297,11 @@ public class Article extends BDitem {
 	    requete += ") ";
 	}
 	if (type != null) {
-	    requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
+	    requete += (" GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
 	    if (type == "menu") {
-		requete += "(SELECT Menu.nomMenu FROM " + type + ")";
+		requete += "(SELECT Menu.nomMenu FROM " + type.toUpperCase() + ")";
 	    } else {
-		requete += "(SELECT * FROM " + type + ")";
+		requete += "(SELECT * FROM " + type.toUpperCase() + ")";
 	    }
 	}
 	System.out.println(requete);

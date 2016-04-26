@@ -150,8 +150,7 @@ public class InterfaceReservation extends Observateur{
     int selectedRow = this.tableau.getSelectedRow();
     if(selectedRow >= 0){
       System.out.println("Selected row : " + selectedRow );
-      int numeroReservation = 1;
-      //int numeroReservation = (int) (this.tableau.getModel()).getValueAt(selectedRow,1);
+      int numeroReservation = (int) (this.tableau.getModel()).getValueAt(selectedRow,1);
       String date = (String) (this.tableau.getModel()).getValueAt(selectedRow,4);
       int table= Controleur.get().getNumeroTables(numeroReservation).get(0);
       String service = (String) (this.tableau.getModel()).getValueAt(selectedRow,5);

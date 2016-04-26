@@ -267,12 +267,12 @@ public class Table extends BDitem {
 	if (numeroTable <= 0) {
 	    return -1;
 	}
-	String requete = new String("DELETE" //supprimer la classe reservation que a été créée?
-				    + " FROM estReserve, Reservation"
-				    + " WHERE Reservation.date = '"+date+"' "
-				    + "AND Reservation.service = '"+service+"' "
-				    + "AND Reservation.numeroreservation = estReserve.numeroreservation "
-				    + "AND estReserve.numerotable = "+ numeroTable);
+	String requete = new String(" DELETE" 
+				    + " FROM estReservee er, Reservation r"
+				    + " WHERE r.dateService = '"+date+"' "
+				    + " AND r.typeService = '"+service+"' "
+				    + " AND r.numeroReservation = er.numeroReservation "
+				    + " AND er.numeroTable = "+ numeroTable);
 	System.out.println(requete);
 	try {
 	    setStmt(getCon().createStatement());
