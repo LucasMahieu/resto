@@ -222,17 +222,20 @@ public class InterfaceCommande extends Observateur{
 		this.labelRecapCommande = new LinkedList<JLabel>();
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
-
-		comboBoxBoisson = new JComboBox<String[]>({"Boisson"});
+		String[] tmp = {"Boisson"};
+		comboBoxBoisson = new JComboBox<String>(tmp);
 		comboBoxBoisson.setBounds(POS_X_BOX_B,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
 		this.panelMenu.add(comboBoxBoisson);
-		comboBoxEntree = new JComboBox<String>({"Entree"});
+		tmp[0] = "Entree";
+		comboBoxEntree = new JComboBox<String>(tmp);
 		comboBoxEntree.setBounds(POS_X_BOX_E,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
 		this.panelMenu.add(comboBoxEntree);
-		comboBoxPlat = new JComboBox<String>({"Plat"});
+		tmp[0] = "Plat";
+		comboBoxPlat = new JComboBox<String>(tmp);
 		comboBoxPlat.setBounds(POS_X_BOX_P,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
 		this.panelMenu.add(comboBoxPlat);
-		comboBoxDessert = new JComboBox<String>({"Dessert"});
+		tmp[0] = "Dessert";
+		comboBoxDessert = new JComboBox<String>(tmp);
 		comboBoxDessert.setBounds(POS_X_BOX_D,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
 		this.panelMenu.add(comboBoxDessert);
 	}
@@ -372,10 +375,10 @@ public class InterfaceCommande extends Observateur{
 
 	public void updateComboBoxMenu(String menuSelectionne){
 		System.out.println("COMBOBOX DU MENU  " + menuSelectionne);
-		String[] menuBoisson = (String[])Controleur.getListeArticleMenu(menuSelectionne, "BOISSON").toArray();
-		String[] menuEntree = (String[])Controleur.getListeArticleMenu(menuSelectionne, "ENTREE").toArray();
-		String[] menuPlat = (String[])Controleur.getListeArticleMenu(menuSelectionne, "PLAT").toArray();
-		String[] menuDessert = (String[])Controleur.getListeArticleMenu(menuSelectionne, "DESSERT").toArray();
+		String[] menuBoisson = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON").toArray();
+		String[] menuEntree = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "ENTREE").toArray();
+		String[] menuPlat = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "PLAT").toArray();
+		String[] menuDessert = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "DESSERT").toArray();
 		this.comboBoxBoisson = new JComboBox<String>(menuBoisson);
 		this.comboBoxEntree = new JComboBox<String>(menuEntree);
 		this.comboBoxPlat = new JComboBox<String>(menuPlat);
