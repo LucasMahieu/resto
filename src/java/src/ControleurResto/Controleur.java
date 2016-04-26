@@ -566,7 +566,7 @@ public class Controleur{
     {
         LinkedList<String> resultat = new LinkedList<String>();
         try {
-            ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
+            ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type, dateNow, serviceNow);
             if (rset == null) {
                 return resultat;
             }
@@ -583,6 +583,8 @@ public class Controleur{
         return resultat;
     }
 
+
+
     /** 
      *  Retourne les articles d'un certain type qui sont disponibles pour un menu donné
      *	@param nomMenu nom du menu
@@ -594,7 +596,7 @@ public class Controleur{
         if (type == "Menu") {
             return null;
         }
-        LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
+        LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type, dateNow, serviceNow);
         return resultat;
     }
 
