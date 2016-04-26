@@ -7,17 +7,12 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Resto{
+public class RestoText{
 	public static void main(String[] args) {
 		// Interface Textuelle
-		/*
 		InterfaceTextPrincipale fenetrePrincipale = new InterfaceTextPrincipale();
 		fenetrePrincipale.lancer();
-		*/
 		
-		// Interface Graphique
-		JFrame fenetrePrincipale = new InterfacePrincipale(); 
-
 		// -------------------------------------------------------- //
 
         // Pour fermer la connection à la BD

@@ -18,11 +18,12 @@
 #   -classpath : repertoire dans lequel sont cherches les .class deja compiles
 #   -sourcepath : repertoire dans lequel sont cherchés les .java (dependances)
 
-all: Resto exeResto
+all: resto exeResto
 
-Resto:
+resto:
 	javac -encoding utf8 -d bin -sourcepath src:src/* src/Resto.java
-
+restoText:
+	javac -encoding utf8 -d bin -sourcepath src:src/* src/RestoText.java
 # Execution:
 # on peut taper directement la ligne de commande :
 #   > java -classpath bin TestGUI
@@ -32,8 +33,14 @@ Resto:
 exeResto:
 	java -classpath bin:bin/* Resto
 
+exeRestoText:
+	java -classpath bin:bin/* RestoText
+
 documentation:
 	javadoc -d doc -sourcepath src/ -subpackages . 
 	
 clean:
 	rm -rf bin/*.class
+	rm -rf ControleurResto/*.class
+	rm -rf ModeleResto/*.class
+	rm -rf VueResto/*.class

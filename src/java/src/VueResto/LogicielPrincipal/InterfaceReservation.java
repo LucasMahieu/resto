@@ -7,7 +7,15 @@ import java.util.*;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import javax.swing.*;
+import java.text.SimpleDateFormat;
+import javax.swing.table.*;
+import java.awt.*;
+import ControleurResto.*;
+import javax.swing.*;
+import javax.swing.table.*;
 import java.awt.event.*;
+import java.awt.*;
+import java.util.*;
 import java.text.SimpleDateFormat;
 
 /** classe d'interface de reservation contenant le panel de reservation a afficher dans l'interface principale du logiciel.
@@ -16,24 +24,38 @@ import java.text.SimpleDateFormat;
  */
 public class InterfaceReservation extends Observateur{
   private JPanel panelReservation;
+  private JScrollPane jScrollPane;
   private static final int TAILLE_X_PANEL = 980;
   private static final int TAILLE_Y_PANEL = 980;
   private static final int TAILLE_Y_BOUTON = 20;
   private static final int TAILLE_X_BOUTON = 200;
+  private RModel rModel;
+  private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne"};
+  private JTable tableau;
+  private static final int POS_X_TABLE = 10;
+  private static final int POS_Y_TABLE = 30;
+  private static final int TAILLE_X_FIELD_TABLE = 100;
+  private static final int TAILLE_Y_FIELD_TABLE = 0;
+  private static final int TAILLE_X_TAB = 650;
+  private static final int TAILLE_Y_TAB = 550;
+  private static final int POS_X_TAB = TAILLE_X_BOUTON + 10 + 10;
+  private static final int POS_Y_TAB = TAILLE_Y_FIELD_TABLE + 10;
+  private static final int TAILLE_LIGNE = 20;
   private JButton boutonReservation = new JButton("Reserver");
   private JLabel labelNomReservation = new JLabel("Nom (Obligatoire)");
+  private JButton boutonSupprimer= new JButton("Supprimer");
   private JTextField texteNomReservation = new JTextField(20);
-  private JLabel labelPrenomReservation = new JLabel("Prenom (Obligatoire)");
-  private JTextField textePrenomReservation = new JTextField(20);
+  private JLabel labelTelephoneReservation = new JLabel("Telephone (Obligatoire)");
+  private JTextField texteTelephoneReservation = new JTextField(20);
   private JLabel labelNombrePersonnes= new JLabel("Nombre de personnes");
   private SpinnerModel modelNombrePersonnes = new SpinnerNumberModel(1,1,100,1);     
   private JSpinner spinnerNombrePersonnes = new JSpinner(modelNombrePersonnes);
   private JLabel labelDate= new JLabel("Date");
   private SpinnerModel modelDate= new SpinnerDateModel();     
   private JSpinner spinnerDate = new JSpinner(modelDate);
-  private JSpinner.DateEditor editorDate = new JSpinner.DateEditor(spinnerDate, "dd-MM-yyyy");
+  private JSpinner.DateEditor editorDate = new JSpinner.DateEditor(spinnerDate, "dd/MM/yyyy");
   private JLabel labelService = new JLabel("Service");
-  private String[] service = {"Midi","Soir"};
+  private String[] service = {"MIDI","SOIR"};
   private JComboBox<String> comboBoxService= new JComboBox<String>(service);
   private JLabel labelLocalisation = new JLabel("Localisation");
   private JTextField texteLocalisation = new JTextField(20);
@@ -43,7 +65,7 @@ public class InterfaceReservation extends Observateur{
    * @returns interface de reservation
    */
   public InterfaceReservation(){
-      int nbBoutons = 0;
+    int nbBoutons = 0;
     this.panelReservation = new JPanel();
     this.panelReservation.setLayout(null);
     this.panelReservation.setPreferredSize(new Dimension(TAILLE_X_PANEL,TAILLE_Y_PANEL));
@@ -56,13 +78,13 @@ public class InterfaceReservation extends Observateur{
     nbBoutons++;
     this.panelReservation.add(texteNomReservation);
 
-    labelPrenomReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    labelTelephoneReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     nbBoutons++;
-    this.panelReservation.add(labelPrenomReservation);
+    this.panelReservation.add(labelTelephoneReservation);
 
-    textePrenomReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    texteTelephoneReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     nbBoutons++;
-    this.panelReservation.add(textePrenomReservation);
+    this.panelReservation.add(texteTelephoneReservation);
 
     labelNombrePersonnes.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     nbBoutons++;
@@ -100,11 +122,36 @@ public class InterfaceReservation extends Observateur{
     boutonReservation.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
     nbBoutons++;
     this.panelReservation.add(boutonReservation);
+
+    boutonSupprimer.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    nbBoutons++;
+    this.panelReservation.add(boutonSupprimer);
+
+    // Tableau contenant les commandes :
+    Object[][] data = {};
+
+    this.rModel = new RModel(data,titre);
+    //this.tableau = new JTable(sModel);
+    this.tableau = new JTable(new DefaultTableModel(data,titre));
+    this.tableau.setRowHeight(TAILLE_LIGNE);
+    this.tableau.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
+    this.jScrollPane = new JScrollPane(tableau);
+    jScrollPane.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
+    panelReservation.add( jScrollPane);
+    // mise à jour du tableau 
+    // TODO
+
   }
 
-	public void activeListener(ActionListener aL){
-		boutonReservation.addActionListener(aL);
-	}
+
+  public void effetBoutonSupprimer(){
+    System.out.println("effetBoutonSupprimer");
+    //TODO : implémenter le bouton Supprimer Reservation
+  }
+  public void activeListener(ActionListener aL){
+    boutonReservation.addActionListener(aL);
+    boutonSupprimer.addActionListener(aL);
+  }
 
   /** permet d'acceder au bouton de reservation de l'interface de reservation
    * 
@@ -113,6 +160,10 @@ public class InterfaceReservation extends Observateur{
   public JButton getBoutonReservation(){
     return this.boutonReservation;
   } 
+
+  public JButton getBoutonSupprimer(){
+    return this.boutonSupprimer;
+  }
 
   /** permet d'acceder à l'étiquette du nom de l'interface de reservation
    * 
@@ -130,20 +181,20 @@ public class InterfaceReservation extends Observateur{
     return this.texteNomReservation;
   } 
 
-  /** permet d'acceder a l'etiquette du prenom de l'interface de reservation
+  /** permet d'acceder a l'etiquette du telephone  de l'interface de reservation
    * 
    * @returns etiquette du prenom de reservation
    */
-  public JLabel getLabelPrenomReservation(){
-    return this.labelPrenomReservation;
+  public JLabel getLabelTelephoneReservation(){
+    return this.labelTelephoneReservation;
   } 
 
-  /** permet d'acceder au contenu du champ textuel du prenom de l'interface de reservation
+  /** permet d'acceder au contenu du champ textuel du telephone de l'interface de reservation
    * 
    * @returns champ du texte du prenom de reservation
    */
-  public JTextField getTextePrenomReservation(){
-    return this.textePrenomReservation;
+  public JTextField getTexteTelephoneReservation(){
+    return this.texteTelephoneReservation;
   } 
 
   /** permet d'acceder a l'etiquette du nombre de personnes de l'interface de reservation
@@ -263,5 +314,70 @@ public class InterfaceReservation extends Observateur{
    * 
    */
   public void update(Observable o, Object arg){
+  }
+  /**
+   * Cette classe est un TableModel Pour le tableau de suivi des commande
+   */
+  public class RModel extends AbstractTableModel {
+    private Object[][] data;
+    private String[] titre;
+
+    public void setData(Object[][] data){
+      this.data = data;
+    }
+
+    /** accesseur du tableau
+     *
+     * @returns tableau de RModel
+     */
+    public Object[][] getData(){
+      return this.data;
+    }
+
+    //Constructeur
+    public RModel(Object[][] data, String[] titre){
+      this.data = data;
+      this.titre = titre;
+    }
+
+    //Retourne le nombre de colonnes
+    public int getColumnCount() {
+      return this.titre.length;
+    }
+
+    //Retourne le nombre de lignes
+    public int getRowCount() {
+      return this.data.length;
+    }
+
+    //Retourne la valeur à l'emplacement spécifié
+    public Object getValueAt(int row, int col){
+      return this.data[row][col];
+    }
+    public void setValueAt(Object value, int lig, int col){
+      if(!(lig==0)){
+        this.data[lig][col] = value;
+      }
+    }
+
+    /**
+     * * Retourne le titre de la colonne à l'indice spécifié
+     * */
+    public String getColumnName(int col) {
+      return this.titre[col];
+    }
+    //Retourne la classe de la donnée de la colonne
+    public Class getColumnClass(int col){
+      //On retourne le type de la cellule à la colonne demandée
+      //On se moque de la ligne puisque les types de données sont les mêmes quelle que soit la ligne
+      //On choisit donc la première ligne
+      return this.data[0][col].getClass();
+    }
+    //Retourne vrai si la cellule est éditable : celle-ci sera donc éditable
+    public boolean isCellEditable(int lig, int col){
+      if(getValueAt(0, col) instanceof JButton)
+        return false;
+      return true; 
+    }
   }
 }

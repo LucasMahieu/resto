@@ -1,5 +1,6 @@
 package VueResto.LogicielPrincipal;
 import VueResto.*;
+import ModeleResto.*;
 import ControleurResto.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -24,31 +25,38 @@ public class InterfaceCommande extends Observateur{
 	private JPanel panelDessert;
 	private JPanel panelMenu;
 	private JTextField textFieldNTable;
-	private JTextField textFieldNom;
 	private JLabel labelNTable;
 	private JLabel labelNom;
 	private JButton buttonRecherche;
 	private JButton buttonAjout;
 	private JButton buttonSuppression;
 	private SpinnerModel modelQuantite;    
-	private JSpinner spinnerQuantite ;
+	private JSpinner spinnerQuantite;
 	private ArrayList<JToggleButton> buttonArticleBoisson;
 	private ArrayList<JToggleButton> buttonArticleEntree;
 	private ArrayList<JToggleButton> buttonArticlePlat;
 	private ArrayList<JToggleButton> buttonArticleDessert;
 	private ArrayList<JToggleButton> buttonArticleMenu;
 	private LinkedList<JLabel> labelRecapCommande;
+	//private String[] menuBoisson = {"BIERE"};
+	//private String[] menuEntree = {"SALADE"};
+	//private String[] menuPlat = {"MOULE FRITE"};
+	//private String[] menuDessert = {"ILE FLOTTANTE"};
+	private JComboBox<String> comboBoxBoisson;
+	private JComboBox<String> comboBoxEntree;
+	private JComboBox<String> comboBoxPlat;
+	private JComboBox<String> comboBoxDessert;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
 	private static final int TAILLE_Y_FIELD_TABLE = 20;
 	private static final int POS_X_TABLE = 10;
 	private static final int POS_Y_TABLE = 30;
-	private static final int TAILLE_X_FIELD_NOM = 100;
-	private static final int TAILLE_Y_FIELD_NOM = 20;
-	private static final int POS_X_NOM = 120;
-	private static final int POS_Y_NOM = 30;
-	private static final int TAILLE_X_PANEL_ARTICLE = 500;
+	private static final int TAILLE_X_RECHERCHE = 100;
+	private static final int TAILLE_Y_RECHERCHE = 20;
+	private static final int POS_X_RECHERCHE = POS_X_TABLE + TAILLE_X_FIELD_TABLE + 10;
+	private static final int POS_Y_RECHERCHE = 30;
+	private static final int TAILLE_X_PANEL_ARTICLE = 550;
 	private static final int TAILLE_Y_PANEL_ARTICLE = 600;
 	private static final int POS_X_ARTICLE = 0;
 	private static final int POS_Y_ARTICLE = 60;
@@ -61,29 +69,20 @@ public class InterfaceCommande extends Observateur{
 	private static final int POS_X_AJOUT = TAILLE_X_PANEL_ARTICLE - TAILLE_AJOUT - TAILLE_SUPPRESSION - 5;
 	private static final int POS_X_AJOUT_Q = TAILLE_X_PANEL_ARTICLE - TAILLE_SUPPRESSION - TAILLE_AJOUT - TAILLE_AJOUT_Q - 10;
 	private static final int POS_Y_AJOUT = 30;
-	private static final int POS_X_RECHERCHE = 240;
-	private static final int POS_Y_RECHERCHE = 30;
-	private static final int TAILLE_X_RECHERCHE = 80;
-	private static final int TAILLE_Y_RECHERCHE = 20;
-	private static final int POS_B = 20;
-	private static final int TAILLE_X_B = 80;
-	private static final int TAILLE_Y_B = 80;
-	private static final int POS_E = 20;
-	private static final int TAILLE_X_E = 100;
-	private static final int TAILLE_Y_E = 80;
-	private static final int POS_P = 20;
-	private static final int TAILLE_X_P = 100;
-	private static final int TAILLE_Y_P = 80;
-	private static final int POS_D = 20;
-	private static final int TAILLE_X_D = 80;
-	private static final int TAILLE_Y_D = 80;
-	private static final int POS_M = 20;
-	private static final int TAILLE_X_M = 80;
-	private static final int TAILLE_Y_M = 80;
-	private static final int POS_X_RECAP = TAILLE_X_PANEL_ARTICLE + 50;
+	private static final int POS_A = 15;
+	private static final int TAILLE_X_A = 150;
+	private static final int TAILLE_Y_A = 40;
+	private static final int POS_X_RECAP = TAILLE_X_PANEL_ARTICLE + 20;
 	private static final int POS_Y_RECAP = 10;
 	private static final int TAILLE_X_RECAP = TAILLE_X_PANEL - TAILLE_X_PANEL_ARTICLE;
 	private static final int TAILLE_Y_RECAP = 20;
+	private static final int TAILLE_X_BOX = 100;
+	private static final int TAILLE_Y_BOX = 20;
+	private static final int POS_X_BOX_B = 10;
+	private static final int POS_X_BOX_E = POS_X_BOX_B + TAILLE_X_BOX + 10;
+	private static final int POS_X_BOX_P = POS_X_BOX_E + TAILLE_X_BOX + 10;
+	private static final int POS_X_BOX_D = POS_X_BOX_P + TAILLE_X_BOX + 10;
+	private static final int POS_Y_BOX = TAILLE_Y_PANEL_ARTICLE - TAILLE_Y_BOX - 30;
 
 	
 	public InterfaceCommande(){
@@ -99,13 +98,6 @@ public class InterfaceCommande extends Observateur{
 		labelNTable = new JLabel("Num. Table");
 		labelNTable.setBounds(POS_X_TABLE,10,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
 		panelCommande.add(labelNTable);
-		//CHAMP TEXT POUR CHOISIR LE NOM DE LA RESA
-		this.textFieldNom = new JTextField(TAILLE_X_FIELD_NOM);
-		textFieldNom.setBounds(POS_X_NOM,POS_Y_NOM,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelCommande.add(textFieldNom);
-		labelNom = new JLabel("Nom Resa.");
-		labelNom.setBounds(POS_X_NOM,10,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelCommande.add(labelNom);
 		// PANEL QUI VA CONTENIR LES ARTICLES
 		this.tabbedPaneArticle = new JTabbedPane(PLACEMENT_TAB_ARTICLE);
 		tabbedPaneArticle.setBounds(POS_X_ARTICLE,POS_Y_ARTICLE,TAILLE_X_PANEL_ARTICLE, TAILLE_Y_PANEL_ARTICLE);
@@ -138,11 +130,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleBoisson.size(); j++){
 			col++;
 			buttonArticleBoisson.add(new JToggleButton(listArticleBoisson.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_B)/TAILLE_X_B)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleBoisson.get(j).setBounds(POS_B+col*TAILLE_X_B,POS_B+lig*TAILLE_Y_B,TAILLE_X_B,TAILLE_Y_B);
+			buttonArticleBoisson.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelBoisson.add(buttonArticleBoisson.get(j));
 		}
 		//Ajout des bouttons pour article ENTREE
@@ -153,11 +145,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleEntree.size(); j++){
 			col++;
 			buttonArticleEntree.add(new JToggleButton(listArticleEntree.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_E)/TAILLE_X_E)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleEntree.get(j).setBounds(POS_E+col*TAILLE_X_E,POS_E+lig*TAILLE_Y_E,TAILLE_X_E,TAILLE_Y_E);
+			buttonArticleEntree.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelEntree.add(buttonArticleEntree.get(j));
 		}
 		//Ajout des bouttons pour article PLAT
@@ -168,11 +160,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticlePlat.size(); j++){
 			col++;
 			buttonArticlePlat.add(new JToggleButton(listArticlePlat.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_P)/TAILLE_X_P)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticlePlat.get(j).setBounds(POS_P+col*TAILLE_X_P,POS_P+lig*TAILLE_Y_P,TAILLE_X_P,TAILLE_Y_P);
+			buttonArticlePlat.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelPlat.add(buttonArticlePlat.get(j));
 		}
 		//Ajout des bouttons pour article Dessert
@@ -183,11 +175,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleDessert.size(); j++){
 			col++;
 			buttonArticleDessert.add(new JToggleButton(listArticleDessert.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_D)/TAILLE_X_D)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleDessert.get(j).setBounds(POS_D+col*TAILLE_X_D,POS_D+lig*TAILLE_Y_D,TAILLE_X_D,TAILLE_Y_D);
+			buttonArticleDessert.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelDessert.add(buttonArticleDessert.get(j));
 		}
 		//Ajout des bouttons pour article Menu
@@ -198,11 +190,11 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleMenu.size(); j++){
 			col++;
 			buttonArticleMenu.add(new JToggleButton(listArticleMenu.get(j)));
-			if (j%((TAILLE_X_PANEL_ARTICLE-TAILLE_X_M)/TAILLE_X_M)==0 && j!=0){
+			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
-			buttonArticleMenu.get(j).setBounds(POS_M+col*TAILLE_X_M,POS_M+lig*TAILLE_Y_M,TAILLE_X_M,TAILLE_Y_M);
+			buttonArticleMenu.get(j).setBounds(POS_A+col*TAILLE_X_A,POS_A+lig*TAILLE_Y_A,TAILLE_X_A,TAILLE_Y_A);
 			panelMenu.add(buttonArticleMenu.get(j));
 		}
 		
@@ -230,6 +222,22 @@ public class InterfaceCommande extends Observateur{
 		this.labelRecapCommande = new LinkedList<JLabel>();
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
+		String[] tmp = {"Boisson"};
+		comboBoxBoisson = new JComboBox<String>(tmp);
+		comboBoxBoisson.setBounds(POS_X_BOX_B,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxBoisson);
+		tmp[0] = "Entree";
+		comboBoxEntree = new JComboBox<String>(tmp);
+		comboBoxEntree.setBounds(POS_X_BOX_E,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxEntree);
+		tmp[0] = "Plat";
+		comboBoxPlat = new JComboBox<String>(tmp);
+		comboBoxPlat.setBounds(POS_X_BOX_P,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxPlat);
+		tmp[0] = "Dessert";
+		comboBoxDessert = new JComboBox<String>(tmp);
+		comboBoxDessert.setBounds(POS_X_BOX_D,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
+		this.panelMenu.add(comboBoxDessert);
 	}
 	
 	/**
@@ -259,7 +267,8 @@ public class InterfaceCommande extends Observateur{
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		labelRecapCommande.add(new JLabel("Table n°"+Controleur.get().getNumeroTables(numResa)));
+        LinkedList<Integer> tables = Controleur.get().getNumeroTables(numResa);
+		labelRecapCommande.add(new JLabel("Table n°"+ (tables == null ? "" : tables.toString())));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
@@ -267,7 +276,7 @@ public class InterfaceCommande extends Observateur{
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		labelRecapCommande.add(new JLabel("---------------------------------------------"));
+		labelRecapCommande.add(new JLabel("----------------------------------------"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
@@ -298,20 +307,21 @@ public class InterfaceCommande extends Observateur{
 			prix = Controleur.get().getPrixArticle(a);
 			somme += prix*q;
 			labelRecapCommande.add(new JLabel(""
-						+ String.format("%0$-"+(65)+"s","- (x"+q+") "+a+" ")
+						+ String.format("%0$-"+(45)+"s","- (x"+q+") "+a+" ")
 						+ prix*q
 						+ "€"));
 			labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 			panelCommande.add(labelRecapCommande.get(j));
 			j++;
 		}
-		labelRecapCommande.add(new JLabel("---------------------------------------------"));
+		labelRecapCommande.add(new JLabel("----------------------------------------"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
 		j++;
-		labelRecapCommande.add(new JLabel(String.format("%0$-70s","TOTAL = ") + somme + "€"));
+		labelRecapCommande.add(new JLabel(String.format("%0$-50s","TOTAL = ") + somme + "€"));
 		labelRecapCommande.get(j).setBounds(POS_X_RECAP,POS_Y_RECAP+j*TAILLE_Y_RECAP,TAILLE_X_RECAP,TAILLE_Y_RECAP);
 		panelCommande.add(labelRecapCommande.get(j));
+		panelCommande.updateUI();
 	}
 	
 	/**
@@ -344,18 +354,90 @@ public class InterfaceCommande extends Observateur{
 				Controleur.get().ajouterArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
 			}
 		}
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
 	}
-	public void update(Observable o, Object arg){
+	/**
+	 * Demande au controleur d'ajouter les articles de type Menu  selectionnés
+	 */
+	public void ajouterArticlesMenuSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				Controleur.get().ajouterMenu(l.get(j).getText()
+						,(int)spinnerQuantite.getValue()
+						,Controleur.get().getNumResaCmdSelectionne()
+						,comboBoxBoisson.getSelectedItem().toString()
+						,comboBoxEntree.getSelectedItem().toString()
+						,comboBoxPlat.getSelectedItem().toString()
+						,comboBoxDessert.getSelectedItem().toString()
+				);
+			}
+			// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
+			return;
+		}
+		// A supprimer grace à l'observateur
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+	}
+	/**
+	 * Demande au controleur de supprimer les articles de type menu selectionnés
+	 */
+	public void supprimerArticlesMenuSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				Controleur.get().supprimerMenu(l.get(j).getText()
+						,(int)spinnerQuantite.getValue()
+						,Controleur.get().getNumResaCmdSelectionne()
+						,comboBoxBoisson.getSelectedItem().toString()
+						,comboBoxEntree.getSelectedItem().toString()
+						,comboBoxPlat.getSelectedItem().toString()
+						,comboBoxDessert.getSelectedItem().toString()
+				);
+			}
+		}
 	}
 
 	/**
+	 * Demande au controleur de supprimer les articles selectionnés
+	 */
+	public void supprimerArticlesSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				Controleur.get().supprimerArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
+			}
+		}
+	}
+
+	public void update(Observable o, Object arg){
+		System.out.println("Methode update de Commande");
+		if(o instanceof ModeleResto.Article){
+			System.out.println("un article à changé arg= " + arg);
+		}
+	}
+
+	/**
+	 * Cette méthode met à jour les comboBox avec le menu (la 1er bouton) selectionné
+	 */
+	public void updateComboBoxMenu(String menuSelectionne){
+		System.out.println("COMBOBOX DU MENU  " + menuSelectionne);
+		String[] menuBoisson = Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON").toArray(new String[0]);
+		String[] menuEntree = Controleur.get().getListeArticlesMenu(menuSelectionne, "ENTREE").toArray(new String[0]);
+		String[] menuPlat = Controleur.get().getListeArticlesMenu(menuSelectionne, "PLAT").toArray(new String[0]);
+		System.out.println("plat = " + menuPlat[0]);
+		String[] menuDessert = Controleur.get().getListeArticlesMenu(menuSelectionne, "DESSERT").toArray(new String[0]);
+		this.comboBoxBoisson = new JComboBox<String>(menuBoisson);
+		this.comboBoxEntree = new JComboBox<String>(menuEntree);
+		this.comboBoxPlat = new JComboBox<String>(menuPlat);
+		this.comboBoxDessert = new JComboBox<String>(menuDessert);
+	}
+	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
-	 *
 	 */
 	public void activeListener(ActionListener aL){
 		buttonRecherche.addActionListener(aL);
 		buttonAjout.addActionListener(aL);
 		buttonSuppression.addActionListener(aL);
+		for(JToggleButton jt : buttonArticleMenu){
+			jt.addActionListener(aL);
+		}
 	}
 
 	public JPanel getPanel(){
@@ -384,9 +466,6 @@ public class InterfaceCommande extends Observateur{
 	}
 	public JTextField getTextFieldNTable(){
 		return this.textFieldNTable;
-	}
-	public JTextField getTextFieldNom(){
-		return this.textFieldNom;
 	}
 	public JLabel getLabelNTable(){
 		return this.labelNTable;

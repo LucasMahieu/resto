@@ -21,7 +21,7 @@ CREATE TABLE Carte (
 
 CREATE TABLE Article (
 	nomArticle VARCHAR(100) CONSTRAINT KnomArticle PRIMARY KEY,
-	prixArticle REAL check (prixArticle > 0),
+	prixArticle FLOAT check (prixArticle > 0),
 	specialite VARCHAR(20)
 );
 
@@ -36,12 +36,11 @@ CREATE TABLE Service (
 CREATE TABLE Reservation (
 	numeroReservation INTEGER check (numeroReservation > 0),
 	nbPersonnes INTEGER check (nbPersonnes > 0),
-	prixTotal INTEGER check (prixTotal > 0),
     -- Attributs liés aux cardinalités 1..1
-    numeroClient INTEGER REFERENCES Client(numeroClient),
+  numeroClient INTEGER REFERENCES Client(numeroClient),
 	typeService VARCHAR(20),
 	dateService VARCHAR(20),
-    CONSTRAINT FKReservation FOREIGN KEY (typeService, dateService) REFERENCES Service,
+  CONSTRAINT FKReservation FOREIGN KEY (typeService, dateService) REFERENCES Service,
 	CONSTRAINT KReservation PRIMARY KEY (numeroReservation)
 );
 
@@ -73,14 +72,14 @@ CREATE TABLE Menu (
 );
 -- Traduction des entités faibles : aucunes
 -- Traduction des multiplicités 1..1 : OK (voir ci dessus)
--- Traduction des multiplicités 0..1
+-- Traduction des multiplicités 0..1 : aucunes
+-- Traduction des multiplicités ?..* (et 0..2)
 CREATE TABLE estReservee (
     numeroTable INTEGER REFERENCES Tables(numeroTable),
     numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
-	CONSTRAINT KestReservee PRIMARY KEY (numeroTable)
+	CONSTRAINT KestReservee PRIMARY KEY (numeroTable, numeroReservation)
 );
 
--- Traduction des multiplicités ?..* (et 0..2)
 CREATE TABLE sontCommandes (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
 	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
@@ -88,6 +87,16 @@ CREATE TABLE sontCommandes (
 	CONSTRAINT KsontCommandes PRIMARY KEY (nomArticle, numeroReservation)
 );
 
+CREATE TABLE menuCommandes (
+	numeroReservation INTEGER REFERENCES Reservation(numeroReservation),
+	nomMenu VARCHAR(20) REFERENCES Menu(nomMenu),
+	nomBoisson VARCHAR(20) REFERENCES Boisson(nomBoisson),
+	nomEntree VARCHAR(20) REFERENCES Entree(nomEntree),
+	nomPlat VARCHAR(20) REFERENCES Plat(nomPlat),
+	nomDessert VARCHAR(20) REFERENCES Dessert(nomDessert),
+	quantite INTEGER check (quantite > 0),
+	CONSTRAINT KmenuCommandes PRIMARY KEY (numeroReservation, nomMenu,nomBoisson, nomEntree, nomPlat, nomDessert)
+);
 CREATE TABLE Disponibles (
 	nomArticle VARCHAR(20) REFERENCES Article(nomArticle),
     nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
