@@ -151,7 +151,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		String res = null;
 		if (numRes <= 0) {
 			return null;
-		}      
+		}
 		String requete = new String("SELECT "
 				+"Client.nomclient "
 				+"FROM Reservation, Client "
