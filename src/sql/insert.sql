@@ -253,18 +253,18 @@ insert into EstCompose
 
 insert into SontVoisines
 	Values(1,3);
-	
+
 insert into SontVoisines
 	Values(3,1);
-	
+
 insert into SontVoisines
 	Values(3,4);
 
 insert into SontVoisines
 	Values(4,3);
-	
+
 insert into SontVoisines
 	Values(2,5);
-	
+
 insert into SontVoisines
 	Values(5,2);

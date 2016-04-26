@@ -12,7 +12,7 @@ public class Service extends BDitem {
 
     /**
      * Existe-t-il un service pour la date donnée? cex : jour férié, dimanche...
-     * TODO -> Question : on doit rentrr toutes les dates/services qui existent à la main??
+     * TODO -> Question : on doit rentrer toutes les dates/services qui existent à la main??
      */
     public boolean presenceService(String date, String typeService) {
 	boolean res = false;
