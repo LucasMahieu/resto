@@ -523,7 +523,10 @@ public class Controleur{
     }
 
     public LinkedList<Integer> getListeReservations() {
-        return null;
+        LinkedList<Integer> ret = new LinkedList<Integer>();
+        Set<Integer> setN = ReservationFactoryConcrete.get().getReservations().keySet();
+        ret.addAll(setN);
+        return ret;
     }
 
     /** 
