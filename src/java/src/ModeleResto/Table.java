@@ -19,9 +19,8 @@ public class Table extends BDitem {
         if (date == null || service == null) {
             return null;
         }
-        String requete = new String(
-                "SELECT t.numeroTable "
-                +"FROM tables t ");
+        String requete = new String("SELECT t.numeroTable "
+				    +"FROM tables t ");
         if(loc!=null && loc != ""){
             requete+="WHERE t.localisation='"+loc+"' ";
         }
@@ -49,16 +48,18 @@ public class Table extends BDitem {
             return null;
         }
     }
+    
     /**
      * Donne le nombre de places restantes d'une table donnée.
+     * -1 -> Erreur
      * @param tab numero de la table 
      * @param config 0 pour table isolée, 1 pour accolée à 1 table, 2 pour accolée à 2 tables voisines
      */
     public int nbPlaceTable(int tab, int config) {
+        int res = -1;
         if (tab <= 0) {
             return -1;
         }
-        int ret=0;
         String requete = new String("SELECT ");
         if(config == 0){
             requete += "nombrePlaceIsolee ";
@@ -75,20 +76,13 @@ public class Table extends BDitem {
         try {
             setStmt(getCon().createStatement());
             ResultSet rset = getStmt().executeQuery(requete);
-            if (!rset.isBeforeFirst()) {
-                rset.close();
-                this.getStmt().close();
-                return -1;
+            if (rset.next()) {
+		res = rset.getInt(1);
             }
-            else {
-                int i = 0;
-                rset.next();
-                i = rset.getInt(1);
-                rset.close();
-                this.getStmt().close();
-                return i;
-            }
-        }
+	    rset.close();
+	    getStmt().close();
+	    return res;
+	}
         catch (SQLException e) {
             System.err.println("Erreur pour faire la requête nbPlaceTable.");
             e.printStackTrace(System.err);
@@ -106,10 +100,10 @@ public class Table extends BDitem {
             return null;
         }
         String requete = new String("SELECT "
-                +"sv.numerotable2 "
-                +"FROM sontvoisines sv "
-                +"WHERE sv.numerotable1="+tab
-                );
+				    +"sv.numerotable2 "
+				    +"FROM sontvoisines sv "
+				    +"WHERE sv.numerotable1="+tab
+				    );
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
@@ -118,7 +112,7 @@ public class Table extends BDitem {
                 res.add(rset.getInt(1));
             }
             rset.close();
-            this.getStmt().close();
+            getStmt().close();
             return res;
         }
         catch (SQLException e) {
@@ -129,7 +123,7 @@ public class Table extends BDitem {
     }
 
     /*
-     * Donne les numeros de table d'une resa
+     * Donne les numeros de table d'une reservation
      */
     public LinkedList<Integer> getNumeroTable(int numResa) {
         LinkedList<Integer> res = new LinkedList<Integer>();
@@ -137,10 +131,10 @@ public class Table extends BDitem {
             return null;
         }
         String requete = new String("SELECT "
-                +"er.numerotable "
-                +"FROM estreservee er "
-                +"WHERE er.numeroreservation="+numResa
-                );
+				    +"er.numerotable "
+				    +"FROM estreservee er "
+				    +"WHERE er.numeroreservation="+numResa
+				    );
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
@@ -149,7 +143,7 @@ public class Table extends BDitem {
                 res.add(rset.getInt(1));
             }
             rset.close();
-            this.getStmt().close();
+            getStmt().close();
             return res;
         }
         catch (SQLException e) {
@@ -160,11 +154,13 @@ public class Table extends BDitem {
     }
 
     /**
-     * Donne le numéro de resa pour une table donnée
+     * Donne le numéro de reservation pour une table donnée
      * avec une date et un service.
+     * -1 -> Erreur
+     * TODO si pas de date/service, mettre ceux automatiques
      */
     public int getNumeroReservation(int numTable, String date, String service) {
-        int res = 0;
+        int res = -1;
         if (numTable <= 0 || date == null || service == null) {
             return -1;
         }
@@ -174,7 +170,7 @@ public class Table extends BDitem {
         requete += "AND numeroTable = " + numTable + " ";
         requete += "AND dateService = '" + date + "' ";
         requete += "AND typeService = '" + service + "'";
-
+	
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
@@ -183,7 +179,7 @@ public class Table extends BDitem {
                 res = rset.getInt(1);
             }
             rset.close();
-            this.getStmt().close();
+            getStmt().close();
             return res;
         }
         catch (SQLException e) {
@@ -195,6 +191,8 @@ public class Table extends BDitem {
 
     /**
      * Ajoute une table à une réservation.
+     * -1 -> Erreur
+     *  0 -> Réussite
      */
     public int ajouterTable(int numeroTable, int numeroReservation) {
         if (numeroTable <= 0 || numeroReservation <= 0) {
@@ -216,28 +214,29 @@ public class Table extends BDitem {
         }
     }
 
+    /**
+     * Retourne le nom associé au numeroReservation
+     */
     public String getNomRes(int numRes) {
-        String res;
+        String res = null;
         if (numRes <= 0) {
             return null;
         }      
         String requete = new String("SELECT "
-                +"Client.nomclient "
-                +"FROM Reservation, Client "
-                +"WHERE Client.numeroclient = Reservation.numeroclient "
-                +"AND reservation.numeroreservation = " + numRes
-                );
+				    +"Client.nomclient "
+				    +"FROM Reservation, Client "
+				    +"WHERE Client.numeroclient = Reservation.numeroclient "
+				    +"AND reservation.numeroreservation = " + numRes
+				    );
         System.out.println(requete);
         try {
             setStmt(getCon().createStatement());
             ResultSet rset = getStmt().executeQuery(requete);
-            if (!rset.isBeforeFirst()) {
-                return null;
+            if (rset.next()) {
+		res = new String(rset.getString(1));
             }
-            rset.next();
-            res = new String(rset.getString(1));
-            rset.close();
-            getStmt().close();
+	    rset.close();
+	    getStmt().close();
             return res;
         }
         catch (SQLException e) {
@@ -247,11 +246,14 @@ public class Table extends BDitem {
         }
     }
 
-    public void supprimerReservation(int numeroTable, String date, String service) {
-	int res = 0;
+    /**
+     * Supprime reservation
+     * -1 -> Erreur
+     *  0 -> Réussite
+     */
+    public int supprimerReservation(int numeroTable, String date, String service) {
 	if (numeroTable <= 0) {
-	    System.out.println("Numero de Table négatif dans existsReservation"); //TODO peut etre lancer une erreur
-	    return;
+	    return -1;
 	}
 	String requete = new String("DELETE FROM Reservation" //supprimer la classe reservation que a été créée?
 				    + "FROM estReserve, Reservation"
@@ -264,17 +266,20 @@ public class Table extends BDitem {
 	    setStmt(getCon().createStatement());
 	    getStmt().executeUpdate(requete);
 	    getStmt().close();
-	    return;
+	    return 0;
 	}
 	catch (SQLException e) {
 	    System.err.println("Erreur pour faire la requête supprimerReservation(table).");
 	    e.printStackTrace(System.err);
-	    return;
+	    return -1;
 	}
     }
     
-
-//probleme -> utiliser exists, il peut y avoir plusieurs résultats et c est pas vérifié
+    /**
+     *A Supprimer a priori
+     */
+    /*
+    //probleme -> utiliser exists, il peut y avoir plusieurs résultats et c est pas vérifié
     public boolean existsReservation(int numeroTable, String date, String service) {
 	if (numeroTable <= 0) {
 	    System.out.println("Numero de Table négatif dans existsReservation"); //TODO peut etre lancer une erreur
@@ -310,5 +315,5 @@ public class Table extends BDitem {
 	    return false;
 	}
     }
-    
+    */
 }
