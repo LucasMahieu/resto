@@ -59,6 +59,7 @@ public class InterfaceReservation extends Observateur{
   private JComboBox<String> comboBoxService= new JComboBox<String>(service);
   private JLabel labelLocalisation = new JLabel("Localisation");
   private JTextField texteLocalisation = new JTextField(20);
+  private JButton boutonAcutaliser= new JButton("Actualiser");
 
   /** constructeur du panel de l'interface de reservation
    * 
@@ -122,10 +123,6 @@ public class InterfaceReservation extends Observateur{
     nbBoutons++;
     this.panelReservation.add(boutonReservation);
 
-    boutonSupprimer.setBounds(5,nbBoutons*TAILLE_Y_BOUTON,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
-    nbBoutons++;
-    this.panelReservation.add(boutonSupprimer);
-
     // Tableau contenant les commandes :
     Object[][] data = {};
 
@@ -138,15 +135,42 @@ public class InterfaceReservation extends Observateur{
     jScrollPane.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
     panelReservation.add( jScrollPane);
     // mise à jour du tableau 
-    // TODO
+
+    boutonAcutaliser.setBounds(POS_X_TAB,POS_Y_TAB + TAILLE_Y_TAB+10,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    this.panelReservation.add(boutonAcutaliser);
+
+    boutonSupprimer.setBounds(POS_X_TAB + TAILLE_X_BOUTON + 5 ,POS_Y_TAB + TAILLE_Y_TAB+10,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
+    this.panelReservation.add(boutonSupprimer);
 
   }
 
 
   public void effetBoutonSupprimer(){
     System.out.println("effetBoutonSupprimer");
-    this.miseAjourTableauReservation();
     //TODO : implémenter le bouton Supprimer Reservation
+    int selectedRow = this.tableau.getSelectedRow();
+    if(selectedRow >= 0){
+      System.out.println("Selected row : " + selectedRow );
+      int numeroReservation = Integer.parseInt((String) (this.tableau.getModel()).getValueAt(selectedRow,1));
+      String date = (String) (this.tableau.getModel()).getValueAt(selectedRow,4);
+      int table= (int) (this.tableau.getModel()).getValueAt(selectedRow,2);
+      String service= (String) (this.tableau.getModel()).getValueAt(selectedRow,5);
+      System.out.println("Reservation: " + numeroReservation);
+      System.out.println("Date : " + date);
+      System.out.println("table: " + table);
+      System.out.println("service: " + service);
+      if (numeroReservation> 0){
+        System.out.println("suppression reservation");
+        Controleur.get().supprimerReservation(table,date,service);
+      }
+      this.miseAjourTableauReservation();
+    }
+    
+  }
+
+  public void effetBoutonActualiser(){
+    System.out.println("effetBoutonActualiser");
+    this.miseAjourTableauReservation();
   }
 
   public void miseAjourTableauReservation(){
@@ -171,9 +195,9 @@ public class InterfaceReservation extends Observateur{
         System.out.println(etatCommande);
         String table = Controleur.get().getNumeroTables(numeroReservationCourant).toString();
         String serviceCourant = Controleur.get().getService(numeroReservationCourant);
-        String nbPersonnes = Controleur.get().getNombrePersonnes(numeroReservationCourant).toString();
+        String nbPersonnes = Integer.toString(Controleur.get().getNombrePersonnes(numeroReservationCourant));
 
-        Object[] o = {nomCommande,numeroReservationCourant,table,nbPersonnes,date,serviceCourant}; //TODO nbPersonnesReservations
+        Object[] o = {nomCommande,numeroReservationCourant,table,nbPersonnes,date,serviceCourant};
         ((DefaultTableModel)this.tableau.getModel()).addRow(o);
         ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
     }
@@ -183,6 +207,7 @@ public class InterfaceReservation extends Observateur{
   public void activeListener(ActionListener aL){
     boutonReservation.addActionListener(aL);
     boutonSupprimer.addActionListener(aL);
+    boutonAcutaliser.addActionListener(aL);
   }
 
   /** permet d'acceder au bouton de reservation de l'interface de reservation
@@ -191,6 +216,10 @@ public class InterfaceReservation extends Observateur{
    */
   public JButton getBoutonReservation(){
     return this.boutonReservation;
+  } 
+
+  public JButton getBoutonActualiser(){
+    return this.boutonAcutaliser;
   } 
 
   public JButton getBoutonSupprimer(){
