@@ -22,7 +22,8 @@ all: resto exeResto
 
 resto:
 	javac -encoding utf8 -d bin -sourcepath src:src/* src/Resto.java
-
+restoText:
+	javac -encoding utf8 -d bin -sourcepath src:src/* src/RestoText.java
 # Execution:
 # on peut taper directement la ligne de commande :
 #   > java -classpath bin TestGUI
@@ -31,6 +32,9 @@ resto:
 
 exeResto:
 	java -classpath bin:bin/* Resto
+
+exeRestoText:
+	java -classpath bin:bin/* RestoText
 
 documentation:
 	javadoc -d doc -sourcepath src/ -subpackages . 

@@ -219,6 +219,10 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
       System.out.println("Bouton fermer suiviCommande");		
       interfaceSuiviCommande.effetBoutonFermer();
     }
+    else if (source == interfaceSuiviCommande.getButtonEnvoyer()){
+      System.out.println("Bouton Envoyer suiviCommande");		
+      interfaceSuiviCommande.effetBoutonEnvoyer();
+    }
     else{
       for(JToggleButton jt : interfaceCommande.getButtonArticleMenu()){
         if(source == jt){
