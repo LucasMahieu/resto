@@ -30,56 +30,48 @@ insert into Carte
 	
 -- ARTICLES
 insert into Article
-	Values('Tajine Boulettes', 17, 'arabe');
-insert into Article
-	Values('Kebab sto frites', 15, 'arabe');
-insert into Article
 	Values('couscous', 15, 'arabe');
 insert into Article
+	Values('gateaux maroc', 8, 'arabe');
+insert into Article
 	Values('salade tunisienne', 8, 'arabe');
+insert into Article
+	Values('the', 3, 'arabe');
 
 insert into Article
-	Values('Pates bolo', 10, 'italien');
-insert into Article
-	Values('Pates carbo', 9, 'italien');
+	Values('pates bolo', 10, 'italien');
 insert into Article
 	Values('tiramissu', 7, 'italien');
 insert into Article
-	Values('Gnocchi', 18, 'italien');
-insert into Article
 	Values('salade de tomates', 8, 'italien');
+insert into Article
+	Values('jus orange', 8, 'italien');
 
 insert into Article
-	Values('Big Mac', 10, 'americain');
-insert into Article
-	Values('Hot Dog', 10, 'americain');
-insert into Article
-	Values('Nuggets', 10, 'americain');
+	Values('salade cesar', 8, 'americain');
 insert into Article
 	Values('steak frites', 10, 'americain');
 insert into Article
 	Values('coca', 3, 'americain');
+insert into Article
+	Values('sunday', 10, 'americain');
 	
 insert into Article
 	Values('carpaccio', 12, 'français');
 insert into Article
 	Values('champagne', 25, 'français');
 insert into Article
-	Values('perrier', 2, 'français');
+	Values('poulet', 16, 'français');
+insert into Article
+	Values('fraise', 16, 'français');
 
 insert into Article
 	Values('menu enfant', 12, NULL);
 insert into Article
 	Values('menu toqué', 18, NULL);
 insert into Article
-	Values('menu chasseur', 14, NULL);
-insert into Article
-	Values('menu pêcheur', 19, NULL);
-insert into Article
-	Values('menu Goulu', 100, NULL);
+	Values('menu goulu', 100, NULL);
 
-insert into Article
-	Values('the glacé', 4, 'Britich');
 	
 -- SERVICE
 insert into Service
@@ -104,37 +96,43 @@ insert into Service
 	Values('MIDI', '28/04/2016', 'carte bar');
 
 -- RESERVATION
-insert into Reservation
-	Values(1, 5, 1, 'SOIR', '21/07/2015');
-insert into Reservation
-	Values(3, 5, 1, 'MIDI', '21/07/2015');
-insert into Reservation
-	Values(2, 3, 2, 'SOIR', '21/07/2015');
-insert into Reservation
-	Values(4, 6, 3, 'SOIR', '21/07/2015');
-	
+
 -- CHOIX
-insert into Choix
-	Values('steak frites');
-insert into Choix
+insert into choix
 	Values('couscous');
-insert into Choix
-	Values('carpaccio');
-insert into Choix
-	Values('salade de tomates');
-insert into Choix
+insert into choix
+	Values('gateaux maroc');
+insert into choix
 	Values('salade tunisienne');
-insert into Choix
-	Values('glace');
-insert into Choix
-	Values('tiramisu');
-insert into Choix
+insert into choix
+	Values('the');
+
+insert choix Article
+	Values('pates bolo');
+insert into choix
+	Values('tiramissu');
+insert into choix
+	Values('salade de tomates');
+insert into choix
+	Values('jus orange');
+
+insert choix Article
+	Values('salade cesar');
+insert into choix
+	Values('steak frites');
+insert into choix
 	Values('coca');
-insert into Choix
-	Values('champagne');
-insert into Choix
-	Values('perrier');
+insert into choix
+	Values('sunday');
 	
+insert choix Article
+	Values('carpaccio');
+insert into choix
+	Values('champagne');
+insert into choix
+	Values('poulet');
+insert into choix
+	Values('fraise');
 
 -- PLAT
 insert into Plat
@@ -142,19 +140,9 @@ insert into Plat
 insert into Plat
 	Values('couscous');
 insert into Plat
-	Values('Big Mac');
+	Values('pates bolo');
 insert into Plat
-	Values('Pates bolo');
-insert into Plat
-	Values('Pates carbo');
-insert into Plat
-	Values('Hot Dog');
-insert into Plat
-	Values('Nuggets');
-insert into Plat
-	Values('Gnocchi');
-insert into Plat
-	Values('Kebab sto frites');
+	Values('poulet');
 
 -- ENTREE	
 insert into Entree
@@ -163,12 +151,18 @@ insert into Entree
 	Values('salade de tomates');
 insert into Entree
 	Values('salade tunisienne');
+insert into Entree
+	Values('salade cesar');
 
 -- DESSERT 
 insert into Dessert
 	Values('glace');
 insert into Dessert
 	Values('tiramisu');
+insert into Dessert
+	Values('fraise');
+insert into Dessert
+	Values('gateaux maroc');
 
 -- BOISSON
 insert into Boisson
@@ -177,9 +171,9 @@ insert into Boisson
     Values('champagne');
 insert into Boisson
     Values('perrier');
-    
 insert into Boisson
-    Values('the glacé');
+    Values('the');
+    
 
 -- MENU
 insert into Menu
@@ -187,37 +181,13 @@ insert into Menu
 insert into Menu
 	Values('menu toqué', 'couscous');
 insert into Menu
-	Values('menu Goulu', 'couscous');
-insert into Menu
-	Values('menu pêcheur', 'couscous');
-insert into Menu
-	Values('menu chasseur', 'Tajin');
-
+	Values('menu goulu', 'pate bolo');
 
 -- ESTRESERVEE (NumeroTable, NumeroReservation)
 
-insert into EstReservee
-	Values(1,1);
-	
-insert into EstReservee
-	Values(2,1);
-	
-	
 -- SONTCOMMANDES
-insert into SontCommandes
-	Values('menu enfant',1,2);
-	
-insert into SontCommandes
-	Values('couscous',1,2);
-	
-insert into SontCommandes
-	Values('coca',1,2);
 
-insert into SontCommandes
-	Values('perrier',1,2);
-	
 -- DISPONIBLE
-
 insert into Disponibles
 	Values('coca', 'carte bar');
 
@@ -225,7 +195,7 @@ insert into Disponibles
 	Values('perrier', 'carte bar');
 	
 insert into Disponibles
-	Values('the a la menthe', 'carte bar');
+	Values('the', 'carte bar');
 	
 insert into Disponibles
 	Values('coca', 'carte repas');
@@ -258,7 +228,6 @@ insert into Disponibles
 	Values('carpaccio', 'carte repas');
 	
 -- ESTCOMPOSE
-
 insert into EstCompose
 	Values('menu enfant', 'perrier');
 insert into EstCompose
@@ -267,11 +236,11 @@ insert into EstCompose
 	Values('menu enfant', 'glace');
 	
 insert into EstCompose
-	Values('menu arabe', 'salade tunisienne');
+	Values('menu toqué', 'salade tunisienne');
 insert into EstCompose
-	Values('menu arabe', 'the a la menthe');
+	Values('menu toqué', 'the');
 insert into EstCompose
-	Values('menu arabe', 'glace');
+	Values('menu toqué', 'glace');
 	
 -- SONTVOISINES
 
