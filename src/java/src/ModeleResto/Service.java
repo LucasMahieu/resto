@@ -12,9 +12,12 @@ public class Service extends BDitem {
 
     /**
      * Existe-t-il un service pour la date donnée? cex : jour férié, dimanche...
-     * TODO -> Question : on doit rentrer toutes les dates/services qui existent à la main??
+     * @param date date
+     * @param typeService type de service (MIDI ou SOIR)
+     * @return true s il existe un service ce jour ci
      */
     public boolean presenceService(String date, String typeService) {
+     // TODO Question : on doit rentrer toutes les dates/services qui existent à la main??
 	boolean res = false;
 	String requete = new String("SELECT * from Service s where s.typeService='" + typeService + "' AND s.dateService='"+date+"'");
 	System.out.println(requete);

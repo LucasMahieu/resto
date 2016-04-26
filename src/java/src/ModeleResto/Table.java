@@ -12,6 +12,10 @@ public class Table extends BDitem {
     /**
      * Donne les tables libre d'une localisation pour une date et un service
      * ou toutes les tables libres si la localisation n'est pas précisée
+     * @param loc localisation
+     * @param date date
+     * @param service service (MIDI ou SOIR)
+     * @return liste des tables libres pour la date et le service souhaite
      */
     public LinkedList<Integer> getTableLibre(String loc, String date, String service) {
         int t = 0;
@@ -51,9 +55,9 @@ public class Table extends BDitem {
     
     /**
      * Donne le nombre de places restantes d'une table donnée.
-     * -1 -> Erreur
      * @param tab numero de la table 
      * @param config 0 pour table isolée, 1 pour accolée à 1 table, 2 pour accolée à 2 tables voisines
+     * @return -1 si erreur 0 sinon
      */
     public int nbPlaceTable(int tab, int config) {
         int res = -1;
@@ -92,7 +96,8 @@ public class Table extends BDitem {
 
     /**
      * Retourne la liste des tables voisine à une table donnée
-     * MARCHE SUR LA BD
+     * @param tab table
+     * @return liste de tables voisines
      */
     public LinkedList<Integer> getTableVoisine(int tab){
         LinkedList<Integer> res = new LinkedList<Integer>();
@@ -156,10 +161,13 @@ public class Table extends BDitem {
     /**
      * Donne le numéro de reservation pour une table donnée
      * avec une date et un service.
-     * -1 -> Erreur
-     * TODO si pas de date/service, mettre ceux automatiques
+     * @param numTable numero de table
+     * @param date date
+     * @param service service (MIDI ou SOIR)
+     * @return -1 si Erreur, 0 sinon
      */
     public int getNumeroReservation(int numTable, String date, String service) {
+     // TODO si pas de date/service, mettre ceux automatiques
         int res = -1;
         if (numTable <= 0 || date == null || service == null) {
             return -1;
@@ -191,8 +199,9 @@ public class Table extends BDitem {
 
     /**
      * Ajoute une table à une réservation.
-     * -1 -> Erreur
-     *  0 -> Réussite
+     * @param numeroTable numero de table
+     * @param numeroReservation numero de reservation
+     *  @return -1 si erreur 0 sinon
      */
     public int ajouterTable(int numeroTable, int numeroReservation) {
         if (numeroTable <= 0 || numeroReservation <= 0) {
@@ -216,6 +225,8 @@ public class Table extends BDitem {
 
     /**
      * Retourne le nom associé au numeroReservation
+     * @param numRes numero de reservation
+     * @return nom du client ayant reserve
      */
     public String getNomRes(int numRes) {
         String res = null;
@@ -248,8 +259,10 @@ public class Table extends BDitem {
 
     /**
      * Supprime reservation
-     * -1 -> Erreur
-     *  0 -> Réussite
+     * @param numeroTable numero de table
+     * @param date date
+     * @param service service (SOIR ou MIDI)
+     * @return -1 si erreur, 0 sinon
      */
     public int supprimerReservation(int numeroTable, String date, String service) {
 	if (numeroTable <= 0) {
@@ -275,45 +288,4 @@ public class Table extends BDitem {
 	}
     }
     
-    /**
-     *A Supprimer a priori
-     */
-    /*
-    //probleme -> utiliser exists, il peut y avoir plusieurs résultats et c est pas vérifié
-    public boolean existsReservation(int numeroTable, String date, String service) {
-	if (numeroTable <= 0) {
-	    System.out.println("Numero de Table négatif dans existsReservation"); //TODO peut etre lancer une erreur
-	    return false;
-	}
-	String requete = new String("SELECT count(*)"
-				    + "FROM estReserve, Reservation"
-				    + "Where Reservation.date = '"+date+"' "
-				    + "AND Reservation.service = "+service+"' "
-				    + "Reservation.numeroreservation = estReserve.numeroreservation"
-				    + "estReserve.numerotable ="+ numeroTable);
-        System.out.println(requete);
-	try {
-	    setStmt(getCon().createStatement());
-	    ResultSet rset = getStmt().executeQuery(requete);
-	    rset.close();
-	    getStmt().close();
-	    if (!rset.isBeforeFirst()) {
-		return false;
-	    }
-            rset.next();
-	    int res = rset.getInt(1);
-	    if (res == 1) {
-		return true; //pas sur que ca marche
-	    } else {
-		System.out.println("Plusieurs reservations correspondent, ce n'est pas logique");
-		return false;
-	    }
-	}
-	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête.");
-	    e.printStackTrace(System.err);
-	    return false;
-	}
-    }
-    */
 }

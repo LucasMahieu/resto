@@ -131,7 +131,7 @@ public class InterfaceSuiviCommande extends Observateur{
 
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
-	 *
+     * @param aL ActionListener de la fenetre
 	 */
 	public void activeListener(ActionListener aL){
 		buttonRechercheSuivi.addActionListener(aL);
@@ -343,7 +343,7 @@ public class InterfaceSuiviCommande extends Observateur{
 
         /** accesseur du tableau
          *
-         * @returns tableau de SModel
+         * @return tableau de SModel
          */
         public Object[][] getData(){
           return this.data;

@@ -9,7 +9,7 @@ public class Client extends BDitem {
 
     /**
      * Retourne le nombre de clients
-     * -1 -> Erreur
+     *  @return -1 si erreur, 0 sinon
      */
     public int getNombreClient() {
 	int ret = 0;
@@ -33,11 +33,12 @@ public class Client extends BDitem {
 
     /**
      * Retourne le numeroClient s'il existe
-     * -1 -> Erreur
-     *  0 -> Absent
-     * TODO rajout du count(*) nécessaire ? Si non, modification dans ajoutclient?
+     * @param nomClient nom du client
+     * @param nTel numero de telephone
+     *  @return -1 si erreur, 0 sinon
      */
     public int existsClient(String nomClient, String nTel) {
+     // TODO rajout du count(*) nécessaire ? Si non, modification dans ajoutclient?
 	int res = 0;
 	if (nomClient == null || nTel == null) {
 	    return -1;
@@ -64,12 +65,12 @@ public class Client extends BDitem {
 
     /**
      * Crée un client
-     * -1 -> Erreur
-     * sinon, numero du client
-     * TODO -> ++lastClient, ca marche vraiment?
+     * @param nomClient nom du client
+     * @param nTel numero de telephone
+     * @return -1 si erreur, numero du client sinon
      */
-    
     public int create(String nomClient, String nTel) {
+     // TODO -> ++lastClient, ca marche vraiment?
 	if (nomClient == null || nTel == null) {
 	    return -1;
 	}

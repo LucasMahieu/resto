@@ -244,8 +244,8 @@ public class InterfaceCommande extends Observateur{
 	 * Créer une nouvelle LinkedList contenant l'en-tête du récap
 	 * Cette méthode est à appeler à chaque fois que l'utilisateur clique sur le bouton "Rechercher"
 	 * avec un numéro de table OU de réservation correct
-	 * @param nResa numéro de la réservation
-	 * @exception si nResa ET nTable sont vide => PROBLEME gerer ce cas en amont lors de l'appui sur "Rechercher"
+	 * si nResa ET nTable sont vide PROBLEME gerer ce cas en amont lors de l'appui sur "Rechercher"
+	 * @param numResa numéro de la réservation
 	 */
 	public void createNewRecap(int numResa){
 		String date = Controleur.get().getDateNow();
@@ -336,6 +336,7 @@ public class InterfaceCommande extends Observateur{
 	}
 	/**
 	 * Applique b à tous les boutons de tous les onglets
+     * @param b etat du bouton
 	 */
 	public void setSelectedButtonArticle(boolean b){
 		setSelectedButtonArticle(buttonArticleBoisson,b);
@@ -346,6 +347,7 @@ public class InterfaceCommande extends Observateur{
 	}
 	/**
 	 * Demande au controleur d'ajouter les articles selectionnés
+     * @param l liste de boutons
 	 */
 	public void ajouterArticlesSelectionnes(ArrayList<JToggleButton> l){
 		for(int j=0; j<l.size(); j++){
@@ -358,6 +360,7 @@ public class InterfaceCommande extends Observateur{
 	}
 	/**
 	 * Demande au controleur d'ajouter les articles de type Menu  selectionnés
+     * @param l liste de boutons
 	 */
 	public void ajouterArticlesMenuSelectionnes(ArrayList<JToggleButton> l){
 		for(int j=0; j<l.size(); j++){
@@ -382,6 +385,7 @@ public class InterfaceCommande extends Observateur{
 	}
 	/**
 	 * Demande au controleur de supprimer les articles de type menu selectionnés
+     * @param l liste de boutons
 	 */
 	public void supprimerArticlesMenuSelectionnes(ArrayList<JToggleButton> l){
 		for(int j=0; j<l.size(); j++){
@@ -405,6 +409,7 @@ public class InterfaceCommande extends Observateur{
 
 	/**
 	 * Demande au controleur de supprimer les articles selectionnés
+     * @param l liste de boutons 
 	 */
 	public void supprimerArticlesSelectionnes(ArrayList<JToggleButton> l){
 		for(int j=0; j<l.size(); j++){
@@ -416,6 +421,12 @@ public class InterfaceCommande extends Observateur{
 		Controleur.get().validate();
 	}
 
+    /**
+     * fonction d'update (observateur)
+     * @param o observable
+     * @param arg argument
+     *
+     */
 	public void update(Observable o, Object arg){
 		System.out.println("Methode update de Commande");
 		if(o instanceof ModeleResto.Article){
@@ -425,6 +436,7 @@ public class InterfaceCommande extends Observateur{
 
 	/**
 	 * Cette méthode met à jour les comboBox avec le menu (la 1er bouton) selectionné
+     * @param menuSelectionne chaine de caractere a mettre dans la combobox
 	 */
 	public void updateComboBoxMenu(String menuSelectionne){
 		System.out.println("COMBOBOX DU MENU  " + menuSelectionne);
@@ -456,6 +468,7 @@ public class InterfaceCommande extends Observateur{
 	}
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
+     * @param aL ActionListener de la fenetre principale
 	 */
 	public void activeListener(ActionListener aL){
 		buttonRecherche.addActionListener(aL);

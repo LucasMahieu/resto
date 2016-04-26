@@ -9,7 +9,10 @@ public class Article extends BDitem {
 
 	/**
 	 * Ajoute un article
-	 * -1 -> Erreur
+     * @param nomArticle nom de d'article
+     * @param quantite quantite
+     * @param numeroReservation numero de la reservation
+     * @return -1 si erreur, 0 sinon
 	 */  
 	public int ajoutArticle(String nomArticle, int quantite, int numeroReservation) {
 		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
@@ -77,7 +80,14 @@ public class Article extends BDitem {
 
 	/**
 	 * Ajoute un menu dans menucommandes
-	 * -1 -> Erreur
+     *  @param nomMenu nom du menu
+     *  @param quantite quantite
+     *  @param numeroReservation numero de reservation
+     *  @param nomBoisson nom de la boisson
+     *  @param nomEntree nom de l entree
+     *  @param nomPlat nom du plat
+     *  @param nomDessert nom du dessert
+     *  @return -1 si erreur, 0 sinon
 	 */
 	public int ajoutMenu(String nomMenu, int quantite, int numeroReservation, String  nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
 
@@ -131,6 +141,10 @@ public class Article extends BDitem {
 
 	/**
 	 * Supprime quantité nomArticle de la reservation n°numeroReservation
+     * @param nomArticle nom de l article
+     * @param quantite quantite
+     * @param numeroReservation numero de la reservation
+     * @return -1 si erreur, 0 sinon
 	 */
 	public int supprimerArticle(String nomArticle, int quantite, int numeroReservation) {
 		if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
@@ -166,7 +180,9 @@ public class Article extends BDitem {
 
 	/**
 	 * Combien de ce "nomArticle" ont été commandés dans la table sontcommandes
-	 * -1 -> Erreur
+     * @param nomArticle nom de l article
+     * @param numeroReservation numero de reservation
+     *  @return -1 si erreur, 0 sinon
 	 */
 	public int dejaCommande(String nomArticle, int numeroReservation) {
 		int ret = 0;
@@ -197,7 +213,13 @@ public class Article extends BDitem {
 
 	/**
 	 * Combien de ce menu ont été commandés (dans Table MenuCommandes)
-	 * -1 -> Erreur
+     * @param nomMenu nom du menu
+     * @param numeroReservation numero de reservation
+     * @param nomBoisson nom de la boisson
+     * @param nomEntree nom de l entree
+     * @param nomPlat nom du plat
+     * @param nomDessert nom du dessert
+     *  @return -1 si erreur , 0 sinon
 	 */
 	public int dejaCommandeMenuCommandes(String nomMenu, int numeroReservation, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
 		if (nomMenu == null || numeroReservation <= 0 ||  nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
@@ -232,6 +254,11 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne toutes les informations sur l'article en question
+     * @param nomArticle nom de l article
+     * @param prixArticle prix de l article
+     * @param specialite specialite
+     * @param type type d article
+     * @return resultat de la requete
 	 */
 	public ResultSet getArticle(String nomArticle, float prixArticle, String specialite, String type) {
 		String requete = new String("SELECT * FROM Article ");
@@ -277,6 +304,9 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne les articles d'un certain type qui sont disponibles pour un menu donné //TODO, marche pas ici
+     * @param nomMenu nom du menu
+     * @param type type d article
+     * @return liste d article du type demande
 	 */
 	public LinkedList<String> getArticleMenu(String nomMenu, String type) {
 		LinkedList<String> res = new LinkedList<String>(); 
@@ -311,7 +341,11 @@ public class Article extends BDitem {
 	}
 
 	/**
-	 *Est utilisé dans la fonction principale
+	 * Est utilisé dans la fonction principale
+     * @param nomMenu nom du menu
+     * @param type type d article
+     * @return nom d article
+     * 
 	 */
 	public String getArticleMenuBis(String nomMenu, String type) {
 		String  res = null;
@@ -343,6 +377,9 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne les articles commandés pour une reservation pour une etape donnée (on ne renvoie pas le contenu des menus)
+     * @param numRes numero de la reservation
+     * @param etape etape du repas
+     * @return HashMap des articles commandes
 	 */
 	public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
 		HashMap<String, Integer> res = new HashMap<String, Integer>();
@@ -374,6 +411,8 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne les articles commandés pour une reservation dans tous les menus (dans menuCommandes)
+     * @param numRes numero de reservation
+     * @return liste des articles commandes dans les menus
 	 */
 	public LinkedList<String> getArticlesMenuCommandes(int numRes) {
 		LinkedList<String> res = new LinkedList<String>();
@@ -402,6 +441,9 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne les articles commandés pour une reservation dans tous les menus (dans menuCommandes) DANS UNE ETAPE
+     * @param numRes numero de reservation
+     * @param type etape du repas
+     * @return liste des articles d'une etape du menu
 	 */
 	public LinkedList<String> getArticlesMenuCommandesType(int numRes, String type) {
 		LinkedList<String> res = new LinkedList<String>();
@@ -429,6 +471,14 @@ public class Article extends BDitem {
 	}
 	/**
 	 * Supprime quantité nomMenu de la reservation n°numeroReservation //TODO ici, a finir
+     * @param nomMenu nom du menu
+     * @param quantite quantite
+     * @param numeroReservation numero de reservation
+     * @param nomBoisson nom de la boisson
+     * @param nomEntree nom de l entree
+     * @param nomPlat nom du plat
+     * @param nomDessert nom du dessert
+     * @return -1 si erreur, 0 sinon
 	 */
 	public int supprimerMenu(String nomMenu, int quantite, int numeroReservation, String nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
 		if (numeroReservation <= 0 || nomMenu == null || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
@@ -474,6 +524,8 @@ public class Article extends BDitem {
 
 	/**
 	 * Retourne le prix de l'aticle demandé
+     * @param nomArticle nom de l article
+     * @return prix de l article en euros
 	 */
 	public float getPrix(String nomArticle) {	   	       
 		float res = -1;
