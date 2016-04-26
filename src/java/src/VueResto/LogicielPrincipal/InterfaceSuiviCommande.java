@@ -260,7 +260,7 @@ public class InterfaceSuiviCommande extends Observateur{
         return;
       }
       HashMap<String, Integer> articlesReservation = new HashMap<String, Integer>();
-      articlesReservation = Controleur.get().getArticlesCommandes(numeroReservationCourant);
+      articlesReservation = Controleur.get().getChoixCommandes(numeroReservationCourant);
       System.out.println("Une liste d'article a été trouvée");
       // On affiche les reservations trouvées
       Object[] o = {"Sauce Piquante","3","Etat?"};
