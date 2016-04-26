@@ -65,9 +65,15 @@ public class Controleur{
         // ajouter à la resa l'article donner avec les bonnes quantités dans la BD
 	return ReservationFactoryConcrete.get().getArticleBD().ajoutMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
     }
-
-
-
+	/**
+     * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
+     * -1 -> Erreur
+     *  0 -> Réussite
+     */
+    public int supprimerMenu(String nomMenu, int quantite, int numResa,String  boisson, String entree, String plat, String dessert){
+        // supprimer à la resa l'article donner avec les bonnes quantités dans la BD
+	return ReservationFactoryConcrete.get().getArticleBD().supprimerMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
+    }
 
     /**
      * Supprime à la BD la quantité d'article 'nom' à la reservation numResa
