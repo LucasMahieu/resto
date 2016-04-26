@@ -408,6 +408,9 @@ public class Controleur{
      */
     public LinkedList<String> getListeArticlesMenu(String nomMenu, String type)
     {
+	if (type == "Menu") {
+	    return null;
+	}
 	LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
 	return resultat;
     }

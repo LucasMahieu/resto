@@ -255,14 +255,32 @@ public class Article extends BDitem {
 	    return null;
 	}
 	if (type == "Plat") {
+	    //On cherche d'abord le plat auquel est associé le menu dans la table menu
 	    requete = new String("SELECT nomPlatBase FROM Menu");
 	    requete += "WHERE nomMenu = '" + nomMenu + "'";
-	} else {
-	     requete = new String("SELECT estCompose.nomArticle FROM estCompose " + type);
-	     requete += " WHERE nomMenu = '" + nomMenu + "'";
-	     requete += "AND "+type+".nomArticle = estCompose.nomArticle";
-	 }
 	    System.out.println(requete);
+	    try {
+		setStmt(getCon().createStatement());
+		ResultSet rset = getStmt().executeQuery(requete);
+		while (rset.next()) {
+		    res.add(rset.getString(1));
+		}
+		rset.close();
+		getStmt().close();
+	    }
+	    catch (SQLException e) {
+		System.err.println("Erreur pour faire la requête.");
+		e.printStackTrace(System.err);
+		return null;
+	    }
+	}
+	
+	//Puis on cherche dans la table estcompose, quel que soit le type
+	requete = new String("SELECT estCompose.nomArticle FROM estCompose " + type);
+	requete += " WHERE nomMenu = '" + nomMenu + "'";
+	requete += "AND "+type+".nomArticle = estCompose.nomArticle";
+	
+	System.out.println(requete);
 	try {
 	    setStmt(getCon().createStatement());
 	    ResultSet rset = getStmt().executeQuery(requete);
@@ -278,11 +296,10 @@ public class Article extends BDitem {
 	    e.printStackTrace(System.err);
 	    return null;
 	}
-	
     }
 
-    /**
-     * Retourne les articles commandés pour une reservation
+/**
+ * Retourne les articles commandés pour une reservation
      */
     public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
 	HashMap<String, Integer> res = new HashMap<String, Integer>();

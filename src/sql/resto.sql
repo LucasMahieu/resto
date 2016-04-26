@@ -66,10 +66,9 @@ CREATE TABLE Boisson (
 );
 
 CREATE TABLE Menu (
-	nomMenu VARCHAR(20) REFERENCES Article(nomArticle),
+	nomMenu VARCHAR(20) CONSTRAINT KnomMenu PRIMARY KEY REFERENCES Article(nomArticle),
     -- Attribut lié à la cardinalité 1..1
 	nomPlatBase VARCHAR(20) REFERENCES Plat(nomPlat)
-	CONSTRAINT KnomMenu PRIMARY KEY (nomMenu, nomPlatBase)
 );
 -- Traduction des entités faibles : aucunes
 -- Traduction des multiplicités 1..1 : OK (voir ci dessus)
