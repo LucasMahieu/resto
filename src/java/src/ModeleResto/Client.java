@@ -38,7 +38,6 @@ public class Client extends BDitem {
      *  @return -1 si erreur, 0 sinon
      */
     public int existsClient(String nomClient, String nTel) {
-     // TODO rajout du count(*) nécessaire ? Si non, modification dans ajoutclient?
 	int res = 0;
 	if (nomClient == null || nTel == null) {
 	    return -1;
@@ -70,7 +69,6 @@ public class Client extends BDitem {
      * @return -1 si erreur, numero du client sinon
      */
     public int create(String nomClient, String nTel) {
-     // TODO -> ++lastClient, ca marche vraiment?
 	if (nomClient == null || nTel == null) {
 	    return -1;
 	}

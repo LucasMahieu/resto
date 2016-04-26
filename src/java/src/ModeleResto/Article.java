@@ -315,7 +315,7 @@ public class Article extends BDitem {
 			return null;
 		}
 		if (type == "Plat") {
-			//  res.add(getArticleMenuBis(nomMenu, type));
+			res.add(getArticleMenuBis(nomMenu, type));
 		}
 		//Puis on cherche dans la table estcompose, quel que soit le type
 		requete = new String("SELECT e.nomChoix FROM estCompose e, " + type);
@@ -470,7 +470,7 @@ public class Article extends BDitem {
 		}
 	}
 	/**
-	 * Supprime quantité nomMenu de la reservation n°numeroReservation //TODO ici, a finir
+	 * Supprime quantité nomMenu de la reservation n°numeroReservation
      * @param nomMenu nom du menu
      * @param quantite quantite
      * @param numeroReservation numero de reservation

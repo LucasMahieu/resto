@@ -167,7 +167,6 @@ public class Table extends BDitem {
      * @return -1 si Erreur, 0 sinon
      */
     public int getNumeroReservation(int numTable, String date, String service) {
-     // TODO si pas de date/service, mettre ceux automatiques
         int res = -1;
         if (numTable <= 0 || date == null || service == null) {
             return -1;
