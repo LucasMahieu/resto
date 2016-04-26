@@ -285,30 +285,12 @@ public class Article extends BDitem {
 	    return null;
 	}
 	if (type == "Plat") {
-	    //On cherche d'abord le plat auquel est associé le menu dans la table menu
-	    requete = new String("SELECT nomPlatBase FROM Menu");
-	    requete += "WHERE nomMenu = '" + nomMenu + "'";
-	    System.out.println(requete);
-	    try {
-		setStmt(getCon().createStatement());
-		ResultSet rset = getStmt().executeQuery(requete);
-		while (rset.next()) {
-		    res.add(rset.getString(1));
-		}
-		rset.close();
-		getStmt().close();
-	    }
-	    catch (SQLException e) {
-		System.err.println("Erreur pour faire la getArticleMenu");
-		e.printStackTrace(System.err);
-		return null;
-	    }
+	    //  res.add(getArticleMenuBis(nomMenu, type));
 	}
-
 	//Puis on cherche dans la table estcompose, quel que soit le type
-	requete = new String("SELECT e.nomMenu FROM estCompose e, " + type);
-	requete += " WHERE nomMenu='" + nomMenu + "' ";
-	requete += "AND "+type+".nom"+type + "= e.nomMenu";
+	requete = new String("SELECT e.nomChoix FROM estCompose e, " + type);
+	requete += " WHERE e.nomMenu ='" + nomMenu + "' ";
+	requete += "AND "+type+".nom"+type + "= e.nomChoix";
 
 	System.out.println(requete);
 	try {
@@ -329,34 +311,66 @@ public class Article extends BDitem {
     }
 
     /**
-     * Retourne les articles commandés pour une reservation pour une etape donnée (on ne renvoie pas le contenu des menus)
+     *Est utilisé dans la fonction principale
      */
-    public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
-	HashMap<String, Integer> res = new HashMap<String, Integer>();
-	if (numRes <= 0) {
-	    return res;
+    public String getArticleMenuBis(String nomMenu, String type) {
+	String  res = null;
+	String requete;
+	if (nomMenu == null || type == null) {
+	    return null;
 	}
-	String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes");
-	requete += ", " + etape;
-	requete += " WHERE numeroReservation = " + numRes;
-	requete += " AND sontcommandes.nomArticle = " + etape + ".nom"+etape;		    
+	//On cherche d'abord le plat auquel est associé le menu dans la table menu
+	requete = new String("SELECT nomPlatBase FROM Menu");
+	requete += "WHERE nomMenu = '" + nomMenu + "'";
 	System.out.println(requete);
 	try {
 	    setStmt(getCon().createStatement());
 	    ResultSet rset = getStmt().executeQuery(requete);
 	    while (rset.next()) {
-		res.put(rset.getString(1), rset.getInt(2));
+		res = new String(rset.getString(1));
 	    }
 	    rset.close();
 	    getStmt().close();
 	    return res;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la getArticlesCommandes");
+	    System.err.println("Erreur pour faire la getArticleMenu");
 	    e.printStackTrace(System.err);
 	    return null;
 	}
     }
+
+
+    /**
+     * Retourne les articles commandés pour une reservation pour une etape donnée (on ne renvoie pas le contenu des menus)
+     */
+    public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
+	    HashMap<String, Integer> res = new HashMap<String, Integer>();
+	    if (numRes <= 0) {
+		return res;
+	    }
+	    String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes");
+	    requete += ", " + etape;
+	    requete += " WHERE numeroReservation = " + numRes;
+	    requete += " AND sontcommandes.nomArticle = " + etape + ".nom"+etape;		    
+	    System.out.println(requete);
+	    try {
+		setStmt(getCon().createStatement());
+		ResultSet rset = getStmt().executeQuery(requete);
+		while (rset.next()) {
+		    res.put(rset.getString(1), rset.getInt(2));
+		}
+		rset.close();
+		getStmt().close();
+		return res;
+	    }
+	    catch (SQLException e) {
+		System.err.println("Erreur pour faire la getArticlesCommandes");
+		e.printStackTrace(System.err);
+		return null;
+	    }
+    }
+
 
     /**
      * Retourne les articles commandés pour une reservation dans tous les menus (dans menuCommandes)
