@@ -312,11 +312,9 @@ INSERT INTO EstCompose
 INSERT INTO EstCompose
 Values ('menu gourmet', 'saumon');
 INSERT INTO EstCompose
-Values ('menu gourmet', 'saint jacques ');
+Values ('menu gourmet', 'saint jacques');
 INSERT INTO EstCompose
 Values ('menu gourmet', 'cognac');
-INSERT INTO EstCompose
-Values ('menu gourmet', 'pâté');
 INSERT INTO EstCompose
 Values ('menu gourmet', 'foie gras');
 INSERT INTO EstCompose
