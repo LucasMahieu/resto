@@ -267,6 +267,10 @@ public class Controleur{
         return numResa;
     }
 
+    public void validate() {
+        ReservationFactoryConcrete.get().validate();
+    }
+
     /** Cette fonction permet de trouver le numero du client 
      *
      *	@param nomC nom du client
