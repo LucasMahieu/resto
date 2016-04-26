@@ -91,7 +91,7 @@ public class Article extends BDitem {
 	 */
 	public int ajoutMenu(String nomMenu, int quantite, int numeroReservation, String  nomBoisson, String nomEntree, String nomPlat, String nomDessert) {
 
-		if (nomMenu == null || quantite <= 0 || numeroReservation <= 0 || nomBoisson == null || nomEntree == null || nomPlat == null || nomDessert == null) {
+		if (nomMenu == null || quantite <= 0 || numeroReservation <= 0 || nomPlat == null || (nomBoisson == null && nomEntree == null && nomDessert == null) ) {
 			return -1;
 		}
 
@@ -103,14 +103,14 @@ public class Article extends BDitem {
 		nombreDejaCommande = dejaCommandeMenuCommandes(nomMenu, numeroReservation, nomBoisson, nomEntree, nomPlat, nomDessert);
 		if (nombreDejaCommande > 0) {
 			requete = new String("UPDATE MenuCommandes ");
-			requete += "SET quantiteArticle = " + (nombreDejaCommande + quantite) + " ";
+			requete += "SET quantite = " + (nombreDejaCommande + quantite) + " ";
 			requete += "WHERE numeroReservation = " + numeroReservation;
 			requete += "AND nomMenu = '" + nomMenu +"' ";
-			requete += "AND nomBoisson = '" + nomBoisson +"' ";
-			requete += "AND nomEntree = '" + nomEntree +"' ";
+				requete += "AND nomBoisson = '" + nomBoisson +"' ";
+				requete += "AND nomEntree = '" + nomEntree +"' ";
 			requete += "AND nomPlat = '" + nomPlat +"' ";
-			requete += "AND nomDessert = '" + nomDessert +"' ";	
-			requete += "AND quantite = " + nombreDejaCommande + 1;
+				requete += "AND nomDessert = '" + nomDessert +"' ";
+			requete += "AND quantite = " + nombreDejaCommande;
 		}
 		else {
 			requete = new String("INSERT INTO MenuCommandes VALUES");
@@ -228,12 +228,12 @@ public class Article extends BDitem {
 		int ret = 0;
 		String requete = new String("SELECT quantite ");
 		requete += "FROM menuCommandes ";
-		requete += "WHERE numeroReservation = " + numeroReservation;
+		requete += "WHERE numeroReservation = " + numeroReservation + " ";
 		requete += "AND nomMenu = '" + nomMenu +"' ";
 		requete += "AND nomBoisson = '" + nomBoisson +"' ";
 		requete += "AND nomEntree = '" + nomEntree +"' ";
 		requete += "AND nomPlat = '" + nomPlat +"' ";
-		requete += "AND nomDessert = '" + nomDessert +"' ";		 
+		requete += "AND nomDessert = '" + nomDessert +"' ";
 		System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
