@@ -225,7 +225,7 @@ public class Article extends BDitem {
 	}
 	if (type != null) {
 	    requete += ("GROUP BY nomArticle, specialite, prixArticle HAVING Article.nomArticle IN ");
-	    if (type == "menu") {
+	    if (type == "Menu") {
 		requete += "(SELECT Menu.nomMenu FROM " + type + ")";
 	    }
 	    else {
