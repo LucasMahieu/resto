@@ -30,7 +30,7 @@ public class InterfaceReservation extends Observateur{
   private static final int TAILLE_Y_BOUTON = 20;
   private static final int TAILLE_X_BOUTON = 200;
   private RModel rModel;
-  private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne"};
+  private String titre[] = {"Nom","n° Réservation","n° Table","Date", "Nbr Personne"};
   private JTable tableau;
   private static final int POS_X_TABLE = 10;
   private static final int POS_Y_TABLE = 30;
@@ -149,6 +149,28 @@ public class InterfaceReservation extends Observateur{
   }
 
   public void miseAjourTableauReservation(){
+    LinkedList<Integer> listeReservations = new LinkedList<Integer>();
+    ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
+    ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+    
+    // listeReservations = Controleur.get().getListeReservations();
+    if(!listeReservations.isEmpty()){
+        System.out.println("Une ou  plusieurs réservations ont été trouvées ");
+    }
+
+    for(int numeroReservationCourant : listeReservations){
+        // On affiche les reservations trouvées
+        String etatCommande = Controleur.get().getEtatCommande(numeroReservationCourant);
+        String nomCommande = Controleur.get().getNom(numeroReservationCourant);
+        String date = Controleur.get().getDateNow();
+        String tempsEtat = Controleur.get().getDateNow();
+        System.out.println(etatCommande);
+        String table = Controleur.get().getNumeroTables(numeroReservationCourant).toString();
+        //String titre[] = {"Nom","n° Réservation","n° Table",date, "Nbr Personne"};
+        Object[] o = {nomCommande,numeroReservationCourant,table,date,"?-?" }; //TODO nbPersonnesReservations
+        ((DefaultTableModel)this.tableau.getModel()).addRow(o);
+        ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+    }
     
   }
 
