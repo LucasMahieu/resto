@@ -223,7 +223,7 @@ public class InterfaceCommande extends Observateur{
 		this.tabbedPaneArticle.setOpaque(true);
 		this.panelCommande.add(tabbedPaneArticle);
 
-		comboBoxBoisson = new JComboBox<String>({"Boisson"});
+		comboBoxBoisson = new JComboBox<String[]>({"Boisson"});
 		comboBoxBoisson.setBounds(POS_X_BOX_B,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
 		this.panelMenu.add(comboBoxBoisson);
 		comboBoxEntree = new JComboBox<String>({"Entree"});

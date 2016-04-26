@@ -48,6 +48,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	private static final int POS_X_TAB = 10;
 	private static final int POS_Y_TAB = POS_Y_TABLE + TAILLE_Y_FIELD_TABLE + 10;
 	private static final int TAILLE_LIGNE = 20;
+
 	public InterfaceSuiviCommande(){
 	// PANEL PRINCIPALE
 		this.panelSuiviCommande = new JPanel();
@@ -61,13 +62,6 @@ public class InterfaceSuiviCommande extends Observateur{
 		labelNTable = new JLabel("Num. Table");
 		labelNTable.setBounds(POS_X_TABLE,10,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
 		panelSuiviCommande.add(labelNTable);
-		//CHAMP TEXT POUR CHOISIR LE NOM DE LA RESA
-		this.textFieldNom = new JTextField(TAILLE_X_FIELD_NOM);
-		textFieldNom.setBounds(POS_X_NOM,POS_Y_NOM,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelSuiviCommande.add(textFieldNom);
-		labelNom = new JLabel("Nom Resa.");
-		labelNom.setBounds(POS_X_NOM,10,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelSuiviCommande.add(labelNom);
 		
 		// Bouton de recherche de la resa
 		this.buttonRechercheSuivi = new JButton("Rechercher");
@@ -87,8 +81,7 @@ public class InterfaceSuiviCommande extends Observateur{
         // Tableau contenant les commandes :
         // un bouton permet d'obtenir les détails de la commande sélectionnée
         // un autre bouton permet de fermer les détails de la commande ouverte.
-		Object[][] data = {
-		};
+		Object[][] data = {};
 
 		this.sModel = new SModel(data,titre);
 		//this.tableau = new JTable(sModel);
@@ -98,6 +91,20 @@ public class InterfaceSuiviCommande extends Observateur{
 		this.jScrollPane = new JScrollPane(tableau);
 		jScrollPane.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
 		panelSuiviCommande.add( jScrollPane);
+        // mise à jour du tableau 
+        this.remiseAZeroTableau();
+
+        // Liste articles de la table sélectionnée
+		Object[][] dataArticles = {};
+
+		this.sModelArticles = new SModel(dataArticles,titre);
+		this.tableauArticles = new JTable(new DefaultTableModel(dataArticles,titreArticles));
+		this.tableauArticles.setRowHeight(TAILLE_LIGNE);
+		this.tableauArticles.setBounds(POS_X_TAB_ART,POS_Y_TAB_ART,TAILLE_X_TAB_ART,TAILLE_Y_TAB_ART);
+		this.jScrollPaneArticles = new JScrollPane(tableauArticles);
+		jScrollPaneArticles.setBounds(POS_X_TAB_ART,POS_Y_TAB_ART,TAILLE_X_TAB_ART,TAILLE_Y_TAB_ART);
+		panelSuiviCommande.add( jScrollPaneArticles);
+        // mise à jour du tableau 
         this.remiseAZeroTableau();
 	}
 
