@@ -51,99 +51,69 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
 		reservations = new HashMap<Integer, ReservationConcrete>();
         // Ajoute dans reservations toutes les réservations futures.
-        initRes(reservations);
     }
 
-    /*
-     * Ajoute dans l'état initial, au lancement de l'application
-     * les réservations d'aujourd'hui et futures.
-     */
-    public int initRes(HashMap<Integer, ReservationConcrete> reservations) {
-		String requete = new String("SELECT numeroReservation, dateService FROM Reservation");
+    public ResultSet initRes(HashMap<Integer, ReservationConcrete> reservations) {
+        String requete = new String("SELECT numeroReservation, dateService FROM Reservation");
         System.out.println(requete);
-		try {
-			setStmt(getCon().createStatement());
-			ResultSet rset = getStmt().executeQuery(requete);
-			while (rset.next()) {
-				int numRes = rset.getInt(1);
-                String date = rset.getString(2);
-                if (turfu(date)) {
-                    reservations.put(numRes, new ReservationConcrete(numRes));
-                }
-			}
-            rset.close();
-            getStmt().close();
-            return 0;
-		}
-		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête initRes.");
-			e.printStackTrace(System.err);
-			return -1;
-		}
+        try {
+            setStmt(getCon().createStatement());
+            ResultSet rset = getStmt().executeQuery(requete);
+            return rset;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête initRes.");
+            e.printStackTrace(System.err);
+            return null;
+        }
     }
 
-    public boolean turfu(String date) {
-        String dateNow = Controleur.get().getDateNow();
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy"); 
-        Date nowDate;
-        Date thisDate;
-        try {
-            nowDate = df.parse(dateNow);
-            thisDate = df.parse(date);
-            if (nowDate.compareTo(thisDate) <= 0) {
-                return true;
-            }
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+    
 
     public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
-		String requete = new String("INSERT INTO Reservation VALUES (");
+        String requete = new String("INSERT INTO Reservation VALUES (");
         int lastRes = getNombreReservations();
-		requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
+        requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
         System.out.println(requete);
-		try {
-			setStmt(getCon().createStatement());
-			getStmt().executeUpdate(requete);
-			getStmt().close();
+        try {
+            setStmt(getCon().createStatement());
+            getStmt().executeUpdate(requete);
+            getStmt().close();
             lastRes++;
-			reservations.put(lastRes, new ReservationConcrete(lastRes));
-			return lastRes;
-		}
-		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête de création de resa");
-			e.printStackTrace(System.err);
-			return -1;
-		}
+            reservations.put(lastRes, new ReservationConcrete(lastRes));
+            return lastRes;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête de création de resa");
+            e.printStackTrace(System.err);
+            return -1;
+        }
     }
 
-	public int getNombreReservations() {
-		String requete = "SELECT COUNT(*) FROM Reservation";
+    public int getNombreReservations() {
+        String requete = "SELECT COUNT(*) FROM Reservation";
         System.out.println(requete);
-		try {
-			setStmt(getCon().createStatement());
-			ResultSet rset = getStmt().executeQuery(requete);
-			while (rset.next()) {
-				int ret = rset.getInt(1);
-				rset.close();
-				getStmt().close();
-				return ret;
-			}
-			return -1;
-		}
-		catch (SQLException e) {
-			System.err.println("Erreur pour faire la requête getNbClient");
-			e.printStackTrace(System.err);
-			return -1;
-		}
-	}
+        try {
+            setStmt(getCon().createStatement());
+            ResultSet rset = getStmt().executeQuery(requete);
+            while (rset.next()) {
+                int ret = rset.getInt(1);
+                rset.close();
+                getStmt().close();
+                return ret;
+            }
+            return -1;
+        }
+        catch (SQLException e) {
+            System.err.println("Erreur pour faire la requête getNbClient");
+            e.printStackTrace(System.err);
+            return -1;
+        }
+    }
 
-	public HashMap<Integer,ReservationConcrete> getReservations(){
-		return reservations;
-	}
+    public HashMap<Integer,ReservationConcrete> getReservations(){
+        return reservations;
+    }
 
     public static ReservationFactoryConcrete get() {
         return instanceUnique;
