@@ -575,7 +575,8 @@ public class Controleur{
 		LinkedList<String> resultat = new LinkedList<String>();
 		try {
 			//ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type);
-			ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type, dateNow, serviceNow);
+			//ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type, dateNow, serviceNow);
+			ResultSet rset = ReservationFactoryConcrete.get().getArticleBD().getArticle(null, -1, null, type, null, null);
 			if (rset == null) {
 				return resultat;
 			}
@@ -604,7 +605,8 @@ public class Controleur{
 			return null;
 		}
 		//LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type);
-		LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type, dateNow, serviceNow);
+		//LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type, dateNow, serviceNow);
+		LinkedList<String> resultat = ReservationFactoryConcrete.get().getArticleBD().getArticleMenu(nomMenu, type, null,null);
 		return resultat;
 	}
 
