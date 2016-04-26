@@ -156,7 +156,7 @@ public class Article extends BDitem {
 	    return ret;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête d'article."); 
+	    System.err.println("Erreur pour faire la requête dejaCommande."); 
 	    e.printStackTrace(System.err);
 	    return -1;
 	}
@@ -191,7 +191,7 @@ public class Article extends BDitem {
 	    return ret;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête d'article."); 
+	    System.err.println("Erreur pour faire la requête dejaCommandeMenu."); 
 	    e.printStackTrace(System.err);
 	    return -1;
 	}
@@ -239,7 +239,7 @@ public class Article extends BDitem {
 	    return rset;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête.");
+	    System.err.println("Erreur pour faire la getArticle.");
 	    e.printStackTrace(System.err);
 	    return null;
 	}
@@ -255,14 +255,32 @@ public class Article extends BDitem {
 	    return null;
 	}
 	if (type == "Plat") {
+	    //On cherche d'abord le plat auquel est associé le menu dans la table menu
 	    requete = new String("SELECT nomPlatBase FROM Menu");
 	    requete += "WHERE nomMenu = '" + nomMenu + "'";
-	} else {
-	     requete = new String("SELECT estCompose.nomArticle FROM estCompose " + type);
-	     requete += " WHERE nomMenu = '" + nomMenu + "'";
-	     requete += "AND "+type+".nomArticle = estCompose.nomArticle";
-	 }
 	    System.out.println(requete);
+	    try {
+		setStmt(getCon().createStatement());
+		ResultSet rset = getStmt().executeQuery(requete);
+		while (rset.next()) {
+		    res.add(rset.getString(1));
+		}
+		rset.close();
+		getStmt().close();
+	    }
+	    catch (SQLException e) {
+		System.err.println("Erreur pour faire la getArticleMenu");
+		e.printStackTrace(System.err);
+		return null;
+	    }
+	}
+	
+	//Puis on cherche dans la table estcompose, quel que soit le type
+	requete = new String("SELECT estCompose.nomArticle FROM estCompose " + type);
+	requete += " WHERE nomMenu = '" + nomMenu + "'";
+	requete += "AND "+type+".nomArticle = estCompose.nomArticle";
+	
+	System.out.println(requete);
 	try {
 	    setStmt(getCon().createStatement());
 	    ResultSet rset = getStmt().executeQuery(requete);
@@ -274,15 +292,14 @@ public class Article extends BDitem {
 	    return res;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête.");
+	    System.err.println("Erreur pour faire la getArticleMenu");
 	    e.printStackTrace(System.err);
 	    return null;
 	}
-	
     }
 
-    /**
-     * Retourne les articles commandés pour une reservation
+/**
+ * Retourne les articles commandés pour une reservation
      */
     public HashMap<String, Integer> getArticlesCommandes(int numRes, String etape) {
 	HashMap<String, Integer> res = new HashMap<String, Integer>();
@@ -291,8 +308,8 @@ public class Article extends BDitem {
 	}
 	String requete = new String("SELECT nomArticle, quantiteArticle FROM sontCommandes");
 	requete += ", " + etape;
-	requete += "WHERE numeroReservation = " + numRes;
-	requete += "AND sontcommandes.nomarticle = " + etape + ".nomarticle";		    
+	requete += " WHERE numeroReservation = " + numRes;
+	requete += " AND sontcommandes.nomArticle = " + etape + ".nom"+etape;		    
 	System.out.println(requete);
 	try {
 	    setStmt(getCon().createStatement());
@@ -305,7 +322,7 @@ public class Article extends BDitem {
 	    return res;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête.");
+	    System.err.println("Erreur pour faire la getArticlesCommandes");
 	    e.printStackTrace(System.err);
 	    return null;
 	}
@@ -333,11 +350,95 @@ public class Article extends BDitem {
 	    return res;
 	}
 	catch (SQLException e) {
-	    System.err.println("Erreur pour faire la requête.");
+	    System.err.println("Erreur pour faire la requête getArticlesMenuCommandes.");
 	    e.printStackTrace(System.err);
 	    return null;
 	}
     }
+
+    /**
+     * Retourne les articles commandés pour une reservation et un menu ET UNE ETAPE
+     */
+    public LinkedList<String> getArticlesMenuCommandesType(int numRes, String type) {
+	LinkedList<String> res = new LinkedList<String>();
+	if (numRes <= 0) {
+	    return res;
+	}
+	String requete = new String("SELECT nom"+type+" FROM menuCommandes");
+	requete += "WHERE numeroReservation = " + numRes;
+	System.out.println(requete);
+	try {
+	    setStmt(getCon().createStatement());
+	    ResultSet rset = getStmt().executeQuery(requete);
+	    while (rset.next()) {
+		res.add(rset.getString(1));
+	    }
+	    rset.close();
+	    getStmt().close();
+	    return res;
+	}
+	catch (SQLException e) {
+	    System.err.println("Erreur pour faire la requête getArticlesMenuCommandes.");
+	    e.printStackTrace(System.err);
+	    return null;
+	}
+    }
+
+
+
+
+	
+    /**
+     * Supprime quantité nomMenu de la reservation n°numeroReservation
+     */
+    public int supprimerMenu(String nomMenu, int quantite, int numResa, String boisson, String entree, String plat, String dessert) {
+
+	/*
+    public int supprimerArticle(String nomArticle, int quantite, int numeroReservation) {
+	if (nomArticle == null || quantite <= 0 || numeroReservation <= 0) {
+	    return -1;
+	}
+	int nombreDejaCommande;
+	String requete;
+	nombreDejaCommande = dejaCommande(nomArticle, numeroReservation);
+	if (nombreDejaCommande <= quantite) {
+	    requete = new String("DELETE FROM sontCommandes ");
+	    requete += "WHERE nomArticle = '" + nomArticle +"' ";
+	    requete += "AND numeroReservation = " + numeroReservation;
+	}
+	else {
+	    requete = new String("UPDATE sontCommandes ");
+	    requete += "SET quantiteArticle=" + (nombreDejaCommande-quantite) + " ";
+	    requete += "WHERE numeroReservation=" + numeroReservation + " ";
+	    requete += "AND nomArticle='" + nomArticle + "' ";
+	}
+	System.out.println(requete);
+	try {
+	    setStmt(getCon().createStatement());
+	    getStmt().executeUpdate(requete);
+	    getStmt().close();
+	    return 0;
+	}
+	catch (SQLException e) {
+	    System.err.println("Erreur pour faire la requête de suppression d'article."); 
+	    e.printStackTrace(System.err);
+	    return -1;
+	}
+
+*/
+
+
+
+
+
+	    return 0;
+	}
+
+
+
+
+
+
 
 
 

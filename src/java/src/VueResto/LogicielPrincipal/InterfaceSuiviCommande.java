@@ -23,6 +23,10 @@ public class InterfaceSuiviCommande extends Observateur{
 	private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé"};
 	private JTable tableau;
 	private JScrollPane jScrollPane;
+	private SModel sModelArticles;
+	private String titreArticles[] = {"Article","Quantité","Etat"};
+	private JTable tableauArticles;
+	private JScrollPane jScrollPaneArticles;
 	private static final int TAILLE_X_PANEL = 900;
 	private static final int TAILLE_Y_PANEL = 600;
 	private static final int TAILLE_X_FIELD_TABLE = 100;
@@ -48,6 +52,12 @@ public class InterfaceSuiviCommande extends Observateur{
 	private static final int POS_X_TAB = 10;
 	private static final int POS_Y_TAB = POS_Y_TABLE + TAILLE_Y_FIELD_TABLE + 10;
 	private static final int TAILLE_LIGNE = 20;
+
+	private static final int TAILLE_X_TAB_ART = 300;
+	private static final int TAILLE_Y_TAB_ART = 550;
+	private static final int POS_X_TAB_ART = POS_X_TAB + TAILLE_X_TAB + 10;
+	private static final int POS_Y_TAB_ART = POS_Y_TABLE + TAILLE_Y_FIELD_TABLE + 10;
+
 	public InterfaceSuiviCommande(){
 	// PANEL PRINCIPALE
 		this.panelSuiviCommande = new JPanel();
@@ -61,13 +71,6 @@ public class InterfaceSuiviCommande extends Observateur{
 		labelNTable = new JLabel("Num. Table");
 		labelNTable.setBounds(POS_X_TABLE,10,TAILLE_X_FIELD_TABLE,TAILLE_Y_FIELD_TABLE);
 		panelSuiviCommande.add(labelNTable);
-		//CHAMP TEXT POUR CHOISIR LE NOM DE LA RESA
-		this.textFieldNom = new JTextField(TAILLE_X_FIELD_NOM);
-		textFieldNom.setBounds(POS_X_NOM,POS_Y_NOM,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelSuiviCommande.add(textFieldNom);
-		labelNom = new JLabel("Nom Resa.");
-		labelNom.setBounds(POS_X_NOM,10,TAILLE_X_FIELD_NOM,TAILLE_Y_FIELD_NOM);
-		panelSuiviCommande.add(labelNom);
 		
 		// Bouton de recherche de la resa
 		this.buttonRechercheSuivi = new JButton("Rechercher");
@@ -87,8 +90,7 @@ public class InterfaceSuiviCommande extends Observateur{
         // Tableau contenant les commandes :
         // un bouton permet d'obtenir les détails de la commande sélectionnée
         // un autre bouton permet de fermer les détails de la commande ouverte.
-		Object[][] data = {
-		};
+		Object[][] data = {};
 
 		this.sModel = new SModel(data,titre);
 		//this.tableau = new JTable(sModel);
@@ -98,7 +100,21 @@ public class InterfaceSuiviCommande extends Observateur{
 		this.jScrollPane = new JScrollPane(tableau);
 		jScrollPane.setBounds(POS_X_TAB,POS_Y_TAB,TAILLE_X_TAB,TAILLE_Y_TAB);
 		panelSuiviCommande.add( jScrollPane);
+        // mise à jour du tableau 
         this.remiseAZeroTableau();
+
+        // Liste articles de la table sélectionnée
+		Object[][] dataArticles = {};
+
+		this.sModelArticles = new SModel(dataArticles,titre);
+		this.tableauArticles = new JTable(new DefaultTableModel(dataArticles,titreArticles));
+		this.tableauArticles.setRowHeight(TAILLE_LIGNE);
+		this.tableauArticles.setBounds(POS_X_TAB_ART,POS_Y_TAB_ART,TAILLE_X_TAB_ART,TAILLE_Y_TAB_ART);
+		this.jScrollPaneArticles = new JScrollPane(tableauArticles);
+		jScrollPaneArticles.setBounds(POS_X_TAB_ART,POS_Y_TAB_ART,TAILLE_X_TAB_ART,TAILLE_Y_TAB_ART);
+		panelSuiviCommande.add( jScrollPaneArticles);
+        // mise à jour du tableau 
+        this.miseAJourTableauArticles();
 	}
 
 	/**
@@ -150,10 +166,11 @@ public class InterfaceSuiviCommande extends Observateur{
     public void effetBoutonOuvrir(){
       System.out.println("Effet Bouton Ouvrir");
       int selectedRow = this.tableau.getSelectedRow();
-      if(selectedRow != -1){
+      if(selectedRow >= 0){
         System.out.println("Selected row : " + selectedRow );
-        Object numReservationSelected = this.sModel.getValueAt(selectedRow,1);
+        Object numReservationSelected = (this.tableau.getModel()).getValueAt(selectedRow,1);
         System.out.println("Number of reservation : " + numReservationSelected);
+        this.miseAJourTableauArticles();
       }
     }
 
@@ -172,6 +189,7 @@ public class InterfaceSuiviCommande extends Observateur{
       System.out.println("Effet Bouton Recherche Suivi");
       if(this.getTextFieldNTable().getText().equals("")){
         this.remiseAZeroTableau();
+        this.miseAJourTableauArticles();
         return;
       }
       // On nettoie le tableau
@@ -196,6 +214,7 @@ public class InterfaceSuiviCommande extends Observateur{
         Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
         ((DefaultTableModel)this.tableau.getModel()).addRow(o);
         ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+        this.miseAJourTableauArticles();
       }
     }
 
@@ -224,6 +243,29 @@ public class InterfaceSuiviCommande extends Observateur{
           ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
         }
       }
+    }
+
+    public void miseAJourTableauArticles(){
+      System.out.println("miseAJourTableauArticles");
+      // On nettoie la table
+      ((DefaultTableModel)this.tableauArticles.getModel()).getDataVector().removeAllElements();
+      ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
+      // On recharge une nouvelle table correspondant à la sélection
+      int selectedRow = this.tableau.getSelectedRow();
+      if(selectedRow < 0){
+        return;
+      }
+      int numeroReservationCourant = Integer.parseInt((this.tableau.getModel()).getValueAt(selectedRow,1).toString());
+      if ( numeroReservationCourant <= 0){
+        return;
+      }
+      HashMap<String, Integer> articlesReservation = new HashMap<String, Integer>();
+      articlesReservation = Controleur.get().getArticlesCommandes(numeroReservationCourant);
+      System.out.println("Une liste d'article a été trouvée");
+      // On affiche les reservations trouvées
+      Object[] o = {"Sauce Piquante","3","Etat?"};
+      ((DefaultTableModel)this.tableauArticles.getModel()).addRow(o);
+      ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
     }
 
 	/**

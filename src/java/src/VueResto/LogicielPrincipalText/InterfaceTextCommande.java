@@ -1,7 +1,10 @@
 package VueResto.LogicielPrincipalText;
 import VueResto.*;
 import ControleurResto.*;
-
+import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.lang.*;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -57,6 +60,7 @@ public class InterfaceTextCommande extends Observateur{
 	}
 	
 	public void  ajouterPlat() {
+
 			System.out.println("Veuillez indiquer le plat commandé");
 			System.out.println("(1) Entrée");
 			System.out.println("(2) Plat principal");
@@ -147,7 +151,23 @@ public class InterfaceTextCommande extends Observateur{
 			}
 
 	}
+	
+	public void supprimerPlat() {
+		HashMap<String, Integer> listeArticle = Controleur.get().getArticlesCommandes(Controleur.get().getNumeroReservation(table));
+		int i = 0;
+		for (Map.Entry<String, Integer> entry : listeArticle.entrySet()) {
+			String key = entry.getKey();
+   	 		int value = entry.getValue();
+			i++;
+			System.out.println("("+i+") "+ key + " quantité : "+ Integer.toString(value));
+		} 
+		System.out.println("Veuillez indiquer l'article à supprimer");
+		String aSupprimer = sc.nextLine();
+		System.out.println("Quantité à supprimer");
+		int q = Integer.parseInt(sc.nextLine());
+		Controleur.get().supprimerArticle(aSupprimer, q, Controleur.get().getNumeroReservation(table));
+	}
 	public void update(Observable o, Object arg) {
-
+		
 	}
 }

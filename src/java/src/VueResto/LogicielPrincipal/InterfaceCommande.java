@@ -357,6 +357,45 @@ public class InterfaceCommande extends Observateur{
 		updateRecap(Controleur.get().getNumResaCmdSelectionne());
 	}
 	/**
+	 * Demande au controleur d'ajouter les articles de type Menu  selectionnés
+	 */
+	public void ajouterArticlesMenuSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				Controleur.get().ajouterMenu(l.get(j).getText()
+						,(int)spinnerQuantite.getValue()
+						,Controleur.get().getNumResaCmdSelectionne()
+						,comboBoxBoisson.getSelectedItem().toString()
+						,comboBoxEntree.getSelectedItem().toString()
+						,comboBoxPlat.getSelectedItem().toString()
+						,comboBoxDessert.getSelectedItem().toString()
+				);
+			}
+			// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
+			return;
+		}
+		// A supprimer grace à l'observateur
+		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+	}
+	/**
+	 * Demande au controleur de supprimer les articles de type menu selectionnés
+	 */
+	public void supprimerArticlesMenuSelectionnes(ArrayList<JToggleButton> l){
+		for(int j=0; j<l.size(); j++){
+			if(l.get(j).isSelected()){
+				Controleur.get().supprimerMenu(l.get(j).getText()
+						,(int)spinnerQuantite.getValue()
+						,Controleur.get().getNumResaCmdSelectionne()
+						,comboBoxBoisson.getSelectedItem().toString()
+						,comboBoxEntree.getSelectedItem().toString()
+						,comboBoxPlat.getSelectedItem().toString()
+						,comboBoxDessert.getSelectedItem().toString()
+				);
+			}
+		}
+	}
+
+	/**
 	 * Demande au controleur de supprimer les articles selectionnés
 	 */
 	public void supprimerArticlesSelectionnes(ArrayList<JToggleButton> l){
@@ -368,11 +407,15 @@ public class InterfaceCommande extends Observateur{
 	}
 
 	public void update(Observable o, Object arg){
-		if(o instanceof Article){
+		System.out.println("Methode update de Commande");
+		if(o instanceof ModeleResto.Article){
 			System.out.println("un article à changé arg= " + arg);
 		}
 	}
 
+	/**
+	 * Cette méthode met à jour les comboBox avec le menu (la 1er bouton) selectionné
+	 */
 	public void updateComboBoxMenu(String menuSelectionne){
 		System.out.println("COMBOBOX DU MENU  " + menuSelectionne);
 		String[] menuBoisson = (String[])Controleur.get().getListeArticlesMenu(menuSelectionne, "BOISSON").toArray();
@@ -386,7 +429,6 @@ public class InterfaceCommande extends Observateur{
 	}
 	/**
 	 * Active les Actions sur les boutons et autres composant de l'inteface
-	 *
 	 */
 	public void activeListener(ActionListener aL){
 		buttonRecherche.addActionListener(aL);
