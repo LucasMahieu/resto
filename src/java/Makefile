@@ -37,8 +37,7 @@ exeRestoText:
 	java -classpath bin:bin/* RestoText
 
 documentation:
-	javadoc -d doc -sourcepath src/ -subpackages . 
-	
+	javadoc -encoding utf8 -d doc -sourcepath src/ -subpackages . 	
 clean:
 	rm -rf bin/*.class
 	rm -rf ControleurResto/*.class

@@ -244,7 +244,6 @@ public class InterfaceCommande extends Observateur{
 	 * Créer une nouvelle LinkedList contenant l'en-tête du récap
 	 * Cette méthode est à appeler à chaque fois que l'utilisateur clique sur le bouton "Rechercher"
 	 * avec un numéro de table OU de réservation correct
-	 * @param nTable numéro de la table pour laquelle on souhaite créer le récap
 	 * @param nResa numéro de la réservation
 	 * @exception si nResa ET nTable sont vide => PROBLEME gerer ce cas en amont lors de l'appui sur "Rechercher"
 	 */

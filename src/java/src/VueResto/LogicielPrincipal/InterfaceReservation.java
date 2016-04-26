@@ -149,6 +149,10 @@ public class InterfaceReservation extends Observateur{
     //TODO : implémenter le bouton Supprimer Reservation
   }
 
+  public void miseAjourTableauReservation(){
+    
+  }
+
   public void activeListener(ActionListener aL){
     boutonReservation.addActionListener(aL);
     boutonSupprimer.addActionListener(aL);
