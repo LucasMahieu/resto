@@ -529,6 +529,14 @@ public class Controleur{
         return ret;
     }
 
+    public String getService(int numResa) {
+        return ReservationFactoryConcrete.get().getServiceBD().getService(numResa);
+    }
+
+    public int getNombrePersonnes(int numResa) {
+        return ReservationFactoryConcrete.get().getNombrePersonnes(numResa);
+    }
+
     /** 
      *  Vérifie que la réservation existe, puis la supprime
      *	@param numeroTable numéro de table
