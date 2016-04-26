@@ -500,6 +500,9 @@ public class Controleur{
         numResaSuiviSelectionee = n;
     }
 
+    /**
+     * Retourne tous les articles commandes par numres, les menus ne sont pas comptés, mais ce qu'ils contiennent si
+     */
 
     public HashMap<String, Integer> getChoixCommandes(int numResa) {
 	HashMap<String, Integer> h = new HashMap<String, Integer>();
@@ -516,4 +519,20 @@ public class Controleur{
 	}
 	return h;
     }
+    /**
+     * Retourne, pour un type, (boisson, entree ..), les articles comandés pour un numresa
+     */
+    
+    public HashMap<String, Integer> getChoixCommandes(int numResa, String type) {
+	HashMap<String, Integer> h = new HashMap<String, Integer>();
+	h.putAll(ReservationFactoryConcrete.get().getArticleBD().getArticlesCommandes(numResa, type));
+	for (String choix : ReservationFactoryConcrete.get().getArticleBD().getArticlesMenuCommandesType(numResa, type)) {
+	    if (h.containsKey(choix)) {
+		h.put(choix, h.get(choix) + 1);
+	    } else {
+		h.put(choix, 1);
+	    }
+	}
+	return h;
+    }	
 }
