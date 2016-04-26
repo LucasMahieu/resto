@@ -29,7 +29,7 @@ CREATE TABLE Service (
 	typeService VARCHAR(20) check (typeService in ('MIDI', 'SOIR')),
 	dateService VARCHAR(20),
     -- Attributs lié à la cardinalité 1..1
-    nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
+ 	nomCarte VARCHAR(20) REFERENCES Carte(nomCarte),
 	CONSTRAINT KService PRIMARY KEY (typeService, dateService)
 );
 
