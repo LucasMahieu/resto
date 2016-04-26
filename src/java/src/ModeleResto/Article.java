@@ -349,7 +349,8 @@ public class Article extends BDitem {
 
 
 	/**
-	 * Retourne les articles d'un certain type qui sont disponibles pour un menu donné //TODO, marche pas ici
+	 * Retourne les articles d'un certain type qui sont disponibles pour un menu donné 
+	 * //TODO, marche pas ici
 	 * @param nomMenu nom du menu
 	 * @param type type d article
 	 * @return liste d article du type demande
@@ -360,9 +361,9 @@ public class Article extends BDitem {
 		if (nomMenu == null || type == null) {
 			return null;
 		}
-		if (!getCarte(date, service).contains(nomMenu)) {
-			return null;
-		}
+		//if (!getCarte(date, service).contains(nomMenu)) {
+		//	return null;
+		//}
 		if (type == "Plat") {
 			res.add(getArticleMenuBis(nomMenu, type));
 		}
