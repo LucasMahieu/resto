@@ -276,9 +276,9 @@ public class Article extends BDitem {
 	}
 	
 	//Puis on cherche dans la table estcompose, quel que soit le type
-	requete = new String("SELECT estCompose.nomArticle FROM estCompose " + type);
-	requete += " WHERE nomMenu = '" + nomMenu + "'";
-	requete += "AND "+type+".nomArticle = estCompose.nomArticle";
+	requete = new String("SELECT e.nomMenu FROM estCompose e, " + type);
+	requete += " WHERE nomMenu='" + nomMenu + "' ";
+	requete += "AND "+type+".nom"+type + "= e.nomMenu";
 	
 	System.out.println(requete);
 	try {
