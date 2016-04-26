@@ -24,7 +24,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	private JTable tableau;
 	private JScrollPane jScrollPane;
 	private SModel sModelArticles;
-	private String titreArticles[] = {"Article","Quantité","Etat"};
+	private String titreArticles[] = {"Article","Quantité"};
 	private JTable tableauArticles;
 	private JScrollPane jScrollPaneArticles;
 	private static final int TAILLE_X_PANEL = 900;
@@ -259,13 +259,17 @@ public class InterfaceSuiviCommande extends Observateur{
       if ( numeroReservationCourant <= 0){
         return;
       }
-      HashMap<String, Integer> articlesReservation = new HashMap<String, Integer>();
-      articlesReservation = Controleur.get().getArticlesCommandes(numeroReservationCourant);
+      Map <String, Integer> articlesReservation = new HashMap<String, Integer>();
+      //TODO : Decommenter et tester
+      //articlesReservation = Controleur.get().aEnvoyer(numeroReservationCourant);
       System.out.println("Une liste d'article a été trouvée");
-      // On affiche les reservations trouvées
-      Object[] o = {"Sauce Piquante","3","Etat?"};
-      ((DefaultTableModel)this.tableauArticles.getModel()).addRow(o);
-      ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
+      // On affiche les articles de la réservation trouvée
+      for( Map.Entry<String,Integer> articleSuivi : articlesReservation.entrySet() ){
+        
+        Object[] o = {articleSuivi.getKey(),articleSuivi.getValue()};
+        ((DefaultTableModel)this.tableauArticles.getModel()).addRow(o);
+        ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
+      }
     }
 
 	/**
