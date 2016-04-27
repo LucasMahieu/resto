@@ -47,5 +47,13 @@
 * Ajout de méthodes supplémentaires d'accès à la BD
 * Début du patron Observateur
 
-## Lundi 26 avril
+## Mardi 26 avril
 * Finalisation de l'interface de Commande : FINIE.
+* Mise en place au propre du pattron observateur avec notify etc
+* Création de méthode pour la mise en place d'un suivis de commande efficace
+
+## Mercredi 27
+* Rapport
+* Ajout de tuples dans la BD pour faire des tests à la soutenance
+* Finalisation des updates des observateurs
+* Suppression de réservation fini
