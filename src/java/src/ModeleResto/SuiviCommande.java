@@ -1,8 +1,9 @@
 package ModeleResto;
 
 import java.util.*;
+import ControleurResto.*;
 
-public class SuiviCommande {
+public class SuiviCommande extends Observable{
 
     private HashMap<String, Integer> boissons;
     private HashMap<String, Integer> entrees;

@@ -103,7 +103,14 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 			getStmt().executeUpdate(requete);
 			getStmt().close();
 			lastRes++;
-			reservations.put(lastRes, new ReservationConcrete(lastRes));
+            ReservationConcrete reserv = new ReservationConcrete(lastRes);
+            if(Controleur.get().getInterface() != null){
+              reserv.addObserver(Controleur.get().getInterface().getInterfaceReservation());
+              reserv.addObserver(Controleur.get().getInterface().getInterfaceSuiviCommande());
+            }
+			reservations.put(lastRes, reserv);
+            reserv.changed();
+            reserv.notifyObservers(null);
 			return lastRes;
 		}
 		catch (SQLException e) {
@@ -151,6 +158,9 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 			getStmt().executeUpdate(requete2);
 			getStmt().executeUpdate(requete1);
 			getStmt().close();
+            System.out.println("Reservation Hashmap :" + reservations.get(numeroReservation));
+            reservations.get(numeroReservation).changed();
+            reservations.get(numeroReservation).notifyObservers(null);
 			return 0;
 		}
 		catch (SQLException e) {

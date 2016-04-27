@@ -22,7 +22,7 @@ public class InterfaceSuiviCommande extends Observateur{
 	private JButton buttonEnvoyer;
 	private SModel sModel;
     private int numeroReservationArticle;
-	private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat","Temps Etat","Servi/Commandé"};
+	private String titre[] = {"Nom","n° Réservation","n° Table", "Nbr Personne","Etat"};
 	private JTable tableau;
 	private JScrollPane jScrollPane;
 	private SModel sModelArticles;
@@ -126,6 +126,7 @@ public class InterfaceSuiviCommande extends Observateur{
 		jScrollPaneArticles.setBounds(POS_X_TAB_ART,POS_Y_TAB_ART,TAILLE_X_TAB_ART,TAILLE_Y_TAB_ART);
 		panelSuiviCommande.add( jScrollPaneArticles);
         // mise à jour du tableau 
+        this.remiseAZeroTableau();
         this.miseAJourTableauArticles();
 	}
 
@@ -142,6 +143,20 @@ public class InterfaceSuiviCommande extends Observateur{
 
 	public void update(Observable o, Object arg){
 		// Notify lancé par une reservation
+        System.out.println("update");
+        if(o instanceof ModeleResto.Article){
+          System.out.println("Update article suivi commande");
+          miseAJourTableauArticles();
+        }
+        else if (o instanceof ModeleResto.ReservationConcrete){
+          System.out.println("update reservation suivi");
+          remiseAZeroTableau();
+        }
+        else if (o instanceof ModeleResto.Table){
+          System.out.println("update table suivi");
+          remiseAZeroTableau();
+        }
+
 	}
 	public JPanel getPanel(){
 		return this.panelSuiviCommande;
@@ -186,7 +201,8 @@ public class InterfaceSuiviCommande extends Observateur{
       int selectedRow = this.tableau.getSelectedRow();
       if(selectedRow >= 0){
         System.out.println("Selected row : " + selectedRow );
-        Object numReservationSelected = (this.tableau.getModel()).getValueAt(selectedRow,1);
+        int numReservationSelected = (int) (this.tableau.getModel()).getValueAt(selectedRow,1);
+        Controleur.get().setNumResaSuiviSelectionne(numReservationSelected);
         System.out.println("Number of reservation : " + numReservationSelected);
         this.miseAJourTableauArticles();
       }
@@ -227,34 +243,47 @@ public class InterfaceSuiviCommande extends Observateur{
     public void effetBoutonRechercheSuivi(){
       // Affiche dans le tableau uniquement les données correspondant au numéro de table ou numéro de réservation sélectionné
       System.out.println("Effet Bouton Recherche Suivi");
+
       if(this.getTextFieldNTable().getText().equals("")){
+        Controleur.get().setNumResaSuiviSelectionne(-1);
         this.remiseAZeroTableau();
         this.miseAJourTableauArticles();
         return;
       }
+      int table = Integer.parseInt(this.getTextFieldNTable().getText());
+      int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
+      Controleur.get().setNumResaSuiviSelectionne(numeroReservationCourant);
+      this.miseAJourTableauReservation();
+      this.miseAJourTableauArticles();
+    }
+
+    public void miseAJourTableauReservation(){
       // On nettoie le tableau
       ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
       ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
       // On recharge une nouvelle table correspondant à la recherche 
-      // TODO : définir le nombre de tables
-      int table = Integer.parseInt(this.getTextFieldNTable().getText());
-      int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
+      int numeroReservationCourant = Controleur.get().getNumResaSuiviSelectionne();
+      LinkedList<Integer> tables = Controleur.get().getNumeroTables(numeroReservationCourant);
+      if (tables.isEmpty()){
+        System.out.println("pas de table");
+        remiseAZeroTableau();
+        return;
+      }
+      int table = tables.get(0);
       if ( numeroReservationCourant <= 0){
         return;
       }
       else if(Integer.parseInt(this.getTextFieldNTable().getText())==(table)){
-
+        Controleur.get().setNumResaSuiviSelectionne(numeroReservationCourant);
         System.out.println("Une ou  plusieurs réservations ont été trouvées ");
         // On affiche les reservations trouvées
         String etatCommande = Controleur.get().getEtatCommande(numeroReservationCourant);
         String nomCommande = Controleur.get().getNom(numeroReservationCourant);
         String date = Controleur.get().getDateNow();
-        String tempsEtat = Controleur.get().getDateNow();
         System.out.println(etatCommande);
-        Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+        Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande};
         ((DefaultTableModel)this.tableau.getModel()).addRow(o);
         ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
-        this.miseAJourTableauArticles();
       }
     }
 
@@ -265,6 +294,7 @@ public class InterfaceSuiviCommande extends Observateur{
       ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
       // On recharge une nouvelle table correspondant à la recherche 
       // TODO : définir le nombre de tables
+      Controleur.get().setNumResaSuiviSelectionne(-1);
       for(int table = 0; table < 100; table++){
         int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
         if ( numeroReservationCourant <= 0){
@@ -278,7 +308,7 @@ public class InterfaceSuiviCommande extends Observateur{
           String date = Controleur.get().getDateNow();
           String tempsEtat = Controleur.get().getDateNow();
           System.out.println(etatCommande);
-          Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande,tempsEtat,"TO DO"};
+          Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande};
           ((DefaultTableModel)this.tableau.getModel()).addRow(o);
           ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
         }
@@ -325,10 +355,6 @@ public class InterfaceSuiviCommande extends Observateur{
         ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
       }
       
-      for( int articleSuivi : articlesReservation.values() ){
-        System.out.println("Boucle");
-        System.out.println(articleSuivi);
-      }
     }
 
 	/**
