@@ -131,6 +131,7 @@ public class SuiviCommande extends Observable{
             }
             else if (previous - quantite > 0) {
                 entrees.put(nomArticle, previous - quantite);
+
             }
             else if (previous - quantite < 0) {
                 return -1;
@@ -267,5 +268,10 @@ public class SuiviCommande extends Observable{
             return desserts;
         else
             return null;
+
+    }
+    
+    public void changed(){
+      this.setChanged();
     }
 }

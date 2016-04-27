@@ -773,8 +773,10 @@ public class Controleur{
 		if (typeArticle == null) {
 			return -1;
 		}
+        int ret = thisRes.getSuivi().estEnvoye(typeArticle, nomArticle, quantite);
+        thisRes.getSuivi().changed();
         thisRes.getSuivi().notifyObservers();
-		return thisRes.getSuivi().estEnvoye(typeArticle, nomArticle, quantite);
+		return ret;
 	}
 	/**
 	 * Retourne, pour un type, (boisson, entree ..), les articles comandés pour un numresa

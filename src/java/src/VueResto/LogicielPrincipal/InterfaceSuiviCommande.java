@@ -234,7 +234,8 @@ public class InterfaceSuiviCommande extends Observateur{
           if (Controleur.get().estEnvoye(numArticleSelected,numeroReservationArticle,quantiteEnvoyee) == -1) {
           }
         }
-        this.miseAJourTableauArticles();
+        this.miseAJourTableauReservationEnvoyer();
+        this.miseAJourTableauArticlesEnvoyer();
       }
       
     }
@@ -288,6 +289,31 @@ public class InterfaceSuiviCommande extends Observateur{
       }
     }
 
+    public void miseAJourTableauReservationEnvoyer(){
+      // On nettoie le tableau
+      ((DefaultTableModel)this.tableau.getModel()).getDataVector().removeAllElements();
+      ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+      // On recharge une nouvelle table correspondant à la recherche 
+      for(int table = 0; table < 100; table++){
+        int numeroReservationCourant = Controleur.get().getNumeroReservation(table);
+        if ( numeroReservationCourant <= 0){
+          continue;
+        }
+        else{
+          System.out.println("Une ou  plusieurs réservations ont été trouvées ");
+          // On affiche les reservations trouvées
+          String etatCommande = Controleur.get().getEtatCommande(numeroReservationCourant);
+          String nomCommande = Controleur.get().getNom(numeroReservationCourant);
+          String date = Controleur.get().getDateNow();
+          String tempsEtat = Controleur.get().getDateNow();
+          System.out.println(etatCommande);
+          Object[] o = {nomCommande,numeroReservationCourant,table,date,etatCommande};
+          ((DefaultTableModel)this.tableau.getModel()).addRow(o);
+          ((DefaultTableModel)this.tableau.getModel()).fireTableDataChanged();
+        }
+      }
+    }
+
     public void remiseAZeroTableau(){
       System.out.println("remiseAZeroTableau");
       // On nettoie la table
@@ -329,6 +355,42 @@ public class InterfaceSuiviCommande extends Observateur{
         return;
       }
       int numeroReservationCourant = Integer.parseInt((this.tableau.getModel()).getValueAt(selectedRow,1).toString());
+      if ( numeroReservationCourant <= 0){
+        System.out.println("numeroReservation <= 0");
+        this.numeroReservationArticle = -1;
+        return;
+      }
+      this.numeroReservationArticle = numeroReservationCourant;
+
+      System.out.println("numeroReservation :" + numeroReservationCourant);
+      Map <String, Integer> articlesReservation;
+
+      articlesReservation = Controleur.get().aEnvoyer(numeroReservationCourant);
+      
+      if( articlesReservation == null){
+        System.out.println("articlesReservation = null ");
+        return;
+      }
+      System.out.println("Une liste d'article a été trouvée");
+      System.out.println("liste vide: " + articlesReservation.isEmpty());
+      // On affiche les articles de la réservation trouvée
+      for( Map.Entry<String,Integer> articleSuivi : articlesReservation.entrySet() ){
+        System.out.println("Boucle");
+        System.out.println(articleSuivi.getKey() + " " + articleSuivi.getValue());
+        Object[] o = {articleSuivi.getKey(),articleSuivi.getValue()};
+        ((DefaultTableModel)this.tableauArticles.getModel()).addRow(o);
+        ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
+      }
+      
+    }
+
+    public void miseAJourTableauArticlesEnvoyer(){
+      System.out.println("miseAJourTableauArticlesEnvoyer");
+      // On nettoie la table
+      ((DefaultTableModel)this.tableauArticles.getModel()).getDataVector().removeAllElements();
+      ((DefaultTableModel)this.tableauArticles.getModel()).fireTableDataChanged();
+      // On recharge une nouvelle table correspondant à la sélection
+      int numeroReservationCourant = Controleur.get().getNumResaSuiviSelectionne();
       if ( numeroReservationCourant <= 0){
         System.out.println("numeroReservation <= 0");
         this.numeroReservationArticle = -1;
