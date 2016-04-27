@@ -126,20 +126,37 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 	 * @param service service (SOIR ou MIDI)
 	 * @return -1 si erreur, 0 sinon
 	 */
-	public int supprimerReservation(int numeroTable, String date, String service) {
+	public int supprimerReservation(int numeroTable, int numeroReservation) {
 		if (numeroTable <= 0) {
 			return -1;
 		}
-		String requete = new String("DELETE " //supprimer la classe reservation que a été créée?
-				+ "FROM estReserve, Reservation "
-				+ "WHERE Reservation.date = '"+date+"' "
-				+ "AND Reservation.service = '"+service+"' "
-				+ "AND Reservation.numeroreservation = estReserve.numeroreservation "
-				+ "AND estReserve.numerotable = "+ numeroTable);
-		System.out.println(requete);
+		String requete1 = new String("DELETE ");
+        requete1 += "FROM Reservation ";
+        requete1 += "WHERE numeroReservation = " + numeroReservation;
+
+		String requete2 = new String("DELETE ");
+        requete2 += "FROM estReservee ";
+        requete2 += "WHERE numeroReservation = " + numeroReservation + " ";
+        requete2 += "AND numeroTable = " + numeroTable;
+
+		String requete3 = new String("DELETE ");
+        requete3 += "FROM menuCommandes ";
+        requete3 += "WHERE numeroReservation = " + numeroReservation + " ";
+
+		String requete4 = new String("DELETE ");
+        requete4 += "FROM sontCommandes ";
+        requete4 += "WHERE numeroReservation = " + numeroReservation + " ";
+
+		System.out.println(requete1);
+		System.out.println(requete2);
+		System.out.println(requete3);
+		System.out.println(requete4);
 		try {
 			setStmt(getCon().createStatement());
-			getStmt().executeUpdate(requete);
+			getStmt().executeUpdate(requete4);
+			getStmt().executeUpdate(requete3);
+			getStmt().executeUpdate(requete2);
+			getStmt().executeUpdate(requete1);
 			getStmt().close();
 			return 0;
 		}
