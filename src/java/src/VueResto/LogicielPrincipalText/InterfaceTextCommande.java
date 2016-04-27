@@ -1,6 +1,8 @@
 package VueResto.LogicielPrincipalText;
 import VueResto.*;
 import ControleurResto.*;
+
+import java.io.File;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,9 +54,9 @@ public class InterfaceTextCommande extends Observateur{
 			}
 		}
 		else if (choix.equals("2")){// on produit la facture
-			System.out.println("Choississez le nom du client pour récupérer la facture");
+			System.out.println("Nous allons editer la facture de la table" +table);
 			String str= sc.nextLine();
-			Controleur.get().creerFacture(str);
+			Controleur.get().editerFacture(Controleur.get().getNumeroReservation(table));
 		}
 		
 		else {
