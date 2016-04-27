@@ -7,8 +7,14 @@ insert into Tables
 	Values(3,5,4,2,'entree');
 insert into Tables
 	Values(4,8,6,5,'entree');
-insert into Tables
-	Values(5,3,2,1,'cheminee');
+insert into Tables Values(5,3,2,1,'cheminee');
+insert INTO Tables Values(6,7,5,3,'terrasse');
+INSERT INTO Tables Values(7,4,3,2,'terrasse');
+INSERT INTO Tables Values(8,10,8,6,'terrasse');
+INSERT INTO Tables Values(9,7,6,5,'cheminee');
+INSERT INTO Tables Values(10,5,4,3,'salon');
+INSERT INTO Tables Values(11,7,6,5,'salon');
+INSERT INTO Tables Values(12,20,18,16,'grande salle');
 
 -- CLIENTS
 insert into Client
