@@ -298,11 +298,11 @@ insert into Disponibles
 	
 -- ESTCOMPOSE
 insert into EstCompose
-	Values('menu enfant', 'perrier');
+	Values('menu enfant', 'salade cesar');
 insert into EstCompose
 	Values('menu enfant', 'coca');
 insert into EstCompose
-	Values('menu enfant', 'glace');
+	Values('menu enfant', 'sunday');
 INSERT INTO EstCompose
 	Values ('menu enfant', 'burger');
 INSERT INTO EstCompose
@@ -313,9 +313,11 @@ insert into EstCompose
 insert into EstCompose
 	Values('menu toqué', 'the');
 insert into EstCompose
-	Values('menu toqué', 'glace');
+	Values('menu toqué', 'gateaux maroc');
 INSERT INTO EstCompose
-	Values ('menu goulu', 'burger');
+	Values ('menu goulu', 'salade tomate');
+INSERT INTO EstCompose Values('menu goulu', 'glace');
+INSERT INTO EstCompose VALUES ('menu goulu', 'tiramisu');
 
 INSERT INTO EstCompose
 Values ('menu gourmet', 'saumon');
