@@ -130,7 +130,7 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleBoisson.size(); j++){
 			col++;
 			buttonArticleBoisson.add(new JToggleButton(listArticleBoisson.get(j)));
-			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
+			if ( (col * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
@@ -145,7 +145,7 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleEntree.size(); j++){
 			col++;
 			buttonArticleEntree.add(new JToggleButton(listArticleEntree.get(j)));
-			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
+			if ( (col * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
@@ -160,7 +160,7 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticlePlat.size(); j++){
 			col++;
 			buttonArticlePlat.add(new JToggleButton(listArticlePlat.get(j)));
-			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
+			if ( (col * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
@@ -175,7 +175,7 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleDessert.size(); j++){
 			col++;
 			buttonArticleDessert.add(new JToggleButton(listArticleDessert.get(j)));
-			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
+			if ( (col * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
@@ -190,7 +190,7 @@ public class InterfaceCommande extends Observateur{
 		for(j=0; j<listArticleMenu.size(); j++){
 			col++;
 			buttonArticleMenu.add(new JToggleButton(listArticleMenu.get(j)));
-			if ( (j * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
+			if ( (col * (TAILLE_X_A + POS_A) > TAILLE_X_PANEL_ARTICLE - TAILLE_X_A) && j!=0){
 				lig++;
 				col=0;
 			}
