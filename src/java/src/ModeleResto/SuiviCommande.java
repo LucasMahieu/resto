@@ -15,12 +15,30 @@ public class SuiviCommande {
         entrees = new HashMap<String, Integer>();
         plats = new HashMap<String, Integer>();
         desserts = new HashMap<String, Integer>();
-        etatCommande = new String("BOISSON");
+        etatCommande = new String("VIDE");
     }
 
     public String getEtatCommande() {
+        refresh();
+        System.out.println(etatCommande);
         return this.etatCommande;
     }
+
+    public void refresh() {
+        if (!boissons.isEmpty()) {
+            etatCommande = "BOISSON";
+        }
+        if (!entrees.isEmpty()) {
+            etatCommande = "ENTREE";
+        }
+        if (!plats.isEmpty()) {
+            etatCommande = "PLAT";
+        }
+        if (!desserts.isEmpty()) {
+            etatCommande = "DESSERT";
+        }
+    }
+
 
     public int estEnvoye(String type, String nomArticle, int quantite) {
         Integer previous = 0;
@@ -36,7 +54,7 @@ public class SuiviCommande {
                 return -1;
             }
             if (boissons.isEmpty()) {
-                next();
+                refresh();
             }
             return 0;
         }
@@ -52,7 +70,7 @@ public class SuiviCommande {
                 return -1;
             }
             if (entrees.isEmpty()) {
-                next();
+                refresh();
             }
             return 0;
         }
@@ -68,7 +86,7 @@ public class SuiviCommande {
                 return -1;
             }
             if (plats.isEmpty()) {
-                next();
+                refresh();
             }
             return 0;
         }
@@ -159,6 +177,7 @@ public class SuiviCommande {
             else {
                 boissons.put(nomArticle, previous + quantite);
             }
+            refresh();
             return 0;
         }
         else if (type.equals("ENTREE")) {
@@ -169,6 +188,7 @@ public class SuiviCommande {
             else {
                 entrees.put(nomArticle, previous + quantite);
             }
+            refresh();
             return 0;
         }
         else if (type.equals("PLAT")) {
@@ -179,6 +199,7 @@ public class SuiviCommande {
             else {
                 plats.put(nomArticle, previous + quantite);
             }
+            refresh();
             return 0;
         }
         else if (type.equals("DESSERT")) {
@@ -189,6 +210,7 @@ public class SuiviCommande {
             else {
                 desserts.put(nomArticle, previous + quantite);
             }
+            refresh();
             return 0;
         }
         else {
@@ -201,7 +223,7 @@ public class SuiviCommande {
 	*/
     public int ajouterMenu(String  nomBoisson, String nomEntree, String nomPlat, String nomDessert, int quantite) {
         Integer previous = 0;
-	previous = boissons.remove(nomBoisson);
+        previous = boissons.remove(nomBoisson);
         if (previous == null) {
             boissons.put(nomBoisson, quantite);
         }
@@ -232,30 +254,8 @@ public class SuiviCommande {
 	return 0;
     }
 
-
-    public boolean next() {
-        if (etatCommande.equals("BOISSON")) {
-            etatCommande = "ENTREE";
-            return true;
-        }
-        else if (etatCommande.equals("ENTREE")) {
-            etatCommande = "PLAT";
-            return true;
-        }
-        else if (etatCommande.equals("PLAT")) {
-            etatCommande = "DESSERT";
-            return true;
-        }
-        else if (etatCommande.equals("DESSERT")) {
-            return false;
-        }
-        else {
-            return false;
-        }
-    }
-
     public HashMap<String, Integer> aEnvoyer() {
-        if (etatCommande.equals("BOISSON")) {
+        if (etatCommande.equals("BOISSON") || etatCommande.equals("VIDE")) {
             return boissons;
         }
         else if (etatCommande.equals("ENTREE"))
