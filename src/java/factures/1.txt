@@ -1,0 +1,11 @@
+Réservation n°1 au nom de TestSuppr
+Table n°[2]
+Service du 27/04/2016 au MIDI
+---------------------------------------- 
+- (x1) glace                                 5.0€ 
+- (x1) the                                   3.0€ 
+- (x1) salade de tomates                     8.0€ 
+- (x1) canard                                16.0€ 
+---------------------------------------- 
+TOTAL =                                           32.0€ 
+

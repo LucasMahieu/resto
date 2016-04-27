@@ -446,7 +446,6 @@ public class InterfaceCommande extends Observateur{
      * fonction d'update (observateur)
      * @param o observable
      * @param arg argument
-     *
      */
 	public void update(Observable o, Object arg){
 		System.out.println("Methode update de Commande");
