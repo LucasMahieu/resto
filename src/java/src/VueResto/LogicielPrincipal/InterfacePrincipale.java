@@ -129,6 +129,9 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 			interfaceReservation.effetBoutonActualiser();
 
 			/* COMMANDE */
+		}else if(source == interfaceCommande.getButtonFacture()){
+			System.out.println("Bouton Facturation");
+			Controleur.get().editerFacture(Controleur.get().getNumResaCmdSelectionne());
 		}else if(source == interfaceCommande.getButtonAjout()){
 			String message = "";
 			message = "ajout de " + interfaceCommande.getSpinnerQuantite().getValue() + " ";

@@ -28,6 +28,7 @@ public class InterfaceCommande extends Observateur{
 	private JLabel labelNTable;
 	private JLabel labelNom;
 	private JButton buttonRecherche;
+	private JButton buttonFacture;
 	private JButton buttonAjout;
 	private JButton buttonSuppression;
 	private SpinnerModel modelQuantite;    
@@ -38,10 +39,6 @@ public class InterfaceCommande extends Observateur{
 	private ArrayList<JToggleButton> buttonArticleDessert;
 	private ArrayList<JToggleButton> buttonArticleMenu;
 	private LinkedList<JLabel> labelRecapCommande;
-	//private String[] menuBoisson = {"BIERE"};
-	//private String[] menuEntree = {"SALADE"};
-	//private String[] menuPlat = {"MOULE FRITE"};
-	//private String[] menuDessert = {"ILE FLOTTANTE"};
 	private JComboBox<String> comboBoxBoisson;
 	private JComboBox<String> comboBoxEntree;
 	private JComboBox<String> comboBoxPlat;
@@ -56,6 +53,10 @@ public class InterfaceCommande extends Observateur{
 	private static final int TAILLE_Y_RECHERCHE = 20;
 	private static final int POS_X_RECHERCHE = POS_X_TABLE + TAILLE_X_FIELD_TABLE + 10;
 	private static final int POS_Y_RECHERCHE = 30;
+	private static final int TAILLE_X_FACTURE = 100;
+	private static final int TAILLE_Y_FACTURE = 20;
+	private static final int POS_X_FACTURE = POS_X_RECHERCHE + TAILLE_X_RECHERCHE + 10;
+	private static final int POS_Y_FACTURE = 30;
 	private static final int TAILLE_X_PANEL_ARTICLE = 550;
 	private static final int TAILLE_Y_PANEL_ARTICLE = 600;
 	private static final int POS_X_ARTICLE = 0;
@@ -203,6 +204,12 @@ public class InterfaceCommande extends Observateur{
 		buttonRecherche.setBounds(POS_X_RECHERCHE,POS_Y_RECHERCHE,TAILLE_X_RECHERCHE,TAILLE_Y_RECHERCHE);
 		panelCommande.add(buttonRecherche);
 		
+		// Bouton de facturation de la resa
+		this.buttonFacture = new JButton("Facture");
+		buttonFacture.setBounds(POS_X_FACTURE,POS_Y_FACTURE,TAILLE_X_FACTURE,TAILLE_Y_FACTURE);
+		panelCommande.add(buttonFacture);
+		
+
 		// (valeur par defaut, minimum, maximun, increment)
 		this.modelQuantite = new SpinnerNumberModel(1,1,10,1);     
 		this.spinnerQuantite = new JSpinner(modelQuantite);
@@ -238,7 +245,6 @@ public class InterfaceCommande extends Observateur{
 		comboBoxDessert = new JComboBox<String>(tmp);
 		comboBoxDessert.setBounds(POS_X_BOX_D,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
 		this.panelMenu.add(comboBoxDessert);
-
 	}
 	
 	/**
@@ -488,6 +494,7 @@ public class InterfaceCommande extends Observateur{
 	 */
 	public void activeListener(ActionListener aL){
 		buttonRecherche.addActionListener(aL);
+		buttonFacture.addActionListener(aL);
 		buttonAjout.addActionListener(aL);
 		buttonSuppression.addActionListener(aL);
 		for(JToggleButton jt : buttonArticleMenu){
@@ -530,6 +537,9 @@ public class InterfaceCommande extends Observateur{
 	}
 	public JButton getButtonRecherche(){
 		return this.buttonRecherche;
+	}
+	public JButton getButtonFacture(){
+		return this.buttonFacture;
 	}
 	public JButton getButtonAjout(){
 		return this.buttonAjout;

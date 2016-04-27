@@ -201,6 +201,11 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		return reservations;
 	}
 
+	public void editerFacture(int numResa){
+		ReservationConcrete res = reservations.get(numResa);
+		res.setFacture( new Facture(numResa));
+	}
+
 	public static ReservationFactoryConcrete get() {
 		return instanceUnique;
 	}

@@ -2,7 +2,7 @@ package ModeleResto;
 public class ReservationConcrete extends Reservation{
 
 	private int numeroReservation;
-    private Facture fractureDuTibia;
+    private Facture facture;
     private SuiviCommande suivi;
 
     public ReservationConcrete(int numeroReservation){
@@ -14,5 +14,11 @@ public class ReservationConcrete extends Reservation{
 	}
 	public int getNumeroReservation(){
 		return this.numeroReservation;
+	}
+	public Facture getFacture(){
+		return this.facture;
+	}
+	public void setFacture(Facture f){
+		this.facture = f;
 	}
 }

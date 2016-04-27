@@ -42,7 +42,6 @@ public class Controleur{
 		if(Integer.parseInt(heureNow) >= DEBUT_SERVICE_SOIR){
 			serviceNow = "SOIR";
 		}
-
 		initRes(ReservationFactoryConcrete.get().getReservations());
 	}
 
@@ -98,7 +97,6 @@ public class Controleur{
 		}
 		return false;
 	}
-
 
 	/**
 	 * Accesseur du controleur
@@ -792,5 +790,15 @@ public class Controleur{
 			}
 		}
 		return h;
+	}
+
+	/**
+	 * Cette classe créer une facture dans un fichier 
+	 */
+	public void editerFacture(int numResa){
+		if (numResa<=0){
+			return;
+		}
+		ReservationFactoryConcrete.get().editerFacture(numResa);
 	}
 }
