@@ -15,26 +15,27 @@ public class SuiviCommande {
         entrees = new HashMap<String, Integer>();
         plats = new HashMap<String, Integer>();
         desserts = new HashMap<String, Integer>();
-        etatCommande = new String("OFF");
+        etatCommande = new String("VIDE");
     }
 
     public String getEtatCommande() {
         refresh();
+        System.out.println(etatCommande);
         return this.etatCommande;
     }
 
     public void refresh() {
-        if (boissons.isEmpty()) {
+        if (!boissons.isEmpty()) {
+            etatCommande = "BOISSON";
+        }
+        if (!entrees.isEmpty()) {
             etatCommande = "ENTREE";
-            if (entrees.isEmpty()) {
-                etatCommande = "PLAT";
-                if (plats.isEmpty()) {
-                    etatCommande = "DESSERT";
-                    if (desserts.isEmpty()) {
-                        etatCommande = "OFF";
-                    }
-                }
-            }
+        }
+        if (!plats.isEmpty()) {
+            etatCommande = "PLAT";
+        }
+        if (!desserts.isEmpty()) {
+            etatCommande = "DESSERT";
         }
     }
 
@@ -53,7 +54,7 @@ public class SuiviCommande {
                 return -1;
             }
             if (boissons.isEmpty()) {
-                next();
+                refresh();
             }
             return 0;
         }
@@ -69,7 +70,7 @@ public class SuiviCommande {
                 return -1;
             }
             if (entrees.isEmpty()) {
-                next();
+                refresh();
             }
             return 0;
         }
@@ -85,7 +86,7 @@ public class SuiviCommande {
                 return -1;
             }
             if (plats.isEmpty()) {
-                next();
+                refresh();
             }
             return 0;
         }
@@ -253,30 +254,8 @@ public class SuiviCommande {
 	return 0;
     }
 
-    public boolean next() {
-        if (etatCommande.equals("BOISSON")) {
-            etatCommande = "ENTREE";
-            return true;
-        }
-        else if (etatCommande.equals("ENTREE")) {
-            etatCommande = "PLAT";
-            return true;
-        }
-        else if (etatCommande.equals("PLAT")) {
-            etatCommande = "DESSERT";
-            return true;
-        }
-        else if (etatCommande.equals("DESSERT")) {
-            etatCommande = "TERMINE";
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
     public HashMap<String, Integer> aEnvoyer() {
-        if (etatCommande.equals("BOISSON") || etatCommande.equals("OFF")) {
+        if (etatCommande.equals("BOISSON") || etatCommande.equals("VIDE")) {
             return boissons;
         }
         else if (etatCommande.equals("ENTREE"))
