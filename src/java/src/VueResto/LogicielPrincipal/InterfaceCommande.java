@@ -238,6 +238,7 @@ public class InterfaceCommande extends Observateur{
 		comboBoxDessert = new JComboBox<String>(tmp);
 		comboBoxDessert.setBounds(POS_X_BOX_D,POS_Y_BOX, TAILLE_X_BOX,TAILLE_Y_BOX);
 		this.panelMenu.add(comboBoxDessert);
+
 	}
 	
 	/**
@@ -355,7 +356,7 @@ public class InterfaceCommande extends Observateur{
 				Controleur.get().ajouterArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
 			}
 		}
-		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		//updateRecap(Controleur.get().getNumResaCmdSelectionne());
 		Controleur.get().validate();
 	}
 	/**
@@ -388,13 +389,13 @@ public class InterfaceCommande extends Observateur{
 				Controleur.get().ajouterMenu(nomMenu, quantite, numResa, boisson, entree, plat, dessert);
 
 				// On ne prend en compte QUE le 1er menu selectionné, sinon aucun sens !
-				updateRecap(Controleur.get().getNumResaCmdSelectionne());
+				//updateRecap(Controleur.get().getNumResaCmdSelectionne());
 				Controleur.get().validate();
 				return;
 			}
 		}
 		// A supprimer grace à l'observateur
-		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		//updateRecap(Controleur.get().getNumResaCmdSelectionne());
 		Controleur.get().validate();
 	}
 	/**
@@ -412,12 +413,12 @@ public class InterfaceCommande extends Observateur{
 						,comboBoxPlat.getSelectedItem().toString()
 						,comboBoxDessert.getSelectedItem().toString()
 				);
-				updateRecap(Controleur.get().getNumResaCmdSelectionne());
+				//updateRecap(Controleur.get().getNumResaCmdSelectionne());
 				Controleur.get().validate();
 				return;
 			}
 		}
-		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		//updateRecap(Controleur.get().getNumResaCmdSelectionne());
 		Controleur.get().validate();
 	}
 
@@ -431,7 +432,7 @@ public class InterfaceCommande extends Observateur{
 				Controleur.get().supprimerArticle(l.get(j).getText(),(int)spinnerQuantite.getValue(),Controleur.get().getNumResaCmdSelectionne());
 			}
 		}
-		updateRecap(Controleur.get().getNumResaCmdSelectionne());
+		//updateRecap(Controleur.get().getNumResaCmdSelectionne());
 		Controleur.get().validate();
 	}
 
@@ -445,6 +446,7 @@ public class InterfaceCommande extends Observateur{
 		System.out.println("Methode update de Commande");
 		if(o instanceof ModeleResto.Article){
 			System.out.println("un article à changé arg= " + arg);
+			updateRecap((int)arg);
 		}
 	}
 

@@ -39,6 +39,9 @@ public class Article extends BDitem {
 			setStmt(getCon().createStatement());
 			getStmt().executeUpdate(requete);
 			getStmt().close();
+
+			setChanged();
+			notifyObservers(numeroReservation);
 			return 0;
 		}
 		catch (SQLException e) {
@@ -128,6 +131,9 @@ public class Article extends BDitem {
 			setStmt(getCon().createStatement());
 			getStmt().executeUpdate(requete);
 			getStmt().close();
+
+			setChanged();
+			notifyObservers(numeroReservation);
 			return 0;
 		}
 		catch (SQLException e) {
@@ -167,6 +173,9 @@ public class Article extends BDitem {
 			setStmt(getCon().createStatement());
 			getStmt().executeUpdate(requete);
 			getStmt().close();
+
+			setChanged();
+			notifyObservers(numeroReservation);
 			return 0;
 		}
 		catch (SQLException e) {
@@ -345,8 +354,6 @@ public class Article extends BDitem {
 			return null;
 		}
 	}
-
-
 
 	/**
 	 * Retourne les articles d'un certain type qui sont disponibles pour un menu donné 
@@ -563,6 +570,9 @@ public class Article extends BDitem {
 			setStmt(getCon().createStatement());
 			getStmt().executeUpdate(requete);
 			getStmt().close();
+			
+			setChanged();
+			notifyObservers();
 			return 0;
 		}
 		catch (SQLException e) {

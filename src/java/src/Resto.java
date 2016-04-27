@@ -17,7 +17,8 @@ public class Resto{
 		
 		// Interface Graphique
 		JFrame fenetrePrincipale = new InterfacePrincipale(); 
-
+		ReservationFactoryConcrete.get().getArticleBD().addObserver(((InterfacePrincipale)fenetrePrincipale).getInterfaceCommande());
+		
 		// -------------------------------------------------------- //
 
         // Pour fermer la connection à la BD
