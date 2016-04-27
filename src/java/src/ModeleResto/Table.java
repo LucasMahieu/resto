@@ -213,6 +213,8 @@ public class Table extends BDitem {
 			setStmt(getCon().createStatement());
 			getStmt().executeUpdate(requete);
 			getStmt().close();
+            setChanged();
+            notifyObservers(numeroReservation);
 			return 0;
 		}
 		catch (SQLException e) {

@@ -149,15 +149,14 @@ public class InterfaceSuiviCommande extends Observateur{
           miseAJourTableauArticles();
         }
         else if (o instanceof ModeleResto.ReservationConcrete){
-          if( Controleur.get().getNumResaSuiviSelectionne() <= 0){
-            System.out.println("Update resaZero suivi commande");
-            remiseAZeroTableau();
-          }
-          else{
-            System.out.println("Update resaMaj suivi commande");
-            miseAJourTableauReservation();
-          }
+          System.out.println("update reservation suivi");
+          remiseAZeroTableau();
         }
+        else if (o instanceof ModeleResto.Table){
+          System.out.println("update table suivi");
+          remiseAZeroTableau();
+        }
+
 	}
 	public JPanel getPanel(){
 		return this.panelSuiviCommande;

@@ -158,6 +158,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 			getStmt().executeUpdate(requete2);
 			getStmt().executeUpdate(requete1);
 			getStmt().close();
+            System.out.println("Reservation Hashmap :" + reservations.get(numeroReservation));
             reservations.get(numeroReservation).changed();
             reservations.get(numeroReservation).notifyObservers(null);
 			return 0;

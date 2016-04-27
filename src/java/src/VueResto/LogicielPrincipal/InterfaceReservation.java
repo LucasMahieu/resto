@@ -164,7 +164,6 @@ public class InterfaceReservation extends Observateur{
                 System.out.println("suppression reservation");
                 Controleur.get().supprimerReservation(table,date,service);
             }
-            this.miseAjourTableauReservation();
         }
     }
 
@@ -382,6 +381,10 @@ public class InterfaceReservation extends Observateur{
       System.out.println("update Reservation");
       if ( o instanceof ModeleResto.ReservationConcrete){
         System.out.println("update Reservation maj");
+        miseAjourTableauReservation();
+      }
+      else if ( o instanceof ModeleResto.Table){
+        System.out.println("update TableRes maj");
         miseAjourTableauReservation();
       }
     }

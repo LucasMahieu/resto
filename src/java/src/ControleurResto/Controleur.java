@@ -555,7 +555,10 @@ public class Controleur{
         int numRes = ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service);
 		if (numRes >= 0) {
 			if (ReservationFactoryConcrete.get().supprimerReservation(numeroTable, numRes) != -1) {
+                ReservationConcrete reserv = ReservationFactoryConcrete.get().getReservations().get(numRes);
+                reserv.changed();
                 ReservationFactoryConcrete.get().getReservations().remove(numRes);
+                reserv.notifyObservers(numRes);
                 validate();
                 return 0;
             }
