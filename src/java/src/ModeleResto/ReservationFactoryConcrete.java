@@ -95,7 +95,7 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 	 */
 	public int creerReservation(int numClient, String date, String service, int nbPersonnes) {
 		String requete = new String("INSERT INTO Reservation VALUES (");
-		int lastRes = getNombreReservations();
+		int lastRes = getMaxNombreReservations();
 		requete += (lastRes + 1) +","+ nbPersonnes +","+numClient+",'"+service+"','"+date+ "')";
 		System.out.println(requete);
 		try {
@@ -193,13 +193,13 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 		}
 	}
 
-	public int getNombreReservations() {
-		String requete = "SELECT COUNT(*) FROM Reservation";
+	public int getMaxNombreReservations() {
+		String requete = "SELECT MAX(numeroReservation) FROM Reservation";
 		System.out.println(requete);
 		try {
 			setStmt(getCon().createStatement());
 			ResultSet rset = getStmt().executeQuery(requete);
-			while (rset.next()) {
+			if (rset.next()) {
 				int ret = rset.getInt(1);
 				rset.close();
 				getStmt().close();
