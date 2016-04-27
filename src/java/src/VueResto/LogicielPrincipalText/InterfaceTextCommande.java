@@ -54,8 +54,9 @@ public class InterfaceTextCommande extends Observateur{
 			}
 		}
 		else if (choix.equals("2")){// on produit la facture
+			System.out.println("Veuillez indiquer le numéro de table de la facture");
+			table = Integer.parseInt(sc.nextLine());
 			System.out.println("Nous allons editer la facture de la table" +table);
-			String str= sc.nextLine();
 			Controleur.get().editerFacture(Controleur.get().getNumeroReservation(table));
 		}
 		
