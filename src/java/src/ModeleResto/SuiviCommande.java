@@ -1,8 +1,9 @@
 package ModeleResto;
 
 import java.util.*;
+import ControleurResto.*;
 
-public class SuiviCommande {
+public class SuiviCommande extends Observable{
 
     private HashMap<String, Integer> boissons;
     private HashMap<String, Integer> entrees;
@@ -28,13 +29,13 @@ public class SuiviCommande {
         if (!boissons.isEmpty()) {
             etatCommande = "BOISSON";
         }
-        if (!entrees.isEmpty()) {
+        else if (!entrees.isEmpty()) {
             etatCommande = "ENTREE";
         }
-        if (!plats.isEmpty()) {
+        else if (!plats.isEmpty()) {
             etatCommande = "PLAT";
         }
-        if (!desserts.isEmpty()) {
+        else if (!desserts.isEmpty()) {
             etatCommande = "DESSERT";
         }
     }
@@ -130,6 +131,7 @@ public class SuiviCommande {
             }
             else if (previous - quantite > 0) {
                 entrees.put(nomArticle, previous - quantite);
+
             }
             else if (previous - quantite < 0) {
                 return -1;
@@ -266,5 +268,10 @@ public class SuiviCommande {
             return desserts;
         else
             return null;
+
+    }
+    
+    public void changed(){
+      this.setChanged();
     }
 }

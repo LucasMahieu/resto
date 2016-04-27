@@ -142,6 +142,8 @@ public class InterfaceReservation extends Observateur{
         boutonSupprimer.setBounds(POS_X_TAB + TAILLE_X_BOUTON + 5 ,POS_Y_TAB + TAILLE_Y_TAB+10,TAILLE_X_BOUTON,TAILLE_Y_BOUTON);
         this.panelReservation.add(boutonSupprimer);
 
+        this.miseAjourTableauReservation();
+
     }
 
 
@@ -162,7 +164,6 @@ public class InterfaceReservation extends Observateur{
                 System.out.println("suppression reservation");
                 Controleur.get().supprimerReservation(table,date,service);
             }
-            this.miseAjourTableauReservation();
         }
     }
 
@@ -377,6 +378,15 @@ public class InterfaceReservation extends Observateur{
      * 
      */
     public void update(Observable o, Object arg){
+      System.out.println("update Reservation");
+      if ( o instanceof ModeleResto.ReservationConcrete){
+        System.out.println("update Reservation maj");
+        miseAjourTableauReservation();
+      }
+      else if ( o instanceof ModeleResto.Table){
+        System.out.println("update TableRes maj");
+        miseAjourTableauReservation();
+      }
     }
     /**
      * Cette classe est un TableModel Pour le tableau de suivi des commande

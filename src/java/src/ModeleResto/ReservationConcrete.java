@@ -21,4 +21,8 @@ public class ReservationConcrete extends Reservation{
 	public void setFacture(Facture f){
 		this.facture = f;
 	}
+    
+    public void changed(){
+      setChanged();
+    }
 }

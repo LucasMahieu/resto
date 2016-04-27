@@ -17,7 +17,12 @@ public class Resto{
 		
 		// Interface Graphique
 		JFrame fenetrePrincipale = new InterfacePrincipale(); 
+        Controleur.get().setInterface((InterfacePrincipale)fenetrePrincipale);
 		ReservationFactoryConcrete.get().getArticleBD().addObserver(((InterfacePrincipale)fenetrePrincipale).getInterfaceCommande());
+		ReservationFactoryConcrete.get().getArticleBD().addObserver(((InterfacePrincipale)fenetrePrincipale).getInterfaceSuiviCommande());
+		ReservationFactoryConcrete.get().getTableBD().addObserver(((InterfacePrincipale)fenetrePrincipale).getInterfaceSuiviCommande());
+		ReservationFactoryConcrete.get().getTableBD().addObserver(((InterfacePrincipale)fenetrePrincipale).getInterfaceReservation());
+        //Controleur.get().setInterface((InterfacePrincipale)fenetrePrincipale);
 		
 		// -------------------------------------------------------- //
 
