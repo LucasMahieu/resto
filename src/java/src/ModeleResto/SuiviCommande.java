@@ -29,13 +29,13 @@ public class SuiviCommande extends Observable{
         if (!boissons.isEmpty()) {
             etatCommande = "BOISSON";
         }
-        if (!entrees.isEmpty()) {
+        else if (!entrees.isEmpty()) {
             etatCommande = "ENTREE";
         }
-        if (!plats.isEmpty()) {
+        else if (!plats.isEmpty()) {
             etatCommande = "PLAT";
         }
-        if (!desserts.isEmpty()) {
+        else if (!desserts.isEmpty()) {
             etatCommande = "DESSERT";
         }
     }
