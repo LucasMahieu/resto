@@ -1,6 +1,6 @@
 package ControleurResto;
-
 import VueResto.*;
+import VueResto.LogicielPrincipal.*;
 import ModeleResto.*;
 import java.util.*;
 import java.util.Date;
@@ -17,6 +17,7 @@ import java.text.*;
  *
  */
 public class Controleur{
+    private InterfacePrincipale interfacePrincipale;
 	private int numResaCmdSelectionee;
 	private int numResaSuiviSelectionee;
 	private Date date;
@@ -116,7 +117,6 @@ public class Controleur{
 	 */
 	public int ajouterArticle(String nom, int quantite, int numResa){
 		// ajouter à la resa l'article donner avec les bonnes quantités dans la BD
-		int ret = ReservationFactoryConcrete.get().getArticleBD().ajoutArticle(nom, quantite, numResa);
 		ReservationConcrete thisRes = ReservationFactoryConcrete.get().getReservations().get(numResa);
 		String typeArticle = ReservationFactoryConcrete.get().getArticleBD().typeArticle(nom);
 		if (thisRes == null) {
@@ -125,6 +125,7 @@ public class Controleur{
 		if (thisRes.getSuivi().ajouterArticle(typeArticle, nom, quantite) == -1) {
 			return -1;
 		}
+		int ret = ReservationFactoryConcrete.get().getArticleBD().ajoutArticle(nom, quantite, numResa);
 		return ret;
 	}
 
@@ -767,6 +768,7 @@ public class Controleur{
 		if (typeArticle == null) {
 			return -1;
 		}
+        thisRes.getSuivi().notifyObservers();
 		return thisRes.getSuivi().estEnvoye(typeArticle, nomArticle, quantite);
 	}
 	/**
@@ -801,4 +803,17 @@ public class Controleur{
 		}
 		ReservationFactoryConcrete.get().editerFacture(numResa);
 	}
+
+    public void setInterface(InterfacePrincipale interfacePrincip){
+      this.interfacePrincipale = interfacePrincip;
+    }
+
+    public InterfacePrincipale getInterface(){
+      return this.interfacePrincipale;
+    }
+
+    public void addObserverSuivi(Observable obs){
+      obs.addObserver(this.interfacePrincipale.getInterfaceSuiviCommande());
+    }
+    
 }

@@ -1,5 +1,6 @@
 package ModeleResto;
-public abstract class Reservation {
+import java.util.*;
+public abstract class Reservation extends Observable{
   public Reservation(){
   }
 }

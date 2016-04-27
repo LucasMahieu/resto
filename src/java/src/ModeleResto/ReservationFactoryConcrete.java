@@ -103,7 +103,12 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 			getStmt().executeUpdate(requete);
 			getStmt().close();
 			lastRes++;
-			reservations.put(lastRes, new ReservationConcrete(lastRes));
+            ReservationConcrete reserv = new ReservationConcrete(lastRes);
+            reserv.addObserver(Controleur.get().getInterface().getInterfaceReservation());
+            reserv.addObserver(Controleur.get().getInterface().getInterfaceSuiviCommande());
+			reservations.put(lastRes, reserv);
+            reserv.changed();
+            reserv.notifyObservers(null);
 			return lastRes;
 		}
 		catch (SQLException e) {
