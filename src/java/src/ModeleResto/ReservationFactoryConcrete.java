@@ -104,8 +104,10 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 			getStmt().close();
 			lastRes++;
             ReservationConcrete reserv = new ReservationConcrete(lastRes);
-            reserv.addObserver(Controleur.get().getInterface().getInterfaceReservation());
-            reserv.addObserver(Controleur.get().getInterface().getInterfaceSuiviCommande());
+            if(Controleur.get().getInterface() == null){
+              reserv.addObserver(Controleur.get().getInterface().getInterfaceReservation());
+              reserv.addObserver(Controleur.get().getInterface().getInterfaceSuiviCommande());
+            }
 			reservations.put(lastRes, reserv);
             reserv.changed();
             reserv.notifyObservers(null);
