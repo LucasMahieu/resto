@@ -146,6 +146,7 @@ public class InterfaceSuiviCommande extends Observateur{
         System.out.println("update");
         if(o instanceof ModeleResto.Article){
           System.out.println("Update article suivi commande");
+          remiseAZeroTableau();
           miseAJourTableauArticles();
         }
         else if (o instanceof ModeleResto.ReservationConcrete){
