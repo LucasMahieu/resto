@@ -553,7 +553,9 @@ public class Controleur{
 	 *	@return 0 si réussite, -1 sinon
 	 */
 	public int supprimerReservation(int numeroTable, String date, String service){
-		if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) == 0) {
+		System.out.println("Suppression Reservation Controleur");
+		if (ReservationFactoryConcrete.get().getTableBD().getNumeroReservation(numeroTable, date, service) >= 0) {
+			System.out.println("Suppression Reservation Controleur if");
 			ReservationFactoryConcrete.get().supprimerReservation(numeroTable, date, service);
 			return 0;
 		}
