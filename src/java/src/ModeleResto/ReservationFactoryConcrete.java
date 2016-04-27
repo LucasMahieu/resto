@@ -142,6 +142,8 @@ public class ReservationFactoryConcrete extends ReservationFactory{
 
 		System.out.println(requete1);
 		System.out.println(requete2);
+		System.out.println(requete3);
+		System.out.println(requete4);
 		try {
 			setStmt(getCon().createStatement());
 			getStmt().executeUpdate(requete4);
