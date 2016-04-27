@@ -126,6 +126,7 @@ public class InterfaceSuiviCommande extends Observateur{
 		jScrollPaneArticles.setBounds(POS_X_TAB_ART,POS_Y_TAB_ART,TAILLE_X_TAB_ART,TAILLE_Y_TAB_ART);
 		panelSuiviCommande.add( jScrollPaneArticles);
         // mise à jour du tableau 
+        this.remiseAZeroTableau();
         this.miseAJourTableauArticles();
 	}
 

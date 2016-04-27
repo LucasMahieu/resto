@@ -121,7 +121,6 @@ public class InterfacePrincipale extends JFrame implements ActionListener {
 							);
 				}
 			}
-            this.getInterfaceReservation().miseAjourTableauReservation();
 		}else if ( source == interfaceReservation.getBoutonSupprimer()){
 			System.out.println("Bouton Supprimer");
 			interfaceReservation.effetBoutonSupprimer();
